@@ -175,7 +175,10 @@ type _ft_device_list_info_node
   d37  :: Cchar; d38  :: Cchar; d39  :: Cchar; d40  :: Cchar
   d41  :: Cchar; d42  :: Cchar; d43  :: Cchar; d44  :: Cchar
   d45  :: Cchar; d46  :: Cchar; d47  :: Cchar; d48  :: Cchar
-  d49  :: Cchar; d50  :: Cchar; d51  :: Cchar; d52  :: Cchar    
+  d49  :: Cchar; d50  :: Cchar; d51  :: Cchar; d52  :: Cchar
+  d53  :: Cchar; d54  :: Cchar; d55  :: Cchar; d56  :: Cchar 
+  d57  :: Cchar; d58  :: Cchar; d59  :: Cchar; d60  :: Cchar 
+  d61  :: Cchar; d62  :: Cchar; d63  :: Cchar; d64  :: Cchar    
   FT_HANDLE    :: Cuint
   function _ft_device_list_info_node()
     new(0,0,0,0,
@@ -183,6 +186,7 @@ type _ft_device_list_info_node
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,
       0)
   end
 end
