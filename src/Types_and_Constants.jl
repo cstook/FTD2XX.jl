@@ -154,32 +154,33 @@ const FT_X_SERIES_CBUS_TIMESTAMP = 0x14
 const FT_X_SERIES_CBUS_KEEP_AWAKE = 0x15
 
 # FT_DEVICE_LIST_INFO_NODE (see FT_GetDeviceInfoList and FT_GetDeviceInfoDetail)
-type _ft_device_list_info_node
+immutable _ft_device_list_info_node
   Flags :: Cuint
   Type  :: Cuint
   ID    :: Cuint
   LocId :: Cuint
-  sn1  :: Cchar; sn2  :: Cchar; sn3  :: Cchar; sn4  :: Cchar  # SerialNumber
-  sn5  :: Cchar; sn6  :: Cchar; sn7  :: Cchar; sn8  :: Cchar
-  sn9  :: Cchar; sn10 :: Cchar; sn11 :: Cchar; sn12 :: Cchar
-  sn13 :: Cchar; sn14 :: Cchar; sn15 :: Cchar; sn16 :: Cchar
-  d1   :: Cchar; d2   :: Cchar; d3   :: Cchar; d4   :: Cchar  # Description
-  d5   :: Cchar; d6   :: Cchar; d7   :: Cchar; d8   :: Cchar
-  d9   :: Cchar; d10  :: Cchar; d11  :: Cchar; d12  :: Cchar
-  d13  :: Cchar; d14  :: Cchar; d15  :: Cchar; d16  :: Cchar
-  d17  :: Cchar; d18  :: Cchar; d19  :: Cchar; d20  :: Cchar
-  d21  :: Cchar; d22  :: Cchar; d23  :: Cchar; d24  :: Cchar
-  d25  :: Cchar; d26  :: Cchar; d27  :: Cchar; d28  :: Cchar
-  d29  :: Cchar; d30  :: Cchar; d31  :: Cchar; d32  :: Cchar
-  d33  :: Cchar; d34  :: Cchar; d35  :: Cchar; d36  :: Cchar
-  d37  :: Cchar; d38  :: Cchar; d39  :: Cchar; d40  :: Cchar
-  d41  :: Cchar; d42  :: Cchar; d43  :: Cchar; d44  :: Cchar
-  d45  :: Cchar; d46  :: Cchar; d47  :: Cchar; d48  :: Cchar
-  d49  :: Cchar; d50  :: Cchar; d51  :: Cchar; d52  :: Cchar
-  d53  :: Cchar; d54  :: Cchar; d55  :: Cchar; d56  :: Cchar 
-  d57  :: Cchar; d58  :: Cchar; d59  :: Cchar; d60  :: Cchar 
-  d61  :: Cchar; d62  :: Cchar; d63  :: Cchar; d64  :: Cchar    
+  sn1  :: UInt8; sn2  :: UInt8; sn3  :: UInt8; sn4  :: UInt8  # SerialNumber
+  sn5  :: UInt8; sn6  :: UInt8; sn7  :: UInt8; sn8  :: UInt8
+  sn9  :: UInt8; sn10 :: UInt8; sn11 :: UInt8; sn12 :: UInt8
+  sn13 :: UInt8; sn14 :: UInt8; sn15 :: UInt8; sn16 :: UInt8
+  d1   :: UInt8; d2   :: UInt8; d3   :: UInt8; d4   :: UInt8  # Description
+  d5   :: UInt8; d6   :: UInt8; d7   :: UInt8; d8   :: UInt8
+  d9   :: UInt8; d10  :: UInt8; d11  :: UInt8; d12  :: UInt8
+  d13  :: UInt8; d14  :: UInt8; d15  :: UInt8; d16  :: UInt8
+  d17  :: UInt8; d18  :: UInt8; d19  :: UInt8; d20  :: UInt8
+  d21  :: UInt8; d22  :: UInt8; d23  :: UInt8; d24  :: UInt8
+  d25  :: UInt8; d26  :: UInt8; d27  :: UInt8; d28  :: UInt8
+  d29  :: UInt8; d30  :: UInt8; d31  :: UInt8; d32  :: UInt8
+  d33  :: UInt8; d34  :: UInt8; d35  :: UInt8; d36  :: UInt8
+  d37  :: UInt8; d38  :: UInt8; d39  :: UInt8; d40  :: UInt8
+  d41  :: UInt8; d42  :: UInt8; d43  :: UInt8; d44  :: UInt8
+  d45  :: UInt8; d46  :: UInt8; d47  :: UInt8; d48  :: UInt8
+  d49  :: UInt8; d50  :: UInt8; d51  :: UInt8; d52  :: UInt8
+  d53  :: UInt8; d54  :: UInt8; d55  :: UInt8; d56  :: UInt8 
+  d57  :: UInt8; d58  :: UInt8; d59  :: UInt8; d60  :: UInt8 
+  d61  :: UInt8; d62  :: UInt8; d63  :: UInt8; d64  :: UInt8  
   FT_HANDLE    :: Cuint
+
   function _ft_device_list_info_node()
     new(0,0,0,0,
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -207,10 +208,10 @@ type ft_program_data
                    # 5 = FT232H extensions
   VendorId :: Cushort # 0x0403 
   ProductId :: Cushort # 0x6001 
-  Manufactuer :: Ref{Uint8}    # "FTDI"
-  ManufacturerId :: Ref{Uint8} # "FT" 
-  Description :: Ref{Uint8}    # "USB HS Serial Converter" 
-  SerialNumber :: Ref{Uint8}   # "FT000001" if fixed, or NULL 
+  Manufactuer :: Ref{UInt8}    # "FTDI"
+  ManufacturerId :: Ref{UInt8} # "FT" 
+  Description :: Ref{UInt8}    # "USB HS Serial Converter" 
+  SerialNumber :: Ref{UInt8}   # "FT000001" if fixed, or NULL 
   MaxPower :: Cushort # 0 < MaxPower <= 500
   PnP :: Cushort # 0 = disabled, 1 = enabled 
   SelfPowered :: Cushort # 0 = bus powered, 1 = self powered 

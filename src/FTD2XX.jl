@@ -3,7 +3,7 @@ module FTD2XX
 export FT_CreateDeviceInfoList, FT_GetDeviceInfoList
 
 type Ftd2xxError <: Exception 
-  ft_status :: Uint
+  ft_status :: UInt64
 end
 function Base.showerror(io::IO, e::Ftd2xxError)
   fts = e.ft_status
@@ -36,7 +36,7 @@ function FT_CreateDeviceInfoList()
 end
 
 function FT_GetDeviceInfoList(lpdwNumDevs)
-  ftdeviceinfolist = Array{_ft_device_list_info_node,1}(lpdwNumDevs)
+  ftdeviceinfolist = Array(_ft_device_list_info_node,lpdwNumDevs)
   n = Ref{Culong}(lpdwNumDevs)
   ft_status = ccall((:FT_GetDeviceInfoList, "ftd2xx.dll"),
                       Culong,
@@ -51,25 +51,19 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
     flags = node.Flags 
     devicetype = node.Type
     id = node.ID 
-    locid = node.LocId    
-    serialnumber = node.sn1  * node.sn2  * node.sn3  * node.sn4  *
-                   node.sn5  * node.sn6  * node.sn7  * node.sn8  *
-                   node.sn9  * node.sn10 * node.sn11 * node.sn12 *
-                   node.sn13 * node.sn14 * node.sn15 * node.sn16
-    description = 
-    node.d1  * node.d2  * node.d3  * node.d4  * 
-    node.d5  * node.d6  * node.d7  * node.d8  *
-    node.d9  * node.d10 * node.d11 * node.d12 *
-    node.d13 * node.d14 * node.d15 * node.d16 *
-    node.d17 * node.d18 * node.d19 * node.d20 *
-    node.d21 * node.d22 * node.d23 * node.d24 *
-    node.d25 * node.d26 * node.d27 * node.d28 *
-    node.d29 * node.d30 * node.d31 * node.d32 *
-    node.d33 * node.d34 * node.d35 * node.d36 *
-    node.d37 * node.d38 * node.d39 * node.d40 *
-    node.d41 * node.d42 * node.d43 * node.d44 *        
-    node.d45 * node.d46 * node.d47 * node.d48 *    
-    node.d49 * node.d50 * node.d51 * node.d52
+    locid = node.LocId
+    sn = Array(UInt8,16)
+    for i in 1:16 # 5:21
+      sn[i] = node.(i+4)
+    end
+    endofstring = findfirst(sn,0)-1
+    serialnumber = convert(ASCIIString,sn[1:endofstring])
+    d = Array(UInt8,64)
+    for i in 1:64 # 22:86
+      d[i] = node.(i+21)
+    end
+    endofstring = findfirst(d,0)-1
+    description = convert(ASCIIString,d[1:endofstring])
     handle = node.FT_HANDLE 
     push!(infonodearray,InfoNode(flags,devicetype,id,locid,serialnumber,
                                  description,handle))
