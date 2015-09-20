@@ -177,6 +177,14 @@ type _ft_device_list_info_node
   d45  :: Cchar; d46  :: Cchar; d47  :: Cchar; d48  :: Cchar
   d49  :: Cchar; d50  :: Cchar; d51  :: Cchar; d52  :: Cchar    
   FT_HANDLE    :: Cuint
+  function _ft_device_list_info_node()
+    new(0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0)
+  end
 end
 
 # FT_FLAGS (see FT_DEVICE_LIST_INFO_NODE)

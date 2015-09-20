@@ -24,8 +24,7 @@ end
 include("Types_and_Constants.jl")
 
 function FT_CreateDeviceInfoList()
-  lpdwNumDevs = Ref{Culong}(0)
-  ft_status = Culong(0)
+  lpdwNumDevs = Ref{Culong}()
   ft_status = ccall((:FT_CreateDeviceInfoList, "ftd2xx.dll"),
                       Culong,
                       (Ref{Culong},),
@@ -37,13 +36,12 @@ function FT_CreateDeviceInfoList()
 end
 
 function FT_GetDeviceInfoList(lpdwNumDevs)
-  ftdeviceinfolistptr = pointer_to_array(Ref{_ft_device_list_info_node},
-                                      lpdwNumDevs,take_ownership=true)
-  ftdeviceinfolist = unsafe_pointer_to_objref(ftdeviceinfolistptr)
+  ftdeviceinfolist = Array{_ft_device_list_info_node,1}(lpdwNumDevs)
+  n = Ref{Culong}(lpdwNumDevs)
   ft_status = ccall((:FT_GetDeviceInfoList, "ftd2xx.dll"),
                       Culong,
-                      (ftdeviceinfolistptr,),
-                      ftdeviceinfolist)
+                      (Ptr{_ft_device_list_info_node},Ref{Culong}),
+                      ftdeviceinfolist,n)
   if ft_status > 0
     throw(Ftd2xxError(ft_status))
   end
