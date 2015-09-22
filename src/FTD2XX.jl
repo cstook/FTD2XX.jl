@@ -23,15 +23,20 @@ end
 
 include("Types_and_Constants.jl")
 
+function checkstatus(ft_status::Int)
+  if ft_status != 0
+    throw(Ftd2xxError(ft_status))
+  end
+  return 0
+end
+
 function FT_CreateDeviceInfoList()
   lpdwNumDevs = Ref{Culong}()
   ft_status = ccall((:FT_CreateDeviceInfoList, "ftd2xx.dll"),
                       Culong,
                       (Ref{Culong},),
                       lpdwNumDevs)
-  if ft_status > 0
-    throw(Ftd2xxError(ft_status))
-  end
+  checkstatus(ft_status)
   return lpdwNumDevs[]
 end
 
@@ -42,9 +47,7 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
                       Culong,
                       (Ptr{_ft_device_list_info_node},Ref{Culong}),
                       ftdeviceinfolist,n)
-  if ft_status > 0
-    throw(Ftd2xxError(ft_status))
-  end
+  checkstatus(ft_status)
   infonodearray = InfoNode[]
   sizehint!(infonodearray,lpdwNumDevs)
   for node in ftdeviceinfolist
@@ -70,7 +73,21 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
   end
   return infonodearray
 end
- 
+
+function FT_Open(iDevice::Int)
+  ft_handle = Ref{Culong}()
+  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+                      Culong,
+                      (Culong,Ref{Culong}),
+                      iDevice,ft_handle)
+  checkstatus(ft_status)
+  return ft_handle
+end
+
+function FT_OpenEx(Arg1, dwFlags, ft_handle)
+  
+
+
 
 
 ftstatusdict = Dict(

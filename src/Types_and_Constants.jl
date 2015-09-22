@@ -180,23 +180,13 @@ immutable _ft_device_list_info_node
   d57  :: UInt8; d58  :: UInt8; d59  :: UInt8; d60  :: UInt8 
   d61  :: UInt8; d62  :: UInt8; d63  :: UInt8; d64  :: UInt8  
   FT_HANDLE    :: Cuint
-
-  function _ft_device_list_info_node()
-    new(0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-      0,0,0,0,0,0,0,0,0,0,0,0,
-      0)
-  end
 end
 
 # FT_FLAGS (see FT_DEVICE_LIST_INFO_NODE)
 const FT_FLAGS_OPENED = 0x00000001
 
 # FT_PROGRAM_DATA_STRUCTURE 
-type ft_program_data
+immutable ft_program_data
   Signature1 :: Cuint # Header - must be 0x0000000
   Signature2 :: Cuint # Header - must be 0xffffffff
   Version :: Cuint # Header - FT_PROGRAM_DATA version 
@@ -351,6 +341,8 @@ type ft_program_data
   FT1248FlowControlH :: Cuchar # FT1248 flow control enable 
   IsVCPH :: Cuchar # non-zero if interface is to use VCP drivers 
   PowerSaveEnableH :: Cuchar # non-zero if using ACBUS7 to save power for self-powered designs
+
+  ft_program_data(Version) = new(0x0000000, 0xffffffff, Version)  
 end
 
 # EEPROM_HEADER STRUCTURE (See FT_EEPROM_Read and FT_EEPROM_Program)
