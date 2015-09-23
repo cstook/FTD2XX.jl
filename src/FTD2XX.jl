@@ -84,8 +84,88 @@ function FT_Open(iDevice::Int)
   return ft_handle
 end
 
-function FT_OpenEx(Arg1, dwFlags, ft_handle)
-  
+immutable FT_Description 
+  description :: Array{UInt8,1}
+  function FT_Description(s :: ASCIIString)
+    description = Array(UInt8,64)
+    if length(s) < 64
+      for (pos,char) in enumerate(s)
+        description[pos] = Int(char)
+      end
+      description[length(s)+1] = 0
+    else
+      error("length(desctiption) must be < 64")
+    end
+    new(desctiption)
+  end
+end
+
+immutable FT_SerialNumber 
+  serialnumber :: Array{UInt8,1}
+  function FT_SerialNumber(s :: ASCIIString)
+    serialnumber = Array(UInt8,16)
+    if length(s) < 16
+      for (pos,char) in enumerate(s)
+        serialnumber[pos] = Int(char)
+      end
+      serialnumber[length(s)+1] = 0
+    else
+      error("length(serialnumber) must be < 16")
+    end
+    new(serialnumber)
+  end
+end
+
+function FT_OpenEx(location :: Int)
+  ft_handle = Ref{Culong}()
+  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+                      Culong,
+                      (Ref{Culong},Culong,Ref{Culong}),
+                      location,FT_OPEN_BY_LOCATION,ft_handle)
+  checkstatus(ft_status)
+  return ft_handle
+end
+
+function FT_OpenEx(serialnumber :: FT_SerialNumber)
+  ft_handle = Ref{Culong}()
+  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+                      Culong,
+                      (Ptr{UInt8},Culong,Ref{Culong}),
+                      serialnumber,FT_OPEN_BY_SERIAL_NUMBER,ft_handle)
+  checkstatus(ft_status)
+  return ft_handle
+end
+
+function FT_OpenEx(description :: FT_Description)
+  ft_handle = Ref{Culong}()
+  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+                      Culong,
+                      (Ptr{UInt8},Culong,Ref{Culong}),
+                      description,FT_OPEN_BY_DESCRIPTION,ft_handle)
+  checkstatus(ft_status)
+  return ft_handle
+end
+
+function FT_Close(ft_handle :: Int)
+  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+                      Culong,
+                      (Culong,),
+                      ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_Read(ft_handle::Int, bytestoread::Int)
+  buffer = Array(UInt8,bytestoread+1)
+  bytesreturned = Ref{Culong}()
+  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+                      Culong,
+                      (Culong, Ptr{UInt8}, Culong, Ref{Culong}),
+                      ft_handle, buffer, bytestoread, bytesreturned)
+  checkstatus(ft_status) 
+  return (convert(Int64,bytesreturned), buffer)
+end
+
 
 
 
