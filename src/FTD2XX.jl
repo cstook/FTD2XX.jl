@@ -1,6 +1,7 @@
 module FTD2XX
 
-export FT_CreateDeviceInfoList, FT_GetDeviceInfoList
+export FT_CreateDeviceInfoList, FT_GetDeviceInfoList, FT_Open, FT_Description
+export FT_SerialNumber, FT_OpenEx, FT_Close, FT_Read, FT_Write, FT_SetBaudRate
 
 type Ftd2xxError <: Exception 
   ft_status :: UInt64
@@ -23,7 +24,7 @@ end
 
 include("Types_and_Constants.jl")
 
-function checkstatus(ft_status::Int)
+function checkstatus(ft_status::Culong)
   if ft_status != 0
     throw(Ftd2xxError(ft_status))
   end
@@ -81,11 +82,11 @@ function FT_Open(iDevice::Int)
                       (Culong,Ref{Culong}),
                       iDevice,ft_handle)
   checkstatus(ft_status)
-  return ft_handle
+  return ft_handle[]
 end
 
 immutable FT_Description 
-  description :: Array{UInt8,1}
+  d :: Array{UInt8,1}
   function FT_Description(s :: ASCIIString)
     description = Array(UInt8,64)
     if length(s) < 64
@@ -96,12 +97,12 @@ immutable FT_Description
     else
       error("length(desctiption) must be < 64")
     end
-    new(desctiption)
+    new(description)
   end
 end
 
 immutable FT_SerialNumber 
-  serialnumber :: Array{UInt8,1}
+  sn :: Array{UInt8,1}
   function FT_SerialNumber(s :: ASCIIString)
     serialnumber = Array(UInt8,16)
     if length(s) < 16
@@ -123,7 +124,7 @@ function FT_OpenEx(location :: Int)
                       (Ref{Culong},Culong,Ref{Culong}),
                       location,FT_OPEN_BY_LOCATION,ft_handle)
   checkstatus(ft_status)
-  return ft_handle
+  return ft_handle[]
 end
 
 function FT_OpenEx(serialnumber :: FT_SerialNumber)
@@ -131,9 +132,9 @@ function FT_OpenEx(serialnumber :: FT_SerialNumber)
   ft_status = ccall((:FT_Open, "ftd2xx.dll"),
                       Culong,
                       (Ptr{UInt8},Culong,Ref{Culong}),
-                      serialnumber,FT_OPEN_BY_SERIAL_NUMBER,ft_handle)
+                      serialnumber.sn,FT_OPEN_BY_SERIAL_NUMBER,ft_handle)
   checkstatus(ft_status)
-  return ft_handle
+  return ft_handle[]
 end
 
 function FT_OpenEx(description :: FT_Description)
@@ -141,12 +142,12 @@ function FT_OpenEx(description :: FT_Description)
   ft_status = ccall((:FT_Open, "ftd2xx.dll"),
                       Culong,
                       (Ptr{UInt8},Culong,Ref{Culong}),
-                      description,FT_OPEN_BY_DESCRIPTION,ft_handle)
+                      description.d,FT_OPEN_BY_DESCRIPTION,ft_handle)
   checkstatus(ft_status)
-  return ft_handle
+  return ft_handle[]
 end
 
-function FT_Close(ft_handle :: Int)
+function FT_Close(ft_handle :: UInt32)
   ft_status = ccall((:FT_Open, "ftd2xx.dll"),
                       Culong,
                       (Culong,),
@@ -155,16 +156,42 @@ function FT_Close(ft_handle :: Int)
   return nothing
 end
 
-function FT_Read(ft_handle::Int, bytestoread::Int)
+function FT_Read(ft_handle::UInt32, bytestoread::Int)
   buffer = Array(UInt8,bytestoread+1)
   bytesreturned = Ref{Culong}()
-  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+  ft_status = ccall((:FT_Read, "ftd2xx.dll"),
                       Culong,
                       (Culong, Ptr{UInt8}, Culong, Ref{Culong}),
                       ft_handle, buffer, bytestoread, bytesreturned)
   checkstatus(ft_status) 
-  return (convert(Int64,bytesreturned), buffer)
+  return (bytesreturned[], buffer)
 end
+
+function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
+  bytestowrite = Culong(length(buffer))
+  byteswrittten = Ref{Culong}()
+  buffer = Array(Uint8,bytestowrite)
+  for (pos,char) in enumerate(stringtowrite)
+    buffer[pos] = char
+  end
+  ft_status = ccall((:FT_Write, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ptr{UInt8}, Culong, Ref{Culong}),
+                     ft_handle, buffer, bytestowrite, byteswritten)
+  checkstatus(ft_status)
+  return byteswritten[]
+end
+
+function FT_SetBaudRate(ft_handle::UInt32, baud::Int)
+  baudrate = Ref{Culong}(baud)
+  ft_status = ccall((:FT_SetBaudRate, "ftd2xx.dll"),
+                     Culong,
+                     (Culong,Culong),
+                     ft_handle,baudrate)
+  checkstatus(ft_status)
+  return nothing
+end
+
 
 
 
