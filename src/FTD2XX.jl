@@ -57,14 +57,14 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
     id = node.ID 
     locid = node.LocId
     sn = Array(UInt8,16)
-    for i in 1:16 # 5:21
+    for i in 1:16 # 5:20
       sn[i] = node.(i+4)
     end
     endofstring = findfirst(sn,0)-1
     serialnumber = convert(ASCIIString,sn[1:endofstring])
     d = Array(UInt8,64)
-    for i in 1:64 # 22:86
-      d[i] = node.(i+21)
+    for i in 1:64 # 21:85
+      d[i] = node.(i+20)
     end
     endofstring = findfirst(d,0)-1
     description = convert(ASCIIString,d[1:endofstring])
@@ -75,7 +75,7 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
   return infonodearray
 end
 
-function FT_Open(iDevice::Int)
+function FT_Open(iDevice::Integer)
   ft_handle = Ref{Culong}()
   ft_status = ccall((:FT_Open, "ftd2xx.dll"),
                       Culong,
@@ -117,19 +117,20 @@ immutable FT_SerialNumber
   end
 end
 
-function FT_OpenEx(location :: Int)
+function FT_OpenEx(location :: Unsigned)
   ft_handle = Ref{Culong}()
-  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+  l = Ref{Culong}(location)
+  ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
                       Culong,
                       (Ref{Culong},Culong,Ref{Culong}),
-                      location,FT_OPEN_BY_LOCATION,ft_handle)
+                      l,FT_OPEN_BY_LOCATION,ft_handle)
   checkstatus(ft_status)
   return ft_handle[]
 end
 
 function FT_OpenEx(serialnumber :: FT_SerialNumber)
   ft_handle = Ref{Culong}()
-  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+  ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
                       Culong,
                       (Ptr{UInt8},Culong,Ref{Culong}),
                       serialnumber.sn,FT_OPEN_BY_SERIAL_NUMBER,ft_handle)
@@ -139,7 +140,7 @@ end
 
 function FT_OpenEx(description :: FT_Description)
   ft_handle = Ref{Culong}()
-  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+  ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
                       Culong,
                       (Ptr{UInt8},Culong,Ref{Culong}),
                       description.d,FT_OPEN_BY_DESCRIPTION,ft_handle)
@@ -148,7 +149,7 @@ function FT_OpenEx(description :: FT_Description)
 end
 
 function FT_Close(ft_handle :: UInt32)
-  ft_status = ccall((:FT_Open, "ftd2xx.dll"),
+  ft_status = ccall((:FT_Close, "ftd2xx.dll"),
                       Culong,
                       (Culong,),
                       ft_handle)
@@ -156,7 +157,7 @@ function FT_Close(ft_handle :: UInt32)
   return nothing
 end
 
-function FT_Read(ft_handle::UInt32, bytestoread::Int)
+function FT_Read(ft_handle::UInt32, bytestoread::Unsigned)
   buffer = Array(UInt8,bytestoread+1)
   bytesreturned = Ref{Culong}()
   ft_status = ccall((:FT_Read, "ftd2xx.dll"),
@@ -182,7 +183,7 @@ function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
   return byteswritten[]
 end
 
-function FT_SetBaudRate(ft_handle::UInt32, baud::Int)
+function FT_SetBaudRate(ft_handle::UInt32, baud::Unsigned)
   baudrate = Ref{Culong}(baud)
   ft_status = ccall((:FT_SetBaudRate, "ftd2xx.dll"),
                      Culong,
