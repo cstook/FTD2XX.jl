@@ -119,11 +119,10 @@ end
 
 function FT_OpenEx(location :: Unsigned)
   ft_handle = Ref{Culong}()
-  l = Ref{Culong}(location)
   ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
                       Culong,
                       (Ref{Culong},Culong,Ref{Culong}),
-                      l,FT_OPEN_BY_LOCATION,ft_handle)
+                      location,FT_OPEN_BY_LOCATION,ft_handle)
   checkstatus(ft_status)
   return ft_handle[]
 end
@@ -158,20 +157,20 @@ function FT_Close(ft_handle :: UInt32)
 end
 
 function FT_Read(ft_handle::UInt32, bytestoread::Unsigned)
-  buffer = Array(UInt8,bytestoread+1)
+  buffer = Array(UInt8,bytestoread)
   bytesreturned = Ref{Culong}()
   ft_status = ccall((:FT_Read, "ftd2xx.dll"),
                       Culong,
                       (Culong, Ptr{UInt8}, Culong, Ref{Culong}),
                       ft_handle, buffer, bytestoread, bytesreturned)
   checkstatus(ft_status) 
-  return (bytesreturned[], buffer)
+  return (bytesreturned[], convert(ASCIIString,buffer[1:bytesreturned[]]))
 end
 
 function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
-  bytestowrite = Culong(length(buffer))
-  byteswrittten = Ref{Culong}()
-  buffer = Array(Uint8,bytestowrite)
+  bytestowrite = Culong(length(stringtowrite))
+  byteswritten = Ref{Culong}()
+  buffer = Array(UInt8,bytestowrite)
   for (pos,char) in enumerate(stringtowrite)
     buffer[pos] = char
   end
@@ -183,12 +182,11 @@ function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
   return byteswritten[]
 end
 
-function FT_SetBaudRate(ft_handle::UInt32, baud::Unsigned)
-  baudrate = Ref{Culong}(baud)
+function FT_SetBaudRate(ft_handle::UInt32, baud::Integer)
   ft_status = ccall((:FT_SetBaudRate, "ftd2xx.dll"),
                      Culong,
                      (Culong,Culong),
-                     ft_handle,baudrate)
+                     ft_handle,baud)
   checkstatus(ft_status)
   return nothing
 end
