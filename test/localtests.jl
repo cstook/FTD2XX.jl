@@ -33,5 +33,6 @@ println("$byteswritten bytes written")
 println("$bytesreturned bytes read")
 println(buffer)
 
-
+FT_SetDataCharacteristics(h, FT_BITS_7, FT_STOP_BITS_1, FT_PARITY_NONE)
+FT_SetTimeouts(h, 1000, 1000)
 FT_Close(h)

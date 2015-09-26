@@ -2,6 +2,11 @@ module FTD2XX
 
 export FT_CreateDeviceInfoList, FT_GetDeviceInfoList, FT_Open, FT_Description
 export FT_SerialNumber, FT_OpenEx, FT_Close, FT_Read, FT_Write, FT_SetBaudRate
+export FT_SetDataCharacteristics, FT_SetTimeouts
+
+export FT_BITS_8, FT_BITS_7, FT_STOP_BITS_1, FT_STOP_BITS_2
+export FT_PARITY_NONE, FT_PARITY_ODD, FT_PARITY_EVEN
+export FT_PARITY_MARK, FT_PARITY_SPACE
 
 type Ftd2xxError <: Exception 
   ft_status :: UInt64
@@ -156,7 +161,7 @@ function FT_Close(ft_handle :: UInt32)
   return nothing
 end
 
-function FT_Read(ft_handle::UInt32, bytestoread::Unsigned)
+function FT_Read(ft_handle::UInt32, bytestoread::Integer)
   buffer = Array(UInt8,bytestoread)
   bytesreturned = Ref{Culong}()
   ft_status = ccall((:FT_Read, "ftd2xx.dll"),
@@ -191,6 +196,91 @@ function FT_SetBaudRate(ft_handle::UInt32, baud::Integer)
   return nothing
 end
 
+function FT_SetDataCharacteristics(ft_handle::UInt32, 
+                                   wordlength::Integer,
+                                   stopbits::Integer,
+                                   parity::Integer)
+  @assert (wordlength==FT_BITS_8) || (wordlength==FT_BITS_7) "invalid word length"
+  @assert (stopbits==FT_STOP_BITS_1) || (stopbits==FT_STOP_BITS_2) "invalid stop bits"
+  @assert parity == FT_PARITY_NONE || parity == FT_PARITY_ODD ||
+          parity == FT_PARITY_EVEN || parity == FT_PARITY_MARK ||
+          parity == FT_PARITY_SPACE "invalid parity"
+  ft_status = ccall((:FT_SetDataCharacteristics, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Cuchar, Cuchar, Cuchar),
+                     ft_handle, wordlength, stopbits, parity)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_SetTimeouts(ft_handle::UInt32,
+                         readtimeout::Integer,
+                         writetimeout::Integer)
+  ft_status = ccall((:FT_SetTimeouts, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Culong, Culong),
+                     ft_handle, readtimeout, writetimeout)
+  checkstatus(ft_status)
+  return nothing
+end 
+
+function FT_SetFlowControl(ft_handle::UInt32, flowcontrol::Integer,
+                           xon::UInt8 = 0x11, xoff::UInt8 = 0x13)
+  @assert flowcontrol == FT_FLOW_NONE ||
+          flowcontrol == FT_FLOW_RTS_CTS ||
+          flowcontrol == FT_FLOW_DTR_DSR ||
+          flowcontrol == FT_FLOW_XON_XOFF "invalid flow control"
+  ft_status = ccall((:FT_SetFlowControl, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Cushort, Cuchar, Cuchar),
+                     ft_handle, flowcontrol, xon, xoff)
+  checkstatus(ft_status)
+  return nothing
+end 
+
+function FT_SetDtr(ft_handle::UInt32)
+  ft_status = ccall((:FT_SetDtr, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end  
+
+function FT_ClrDtr(ft_handle::UInt32)
+  ft_status = ccall((:FT_ClrDtr, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_SetRts(ft_handle::UInt32)
+  ft_status = ccall((:FT_SetRts, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end  
+
+function FT_ClrRts(ft_handle::UInt32)
+  ft_status = ccall((:FT_ClrRts, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_GetModemStatus(ft_handle::UInt32)
+  modemstatus = Ref{Culong}()
+  ft_status = ccall((:FT_GetModemStatus, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}),
+                     ft_handle, modemstatus)
+  checkstatus(ft_status)
+  return convert(UInt32,modemstatus[])
+end 
+
+FT_GetQueueStatus(ft_handle::UInt32)
+  amountinrxqueue = Ref{Culong}()
+  ft_status = ccall((:FT_GetQueueStatus, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}),
+                     ft_handle, amountinrxqueue)
+  checkstatus(ft_status)
+  return convert(UInt32, amountinrxqueue[])
+end 
 
 
 
