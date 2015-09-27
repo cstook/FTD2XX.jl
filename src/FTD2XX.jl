@@ -355,10 +355,109 @@ What do I do here ????
 
 =#
 
+function FT_SetChars(ft_handle::UInt32, eventch::UInt8, eventchen::Bool,
+                                        errorch::UInt8, errorchen::Bool)
+  if eventchen
+    event = 0x01
+  else
+    event = 0x00
+  end
+  if errorchen
+    error = 0x01
+  else
+    error = 0x00
+  end
+  ft_status = ccall((:FT_SetChars, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Cuchar, Cuchar, Cuchar, Cuchar),
+                     ft_handle, eventch, event, errorch, error)
+  checkstatus(ft_status)
+  return nothing
+end
 
+function FT_SetBreakOn(ft_handle::UInt32)
+  ft_status = ccall((:FT_SetBreakOn, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
 
+function FT_SetBreakOff(ft_handle::UInt32)
+  ft_status = ccall((:FT_SetBreakOff, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
 
+function FT_Purge(ft_handle::UInt32, mask::Integer)
+  ft_status = ccall((:FT_Purge, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Culong),
+                     ft_handle, mask)
+  checkstatus(ft_status)
+  return nothing
+end
 
+function FT_ResetDevice(ft_handle::UInt32)
+  ft_status = ccall((:FT_ResetDevice, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_ResetPort(ft_handle::UInt32)
+  ft_status = ccall((:FT_ResetPort, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_CyclePort(ft_handle::UInt32)
+  ft_status = ccall((:FT_CyclePort, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_Rescan(ft_handle::UInt32)
+  ft_status = ccall((:FT_Rescan, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_Reload(vid::Integer, pid::Integer)
+  ft_status = ccall((:FT_Reload, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Cuint, Cuint),
+                     ft_handle, vid, pid)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_SetResetPipeRetryCount(ft_handle::UInt32, count::Integer)
+  ft_status = ccall((:FT_SetResetPipeRetryCount, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Culong),
+                     ft_handle, count)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_StopInTask(ft_handle::UInt32)
+  ft_status = ccall((:FT_StopInTask, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_StartInTask(ft_handle::UInt32)
+  ft_status = ccall((:FT_StartInTask, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_SetDeadmanTimeout(ft_handle::UInt32, deadmantimeout::Integer = 5000)
+  ft_status = ccall((:FT_SetDeadmanTimeout, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Culong),
+                     ft_handle, deadmantimeout)
+  checkstatus(ft_status)
+  return nothing
+end 
 
 
 ftdevicetypedict = Dict(
