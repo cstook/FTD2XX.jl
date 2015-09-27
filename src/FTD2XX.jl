@@ -536,6 +536,63 @@ function FT_EE_UAWrite(ft_handle::UInt32, buffer::Array{UInt8,1})
   return nothing
 end
 
+function FT_SetLatencyTimer(ft_handle::UInt32, timer::Integer)
+  @assert timer>1
+  @assert timer<256
+  ft_status = ccall((:FT_SetLatencyTimer, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Cuchar),
+                     ft_handle, timer)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_GetLatencyTimer(ft_handle::UInt32)
+  timer = Ref{Cuchar}()
+  ft_status = ccall((:FT_SetLatencyTimer, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Cuchar}),
+                     ft_handle, timer)
+  checkstatus(ft_status)
+  return convert(UInt8,timer[])
+end
+
+function FT_SetBitMode(ft_handle::Uint32, mask::UInt8, mode::UInt8)
+  ft_status = ccall((:FT_SetBitMode, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Cuchar, Cuchar),
+                     ft_handle, mask, mode)
+  checkstatus(ft_status)
+  return nothing
+end
+
+function FT_GetBitMode(ft_handle::UInt32)
+  mode = Ref{Cuchar}()
+  ft_status = ccall((:FT_GetBitMode, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Cuchar}),
+                     ft_handle, mode)
+  checkstatus(ft_status)
+  return convert(UInt8, mode[])
+end 
+
+function FT_SetUSBParameters(ft_handle::UInt32,
+                             intransfersize::Integer = 4096,
+                             outtransfersize::Integer = 4096)
+  @assert intransfersize > 63
+  @assert outtransfersize > 63
+  @assert intransfersize < 2^16+1
+  @assert outtransfersize < 2^16+1
+  @assert (intransfer>>4)*16 == intransfersize
+  @assert (outtransfer>>4)*16 == outtransfersize
+  ft_status = ccall((:FT_SetUSBParameters, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Culong, Culong),
+                     ft_handle, intransfersize, outtransfersize)
+  checkstatus(ft_status)
+  return nothing
+end
+
 
 
 type FtProgramData
@@ -708,6 +765,16 @@ type FtProgramData
     end
     return newpd
 end
+
+ftbitmodedict = Dict()
+  FT_BITMODE_RESET => "FT_BITMODE_RESET"
+  FT_BITMODE_ASYNC_BITBANG => "FT_BITMODE_ASYNC_BITBANG"
+  FT_BITMODE_MPSSE => "FT_BITMODE_MPSSE"
+  FT_BITMODE_SYNC_BITBANG => "FT_BITMODE_SYNC_BITBANG"
+  FT_BITMODE_MCU_HOST => "FT_BITMODE_MCU_HOST"
+  FT_BITMODE_FAST_SERIAL => "FT_BITMODE_FAST_SERIAL"
+  FT_BITMODE_CBUS_BITBANG => "FT_BITMODE_CBUS_BITBANG"
+  FT_BITMODE_SYNC_FIFO => "FT_BITMODE_SYNC_FIFO")
 
 
 ftdevicetypedict = Dict(
