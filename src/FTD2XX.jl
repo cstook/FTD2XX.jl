@@ -272,7 +272,7 @@ function FT_GetModemStatus(ft_handle::UInt32)
   return convert(UInt32,modemstatus[])
 end 
 
-FT_GetQueueStatus(ft_handle::UInt32)
+function FT_GetQueueStatus(ft_handle::UInt32)
   amountinrxqueue = Ref{Culong}()
   ft_status = ccall((:FT_GetQueueStatus, "ftd2xx.dll"),
                      Culong,
@@ -282,29 +282,92 @@ FT_GetQueueStatus(ft_handle::UInt32)
   return convert(UInt32, amountinrxqueue[])
 end 
 
+function FT_GetDeviceInfo(ft_handle::UInt32)
+  ft_device = Ref{Culong}() # see ftdevicetypedict
+  id = Ref{Culong}()
+  serialnumber = Array(UInt8,17)
+  description = Array(UInt8,65)
+  serialnumber[17] = 0x00
+  description[65] = 0x00
+  ft_status = ccall((:FT_GetDeviceInfo, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}, Ref{Culong}, Ptr{UInt8}, Ptr{UInt8}, Ptr{Void}),
+                     ft_handle, ft_device, id, serialnumber, description, Void)
+  sn = convert(ASCIIString,serialnumber[1:findfirst(serialnumber,0)-1])
+  d = convert(ASCIIString,description[1:findfirst(description,0)-1])
+  checkstatus(ft_status)
+  return (ft_device, id, sn, d)
+end 
+
+function FT_GetDriverVersion(ft_handle::UInt32)
+  driverversion = Ref{Culong}()
+  ft_status = ccall((:FT_GetDriverVersion, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}),
+                     ft_handle, driverversion)
+  checkstatus(ft_status)
+  build = (driverversion & 0x000000ff)
+  minor = (driverversion & 0x0000ff00)>>8
+  major = (driverversion & 0x00ff0000)>>16
+  return VersionNumber(major,minor,build)
+end
+
+function FT_GetLibraryVersion()
+  dllversion = Ref{Culong}()
+  ft_status = ccall((:FT_GetLibraryVersion, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}),
+                     ft_handle, dllversion)
+  checkstatus(ft_status)
+  build = (driverversion & 0x000000ff)
+  minor = (driverversion & 0x0000ff00)>>8
+  major = (driverversion & 0x00ff0000)>>16
+  return VersionNumber(major,minor,build)
+end
+
+function FT_GetComPortNumber(ft_handle::UInt32)
+  comportnumber = Ref{Culong}()
+  ft_status = ccall((:FT_GetComPortNumber, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}),
+                     ft_handle, comportnumber)
+  checkstatus(ft_status)
+  return convert(Int, comportnumber)
+end
 
 
 
+ftdevicetypedict = Dict(
+  FT_DEVICE_232BM => "232BM",
+  FT_DEVICE_232AM => "232AM",
+  FT_DEVICE_100AX => "100AX",
+  FT_DEVICE_UNKNOWN => "UNKNOWN",
+  FT_DEVICE_2232C => "2232C",
+  FT_DEVICE_232R => "232R",
+  FT_DEVICE_2232H => "2232H",
+  FT_DEVICE_4232H => "4232H",
+  FT_DEVICE_232H => "232H",
+  FT_DEVICE_X_SERIES => "X_SERIES")
 
 ftstatusdict = Dict(
-  0   => "FT_OK",
-  1   => "FT_INVALID_HANDLE",
-  2   => "FT_DEVICE_NOT_FOUND",
-  3   => "FT_DEVICE_NOT_OPENED",
-  4   => "FT_IO_ERROR",
-  5   => "FT_INSUFFICIENT_RESOURCES",
-  6   => "FT_INVALID_PARAMETER",
-  7   => "FT_INVALID_BAUD_RATE",
-  8   => "FT_DEVICE_NOT_OPENED_FOR_ERASE",
-  9   => "FT_DEVICE_NOT_OPENED_FOR_WRITE",
-  10  => "FT_FAILED_TO_WRITE_DEVICE",
-  11  => "FT_EEPROM_READ_FAILED",
-  12  => "FT_EEPROM_WRITE_FAILED",
-  13  => "FT_EEPROM_ERASE_FAILED",
-  14  => "FT_EEPROM_NOT_PRESENT",
-  15  => "FT_EEPROM_NOT_PROGRAMMED",
-  16  => "FT_INVALID_ARGS",
-  17  => "FT_NOT_SUPPORTED",
-  18  => "FT_OTHER_ERROR")
+  FT_OK                           => "FT_OK",
+  FT_INVALID_HANDLE               => "FT_INVALID_HANDLE",
+  FT_DEVICE_NOT_FOUND             => "FT_DEVICE_NOT_FOUND",
+  FT_DEVICE_NOT_OPENED            => "FT_DEVICE_NOT_OPENED",
+  FT_IO_ERROR                     => "FT_IO_ERROR",
+  FT_INSUFFICIENT_RESOURCES       => "FT_INSUFFICIENT_RESOURCES",
+  FT_INVALID_PARAMETER            => "FT_INVALID_PARAMETER",
+  FT_INVALID_BAUD_RATE            => "FT_INVALID_BAUD_RATE",
+  FT_DEVICE_NOT_OPENED_FOR_ERASE  => "FT_DEVICE_NOT_OPENED_FOR_ERASE",
+  FT_DEVICE_NOT_OPENED_FOR_WRITE  => "FT_DEVICE_NOT_OPENED_FOR_WRITE",
+  FT_FAILED_TO_WRITE_DEVICE       => "FT_FAILED_TO_WRITE_DEVICE",
+  FT_EEPROM_READ_FAILED           => "FT_EEPROM_READ_FAILED",
+  FT_EEPROM_WRITE_FAILED          => "FT_EEPROM_WRITE_FAILED",
+  FT_EEPROM_ERASE_FAILED          => "FT_EEPROM_ERASE_FAILED",
+  FT_EEPROM_NOT_PRESENT           => "FT_EEPROM_NOT_PRESENT",
+  FT_EEPROM_NOT_PROGRAMMED        => "FT_EEPROM_NOT_PROGRAMMED",
+  FT_INVALID_ARGS                 => "FT_INVALID_ARGS",
+  FT_NOT_SUPPORTED                => "FT_NOT_SUPPORTED",
+  FT_OTHER_ERROR                  => "FT_OTHER_ERROR")
 
 end # module
