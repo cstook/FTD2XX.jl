@@ -186,7 +186,7 @@ end
 const FT_FLAGS_OPENED = 0x00000001
 
 # FT_PROGRAM_DATA_STRUCTURE 
-immutable ft_program_data
+type ft_program_data
   Signature1 :: Cuint # Header - must be 0x0000000
   Signature2 :: Cuint # Header - must be 0xffffffff
   Version :: Cuint # Header - FT_PROGRAM_DATA version 
@@ -341,9 +341,55 @@ immutable ft_program_data
   FT1248FlowControlH :: Cuchar # FT1248 flow control enable 
   IsVCPH :: Cuchar # non-zero if interface is to use VCP drivers 
   PowerSaveEnableH :: Cuchar # non-zero if using ACBUS7 to save power for self-powered designs
-
-  ft_program_data(Version) = new(0x0000000, 0xffffffff, Version)  
+  
+  function ft_program_data(Version::Integer,
+                           Manufacture::ASCIIString,
+                           ManufactureId::ASCIIString,
+                           Description::ASCIIString,
+                           SerialNumber::ASCIIString)
+    @assert (length(Manufacture) + length(ManufactureId)) < 41
+    @assert length(Description)<=64
+    @assert length(SerialNumber)<=16
+    mfg = zeros(UInt8,41)
+    mfgid = zeros(UInt8,41)
+    d = zeros(UInt8,65)
+    sn = zeros(UInt8,17)
+    for (p,c) in enumerate(Manufacture)
+      mfg[p] = Int(c)
+    end
+    for (p,c) in enumerate(ManufactureID)
+      mfgid[p] = Int(c)
+    end
+    for (p,c) in enumerate(Description)
+      d[p] = Int(c)
+    end
+    for (p,c) in enumerate(SerialNumber)
+      sn[p] = Int(c)
+    end
+    new(0x00000000, 0xffffffff, Version, Ref{UInt8}(mfg), 
+        Ref{UInt8}(mfgid), Ref{UInt8}(d), Ref{UInt8}(sn))
+  end
+  function ft_program_data(pd::FtProgramData)
+    newpd = ft_program_data(pd.Version,pd.Manufacture,pd.ManufactureId,pd.Description,pd.SerialNumber)
+    newpd.VendorId = pd.VendorId
+    newpd.ProductId = pd.ProductId
+    for i in 10:130
+      newpd.[i] = pd.[i]
+    end
+    return newpd
+  end
+  ft_program_data(Version) = ft_program_data(Version,"","","","")  
 end
+
+
+ Manufactuer :: Ref{UInt8}    # "FTDI"
+  ManufacturerId :: Ref{UInt8} # "FT" 
+  Description :: Ref{UInt8}    # "USB HS Serial Converter" 
+  SerialNumber :: Ref{UInt8}   # "FT000001" if fixed, or NULL 
+
+
+
+
 
 # EEPROM_HEADER STRUCTURE (See FT_EEPROM_Read and FT_EEPROM_Program)
 type ft_eeprom_header
