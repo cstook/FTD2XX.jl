@@ -296,7 +296,7 @@ function FT_GetDeviceInfo(ft_handle::UInt32)
   sn = convert(ASCIIString,serialnumber[1:findfirst(serialnumber,0)-1])
   d = convert(ASCIIString,description[1:findfirst(description,0)-1])
   checkstatus(ft_status)
-  return (ft_device, id, sn, d)
+  return (ft_device[], id[], sn, d)
 end 
 
 function FT_GetDriverVersion(ft_handle::UInt32)
@@ -306,9 +306,9 @@ function FT_GetDriverVersion(ft_handle::UInt32)
                      (Culong, Ref{Culong}),
                      ft_handle, driverversion)
   checkstatus(ft_status)
-  build = (driverversion & 0x000000ff)
-  minor = (driverversion & 0x0000ff00)>>8
-  major = (driverversion & 0x00ff0000)>>16
+  build = (driverversion[] & 0x000000ff)
+  minor = (driverversion[] & 0x0000ff00)>>8
+  major = (driverversion[] & 0x00ff0000)>>16
   return VersionNumber(major,minor,build)
 end
 
@@ -319,9 +319,9 @@ function FT_GetLibraryVersion()
                      (Culong, Ref{Culong}),
                      ft_handle, dllversion)
   checkstatus(ft_status)
-  build = (driverversion & 0x000000ff)
-  minor = (driverversion & 0x0000ff00)>>8
-  major = (driverversion & 0x00ff0000)>>16
+  build = (driverversion[] & 0x000000ff)
+  minor = (driverversion[] & 0x0000ff00)>>8
+  major = (driverversion[] & 0x00ff0000)>>16
   return VersionNumber(major,minor,build)
 end
 
@@ -332,8 +332,32 @@ function FT_GetComPortNumber(ft_handle::UInt32)
                      (Culong, Ref{Culong}),
                      ft_handle, comportnumber)
   checkstatus(ft_status)
-  return convert(Int, comportnumber)
+  return convert(Int32, comportnumber[])
 end
+
+function FT_GetStatus(ft_handle::UInt32)
+  amountinrxqueue = Ref{Culong}()
+  amountintxqueue = Ref{Culong}()
+  eventstatus = Ref{Culong}()
+  ft_status = ccall((:FT_GetStatus, "ftd2xx.dll"),
+                     Culong,
+                     (Culong, Ref{Culong}),
+                     ft_handle, comportnumber)
+  checkstatus(ft_status)
+  return (convert(Int32,amountinrxqueue[]),
+          convert(Int32,amountintxqueue[]),convert(Int32,eventstatus))
+end
+
+#=
+function FT_SetEventNotification(ft_handle::UInt32, eventmask::Integer)
+
+What do I do here ????
+
+=#
+
+
+
+
 
 
 
