@@ -369,27 +369,9 @@ type ft_program_data
     new(0x00000000, 0xffffffff, Version, Ref{UInt8}(mfg), 
         Ref{UInt8}(mfgid), Ref{UInt8}(d), Ref{UInt8}(sn))
   end
-  function ft_program_data(pd::FtProgramData)
-    newpd = ft_program_data(pd.Version,pd.Manufacture,pd.ManufactureId,pd.Description,pd.SerialNumber)
-    newpd.VendorId = pd.VendorId
-    newpd.ProductId = pd.ProductId
-    for i in 10:130
-      newpd.[i] = pd.[i]
-    end
-    return newpd
-  end
+
   ft_program_data(Version) = ft_program_data(Version,"","","","")  
 end
-
-
- Manufactuer :: Ref{UInt8}    # "FTDI"
-  ManufacturerId :: Ref{UInt8} # "FT" 
-  Description :: Ref{UInt8}    # "USB HS Serial Converter" 
-  SerialNumber :: Ref{UInt8}   # "FT000001" if fixed, or NULL 
-
-
-
-
 
 # EEPROM_HEADER STRUCTURE (See FT_EEPROM_Read and FT_EEPROM_Program)
 type ft_eeprom_header

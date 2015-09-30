@@ -29,6 +29,188 @@ end
 
 include("Types_and_Constants.jl")
 
+type FtProgramData
+  Signature1 :: UInt32 # Header - must be 0x0000000
+  Signature2 :: UInt32 # Header - must be 0xffffffff
+  Version :: UInt32 # Header - FT_PROGRAM_DATA version 
+                   # 0 = original (FT232B) 
+                   # 1 = FT2232 extensions 
+                   # 2 = FT232R extensions
+                   # 3 = FT2232H extensions
+                   # 4 = FT4232H extensions
+                   # 5 = FT232H extensions
+  VendorId :: UInt16 # 0x0403 
+  ProductId :: UInt16 # 0x6001 
+  Manufactuer :: ASCIIString     # "FTDI"
+  ManufacturerId :: ASCIIString  # "FT" 
+  Description :: ASCIIString     # "USB HS Serial Converter" 
+  SerialNumber :: ASCIIString    # "FT000001" if fixed, or NULL 
+  MaxPower :: UInt16 # 0 < MaxPower <= 500
+  PnP :: UInt16 # 0 = disabled, 1 = enabled 
+  SelfPowered :: UInt16 # 0 = bus powered, 1 = self powered 
+  RemoteWakeup :: UInt16  # 0 = not capable, 1 = capable
+  #
+  # Rev4 (FT232B) extensions 
+  #
+  Rev4 :: UInt8 # non-zero if Rev4 chip, zero otherwise 
+  IsoIn :: UInt8 # non-zero if in endpoint is isochronous 
+  IsoOut :: UInt8 # non-zero if out endpoint is isochronous
+  PullDownEnable :: UInt8 # non-zero if pull down enabled 
+  SerNumEnable :: UInt8 # non-zero if serial number to be used 
+  USBVersionEnable :: UInt8 # non-zero if chip uses USBVersion 
+  USBVersion :: UInt16 # BCD (0x0200 => USB2) 
+  #
+  # Rev 5 (FT2232) extensions
+  #
+  Rev5 :: UInt8 # non-zero if Rev5 chip, zero otherwise 
+  IsoInA :: UInt8 # non-zero if in endpoint is isochronous
+  IsoInB :: UInt8 # non-zero if in endpoint is isochronous
+  IsoOutA :: UInt8 # non-zero if out endpoint is isochronous
+  IsoOutB :: UInt8 # non-zero if out endpoint is isochronous 
+  PullDownEnable5 :: UInt8 # non-zero if pull down enabled 
+  SerNumEnable5 :: UInt8 # non-zero if serial number to be used
+  USBVersionEnable5 :: UInt8 # non-zero if chip uses USBVersion 
+  USBVersion5 :: UInt16 # BCD (0x0200 => USB2) 
+  AIsHighCurrent :: UInt8 # non-zero if interface is high current 
+  BIsHighCurrent :: UInt8 # non-zero if interface is high current 
+  IFAIsFifo :: UInt8 # non-zero if interface is 245 FIFO 
+  IFAIsFifoTar :: UInt8 # non-zero if interface is 245 FIFO CPU target
+  IFAIsFastSer :: UInt8 # non-zero if interface is Fast serial 
+  AIsVCP :: UInt8 # non-zero if interface is to use VCP drivers 
+  IFBIsFifo :: UInt8 # non-zero if interface is 245 FIFO
+  IFBIsFifoTar :: UInt8 # non-zero if interface is 245 FIFO CPU target 
+  IFBIsFastSer :: UInt8 # non-zero if interface is Fast serial
+  BIsVCP  :: UInt8 # non-zero if interface is to use VCP drivers 
+  #
+  # Rev 6 (FT232R) extensions
+  #
+  UseExtOsc :: UInt8 # Use External Oscillator 
+  HighDriveIOs :: UInt8 # High Drive I/Os 
+  EndpointSize :: UInt8 # Endpoint size 
+  PullDownEnableR :: UInt8 # non-zero if pull down enabled 
+  SerNumEnableR :: UInt8 # non-zero if serial number to be used 
+  InvertTXD :: UInt8 # non-zero if invert TXD 
+  InvertRXD :: UInt8 # non-zero if invert RXD 
+  InvertRTS :: UInt8 # non-zero if invert RTS 
+  InvertCTS :: UInt8 # non-zero if invert CTS 
+  InvertDTR :: UInt8 # non-zero if invert DTR 
+  InvertDSR :: UInt8 # non-zero if invert DSR
+  InvertDCD :: UInt8 # non-zero if invert DCD 
+  InvertRI  :: UInt8 # non-zero if invert RI 
+  Cbus0 :: UInt8 # Cbus Mux control 
+  Cbus1 :: UInt8 # Cbus Mux control 
+  Cbus2 :: UInt8 # Cbus Mux control 
+  Cbus3 :: UInt8 # Cbus Mux control 
+  Cbus4 :: UInt8 # Cbus Mux control
+  RIsD2XX :: UInt8 # non-zero if using D2XX driver 
+  #
+  # Rev 7 (FT2232H) Extensions 
+  #
+  PullDownEnable7 :: UInt8 # non-zero if pull down enabled 
+  SerNumEnable7 :: UInt8 # non-zero if serial number to be used 
+  ALSlowSlew :: UInt8 # non-zero if AL pins have slow slew 
+  ALSchmittInput :: UInt8 # non-zero if AL pins are Schmitt input 
+  ALDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  AHSlowSlew :: UInt8 # non-zero if AH pins have slow slew 
+  AHSchmittInput :: UInt8 # non-zero if AH pins are Schmitt input 
+  AHDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  BLSlowSlew :: UInt8 # non-zero if BL pins have slow slew 
+  BLSchmittInput :: UInt8 # non-zero if BL pins are Schmitt input 
+  BLDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  BHSlowSlew :: UInt8 # non-zero if BH pins have slow slew 
+  BHSchmittInput :: UInt8 # non-zero if BH pins are Schmitt input 
+  BHDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  IFAIsFifo7 :: UInt8 # non-zero if interface is 245 FIFO 
+  IFAIsFifoTar7 :: UInt8 # non-zero if interface is 245 FIFO CPU target 
+  IFAIsFastSer7 :: UInt8 # non-zero if interface is Fast serial 
+  AIsVCP7 :: UInt8 # non-zero if interface is to use VCP drivers 
+  IFBIsFifo7 :: UInt8 # non-zero if interface is 245 FIFO 
+  IFBIsFifoTar7 :: UInt8 # non-zero if interface is 245 FIFO CPU target 
+  IFBIsFastSer7 :: UInt8 # non-zero if interface is Fast serial 
+  BIsVCP7 :: UInt8 # non-zero if interface is to use VCP drivers 
+  PowerSaveEnable :: UInt8 # non-zero if using BCBUS7 to save power for self-powered designs 
+  #
+  # Rev 8 (FT4232H) Extensions 
+  #
+  PullDownEnable8 :: UInt8 # non-zero if pull down enabled 
+  SerNumEnable8 :: UInt8 # non-zero if serial number to be used 
+  ASlowSlew :: UInt8 # non-zero if AL pins have slow slew 
+  ASchmittInput :: UInt8 # non-zero if AL pins are Schmitt input 
+  ADriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  BSlowSlew :: UInt8 # non-zero if AH pins have slow slew 
+  BSchmittInput :: UInt8 # non-zero if AH pins are Schmitt input 
+  BDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA
+  CSlowSlew :: UInt8 # non-zero if BL pins have slow slew 
+  CSchmittInput :: UInt8 # non-zero if BL pins are Schmitt input 
+  CDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  DSlowSlew :: UInt8 # non-zero if BH pins have slow slew 
+  DSchmittInput :: UInt8 # non-zero if BH pins are Schmitt input 
+  DDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  ARIIsTXDEN :: UInt8 # non-zero if port A uses RI as RS485 TXDEN 
+  BRIIsTXDEN :: UInt8 # non-zero if port B uses RI as RS485 TXDEN 
+  CRIIsTXDEN :: UInt8 # non-zero if port C uses RI as RS485 TXDEN 
+  DRIIsTXDEN :: UInt8 # non-zero if port D uses RI as RS485 TXDEN 
+  AIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
+  BIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
+  CIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
+  DIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
+  #
+  # Rev 9 (FT232H) Extensions 
+  #
+  PullDownEnableH :: UInt8 # non-zero if pull down enabled 
+  SerNumEnableH :: UInt8 # non-zero if serial number to be used 
+  ACSlowSlewH :: UInt8 # non-zero if AC pins have slow slew 
+  ACSchmittInputH :: UInt8 # non-zero if AC pins are Schmitt input 
+  ACDriveCurrentH :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  ADSlowSlewH :: UInt8 # non-zero if AD pins have slow slew 
+  ADSchmittInputH :: UInt8 # non-zero if AD pins are Schmitt input 
+  ADDriveCurrentH :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
+  Cbus0H :: UInt8 # Cbus Mux control 
+  Cbus1H :: UInt8 # Cbus Mux control 
+  Cbus2H :: UInt8 # Cbus Mux control 
+  Cbus3H :: UInt8 # Cbus Mux control 
+  Cbus4H :: UInt8 # Cbus Mux control 
+  Cbus5H :: UInt8 # Cbus Mux control 
+  Cbus6H :: UInt8 # Cbus Mux control 
+  Cbus7H :: UInt8 # Cbus Mux control 
+  Cbus8H :: UInt8 # Cbus Mux control 
+  Cbus9H :: UInt8 # Cbus Mux control 
+  IsFifoH :: UInt8 # non-zero if interface is 245 FIFO 
+  IsFifoTarH :: UInt8 # non-zero if interface is 245 FIFO CPU target 
+  IsFastSerH :: UInt8 # non-zero if interface is Fast serial 
+  IsFT1248H :: UInt8 # non-zero if interface is FT1248 
+  FT1248CpolH :: UInt8 # FT1248 clock polarity - clock idle high (1) or clock idle low (0) 
+  FT1248LsbH :: UInt8 # FT1248 data is LSB (1) or MSB (0) 
+  FT1248FlowControlH :: UInt8 # FT1248 flow control enable 
+  IsVCPH :: UInt8 # non-zero if interface is to use VCP drivers 
+  PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
+  function FtProgramData(pd :: ft_program_data)
+    newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VernorID,pd.ProductId)
+    newpd.Manufacture = convert(ASCIIString,
+                        pd.Manufacture[1:findfirst(pd.Manufacture,0)-1])
+    newpd.ManufactureId = convert(ASCIIString,
+                        pd.ManufactureId[1:findfirst(pd.ManufactureId,0)-1])
+    newpd.Description = convert(ASCIIString,
+                        pd.Description[1:findfirst(pd.Description,0)-1])
+    newpd.SerialNumber = convert(ASCIIString,
+                        pd.SerialNumber[1:findfirst(pd.SerialNumber,0)-1])
+    for i in 10:130
+      newpd.[i] = pd.[i]
+    end
+    return newpd
+  end
+end
+
+function ft_program_data(pd::FtProgramData)
+  newpd = ft_program_data(pd.Version,pd.Manufacture,pd.ManufactureId,pd.Description,pd.SerialNumber)
+  newpd.VendorId = pd.VendorId
+  newpd.ProductId = pd.ProductId
+  for i in 10:130
+    newpd.[i] = pd.[i]
+  end
+  return newpd
+end
+
 function checkstatus(ft_status::Culong)
   if ft_status != 0
     throw(Ftd2xxError(ft_status))
@@ -557,7 +739,7 @@ function FT_GetLatencyTimer(ft_handle::UInt32)
   return convert(UInt8,timer[])
 end
 
-function FT_SetBitMode(ft_handle::Uint32, mask::UInt8, mode::UInt8)
+function FT_SetBitMode(ft_handle::UInt32, mask::UInt8, mode::UInt8)
   ft_status = ccall((:FT_SetBitMode, "ftd2xx.dll"),
                      Culong,
                      (Culong, Cuchar, Cuchar),
@@ -595,185 +777,14 @@ end
 
 
 
-type FtProgramData
-  Signature1 :: UInt32 # Header - must be 0x0000000
-  Signature2 :: UInt32 # Header - must be 0xffffffff
-  Version :: UInt32 # Header - FT_PROGRAM_DATA version 
-                   # 0 = original (FT232B) 
-                   # 1 = FT2232 extensions 
-                   # 2 = FT232R extensions
-                   # 3 = FT2232H extensions
-                   # 4 = FT4232H extensions
-                   # 5 = FT232H extensions
-  VendorId :: UInt16 # 0x0403 
-  ProductId :: UInt16 # 0x6001 
-  Manufactuer :: ASCIIString     # "FTDI"
-  ManufacturerId :: ASCIIString  # "FT" 
-  Description :: ASCIIString     # "USB HS Serial Converter" 
-  SerialNumber :: ASCIIString    # "FT000001" if fixed, or NULL 
-  MaxPower :: UInt16 # 0 < MaxPower <= 500
-  PnP :: UInt16 # 0 = disabled, 1 = enabled 
-  SelfPowered :: UInt16 # 0 = bus powered, 1 = self powered 
-  RemoteWakeup :: UInt16  # 0 = not capable, 1 = capable
-  #
-  # Rev4 (FT232B) extensions 
-  #
-  Rev4 :: UInt8 # non-zero if Rev4 chip, zero otherwise 
-  IsoIn :: UInt8 # non-zero if in endpoint is isochronous 
-  IsoOut :: UInt8 # non-zero if out endpoint is isochronous
-  PullDownEnable :: UInt8 # non-zero if pull down enabled 
-  SerNumEnable :: UInt8 # non-zero if serial number to be used 
-  USBVersionEnable :: UInt8 # non-zero if chip uses USBVersion 
-  USBVersion :: UInt16 # BCD (0x0200 => USB2) 
-  #
-  # Rev 5 (FT2232) extensions
-  #
-  Rev5 :: UInt8 # non-zero if Rev5 chip, zero otherwise 
-  IsoInA :: UInt8 # non-zero if in endpoint is isochronous
-  IsoInB :: UInt8 # non-zero if in endpoint is isochronous
-  IsoOutA :: UInt8 # non-zero if out endpoint is isochronous
-  IsoOutB :: UInt8 # non-zero if out endpoint is isochronous 
-  PullDownEnable5 :: UInt8 # non-zero if pull down enabled 
-  SerNumEnable5 :: UInt8 # non-zero if serial number to be used
-  USBVersionEnable5 :: UInt8 # non-zero if chip uses USBVersion 
-  USBVersion5 :: UInt16 # BCD (0x0200 => USB2) 
-  AIsHighCurrent :: UInt8 # non-zero if interface is high current 
-  BIsHighCurrent :: UInt8 # non-zero if interface is high current 
-  IFAIsFifo :: UInt8 # non-zero if interface is 245 FIFO 
-  IFAIsFifoTar :: UInt8 # non-zero if interface is 245 FIFO CPU target
-  IFAIsFastSer :: UInt8 # non-zero if interface is Fast serial 
-  AIsVCP :: UInt8 # non-zero if interface is to use VCP drivers 
-  IFBIsFifo :: UInt8 # non-zero if interface is 245 FIFO
-  IFBIsFifoTar :: UInt8 # non-zero if interface is 245 FIFO CPU target 
-  IFBIsFastSer :: UInt8 # non-zero if interface is Fast serial
-  BIsVCP  :: UInt8 # non-zero if interface is to use VCP drivers 
-  #
-  # Rev 6 (FT232R) extensions
-  #
-  UseExtOsc :: UInt8 # Use External Oscillator 
-  HighDriveIOs :: UInt8 # High Drive I/Os 
-  EndpointSize :: UInt8 # Endpoint size 
-  PullDownEnableR :: UInt8 # non-zero if pull down enabled 
-  SerNumEnableR :: UInt8 # non-zero if serial number to be used 
-  InvertTXD :: UInt8 # non-zero if invert TXD 
-  InvertRXD :: UInt8 # non-zero if invert RXD 
-  InvertRTS :: UInt8 # non-zero if invert RTS 
-  InvertCTS :: UInt8 # non-zero if invert CTS 
-  InvertDTR :: UInt8 # non-zero if invert DTR 
-  InvertDSR :: UInt8 # non-zero if invert DSR
-  InvertDCD :: UInt8 # non-zero if invert DCD 
-  InvertRI  :: UInt8 # non-zero if invert RI 
-  Cbus0 :: UInt8 # Cbus Mux control 
-  Cbus1 :: UInt8 # Cbus Mux control 
-  Cbus2 :: UInt8 # Cbus Mux control 
-  Cbus3 :: UInt8 # Cbus Mux control 
-  Cbus4 :: UInt8 # Cbus Mux control
-  RIsD2XX :: UInt8 # non-zero if using D2XX driver 
-  #
-  # Rev 7 (FT2232H) Extensions 
-  #
-  PullDownEnable7 :: UInt8 # non-zero if pull down enabled 
-  SerNumEnable7 :: UInt8 # non-zero if serial number to be used 
-  ALSlowSlew :: UInt8 # non-zero if AL pins have slow slew 
-  ALSchmittInput :: UInt8 # non-zero if AL pins are Schmitt input 
-  ALDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  AHSlowSlew :: UInt8 # non-zero if AH pins have slow slew 
-  AHSchmittInput :: UInt8 # non-zero if AH pins are Schmitt input 
-  AHDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  BLSlowSlew :: UInt8 # non-zero if BL pins have slow slew 
-  BLSchmittInput :: UInt8 # non-zero if BL pins are Schmitt input 
-  BLDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  BHSlowSlew :: UInt8 # non-zero if BH pins have slow slew 
-  BHSchmittInput :: UInt8 # non-zero if BH pins are Schmitt input 
-  BHDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  IFAIsFifo7 :: UInt8 # non-zero if interface is 245 FIFO 
-  IFAIsFifoTar7 :: UInt8 # non-zero if interface is 245 FIFO CPU target 
-  IFAIsFastSer7 :: UInt8 # non-zero if interface is Fast serial 
-  AIsVCP7 :: UInt8 # non-zero if interface is to use VCP drivers 
-  IFBIsFifo7 :: UInt8 # non-zero if interface is 245 FIFO 
-  IFBIsFifoTar7 :: UInt8 # non-zero if interface is 245 FIFO CPU target 
-  IFBIsFastSer7 :: UInt8 # non-zero if interface is Fast serial 
-  BIsVCP7 :: UInt8 # non-zero if interface is to use VCP drivers 
-  PowerSaveEnable :: UInt8 # non-zero if using BCBUS7 to save power for self-powered designs 
-  #
-  # Rev 8 (FT4232H) Extensions 
-  #
-  PullDownEnable8 :: UInt8 # non-zero if pull down enabled 
-  SerNumEnable8 :: UInt8 # non-zero if serial number to be used 
-  ASlowSlew :: UInt8 # non-zero if AL pins have slow slew 
-  ASchmittInput :: UInt8 # non-zero if AL pins are Schmitt input 
-  ADriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  BSlowSlew :: UInt8 # non-zero if AH pins have slow slew 
-  BSchmittInput :: UInt8 # non-zero if AH pins are Schmitt input 
-  BDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA
-  CSlowSlew :: UInt8 # non-zero if BL pins have slow slew 
-  CSchmittInput :: UInt8 # non-zero if BL pins are Schmitt input 
-  CDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  DSlowSlew :: UInt8 # non-zero if BH pins have slow slew 
-  DSchmittInput :: UInt8 # non-zero if BH pins are Schmitt input 
-  DDriveCurrent :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  ARIIsTXDEN :: UInt8 # non-zero if port A uses RI as RS485 TXDEN 
-  BRIIsTXDEN :: UInt8 # non-zero if port B uses RI as RS485 TXDEN 
-  CRIIsTXDEN :: UInt8 # non-zero if port C uses RI as RS485 TXDEN 
-  DRIIsTXDEN :: UInt8 # non-zero if port D uses RI as RS485 TXDEN 
-  AIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
-  BIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
-  CIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
-  DIsVCP8 :: UInt8 # non-zero if interface is to use VCP drivers 
-  #
-  # Rev 9 (FT232H) Extensions 
-  #
-  PullDownEnableH :: UInt8 # non-zero if pull down enabled 
-  SerNumEnableH :: UInt8 # non-zero if serial number to be used 
-  ACSlowSlewH :: UInt8 # non-zero if AC pins have slow slew 
-  ACSchmittInputH :: UInt8 # non-zero if AC pins are Schmitt input 
-  ACDriveCurrentH :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  ADSlowSlewH :: UInt8 # non-zero if AD pins have slow slew 
-  ADSchmittInputH :: UInt8 # non-zero if AD pins are Schmitt input 
-  ADDriveCurrentH :: UInt8 # valid values are 4mA, 8mA, 12mA, 16mA 
-  Cbus0H :: UInt8 # Cbus Mux control 
-  Cbus1H :: UInt8 # Cbus Mux control 
-  Cbus2H :: UInt8 # Cbus Mux control 
-  Cbus3H :: UInt8 # Cbus Mux control 
-  Cbus4H :: UInt8 # Cbus Mux control 
-  Cbus5H :: UInt8 # Cbus Mux control 
-  Cbus6H :: UInt8 # Cbus Mux control 
-  Cbus7H :: UInt8 # Cbus Mux control 
-  Cbus8H :: UInt8 # Cbus Mux control 
-  Cbus9H :: UInt8 # Cbus Mux control 
-  IsFifoH :: UInt8 # non-zero if interface is 245 FIFO 
-  IsFifoTarH :: UInt8 # non-zero if interface is 245 FIFO CPU target 
-  IsFastSerH :: UInt8 # non-zero if interface is Fast serial 
-  IsFT1248H :: UInt8 # non-zero if interface is FT1248 
-  FT1248CpolH :: UInt8 # FT1248 clock polarity - clock idle high (1) or clock idle low (0) 
-  FT1248LsbH :: UInt8 # FT1248 data is LSB (1) or MSB (0) 
-  FT1248FlowControlH :: UInt8 # FT1248 flow control enable 
-  IsVCPH :: UInt8 # non-zero if interface is to use VCP drivers 
-  PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
-  function FtProgramData(pd :: ft_program_data)
-    newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VernorID,pd.ProductId)
-    newpd.Manufacture = convert(ASCIIString,
-                        pd.Manufacture[1:findfirst(pd.Manufacture,0)-1])
-    newpd.ManufactureId = convert(ASCIIString,
-                        pd.ManufactureId[1:findfirst(pd.ManufactureId,0)-1])
-    newpd.Description = convert(ASCIIString,
-                        pd.Description[1:findfirst(pd.Description,0)-1])
-    newpd.SerialNumber = convert(ASCIIString,
-                        pd.SerialNumber[1:findfirst(pd.SerialNumber,0)-1])
-    for i in 10:130
-      newpd.[i] = pd.[i]
-    end
-    return newpd
-end
-
-ftbitmodedict = Dict()
-  FT_BITMODE_RESET => "FT_BITMODE_RESET"
-  FT_BITMODE_ASYNC_BITBANG => "FT_BITMODE_ASYNC_BITBANG"
-  FT_BITMODE_MPSSE => "FT_BITMODE_MPSSE"
-  FT_BITMODE_SYNC_BITBANG => "FT_BITMODE_SYNC_BITBANG"
-  FT_BITMODE_MCU_HOST => "FT_BITMODE_MCU_HOST"
-  FT_BITMODE_FAST_SERIAL => "FT_BITMODE_FAST_SERIAL"
-  FT_BITMODE_CBUS_BITBANG => "FT_BITMODE_CBUS_BITBANG"
+ftbitmodedict = Dict(
+  FT_BITMODE_RESET => "FT_BITMODE_RESET",
+  FT_BITMODE_ASYNC_BITBANG => "FT_BITMODE_ASYNC_BITBANG",
+  FT_BITMODE_MPSSE => "FT_BITMODE_MPSSE",
+  FT_BITMODE_SYNC_BITBANG => "FT_BITMODE_SYNC_BITBANG",
+  FT_BITMODE_MCU_HOST => "FT_BITMODE_MCU_HOST",
+  FT_BITMODE_FAST_SERIAL => "FT_BITMODE_FAST_SERIAL",
+  FT_BITMODE_CBUS_BITBANG => "FT_BITMODE_CBUS_BITBANG",
   FT_BITMODE_SYNC_FIFO => "FT_BITMODE_SYNC_FIFO")
 
 
