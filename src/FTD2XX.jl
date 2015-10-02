@@ -1,12 +1,6 @@
 module FTD2XX
 
-export FT_CreateDeviceInfoList, FT_GetDeviceInfoList, FT_Open, FT_Description
-export FT_SerialNumber, FT_OpenEx, FT_Close, FT_Read, FT_Write, FT_SetBaudRate
-export FT_SetDataCharacteristics, FT_SetTimeouts
-
-export FT_BITS_8, FT_BITS_7, FT_STOP_BITS_1, FT_STOP_BITS_2
-export FT_PARITY_NONE, FT_PARITY_ODD, FT_PARITY_EVEN
-export FT_PARITY_MARK, FT_PARITY_SPACE
+include("exports.jl")
 
 type Ftd2xxError <: Exception 
   ft_status :: UInt64
@@ -255,7 +249,7 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
     end
     endofstring = findfirst(d,0)-1
     description = convert(ASCIIString,d[1:endofstring])
-    handle = node.FT_HANDLE 
+    handle = node.FT_HANDLE
     push!(infonodearray,InfoNode(flags,devicetype,id,locid,serialnumber,
                                  description,handle))
   end
