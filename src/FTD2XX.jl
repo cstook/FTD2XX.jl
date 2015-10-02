@@ -468,7 +468,7 @@ function FT_GetDeviceInfo(ft_handle::UInt32)
   ft_status = ccall((:FT_GetDeviceInfo, "ftd2xx.dll"),
                      Culong,
                      (Culong, Ref{Culong}, Ref{Culong}, Ptr{UInt8}, Ptr{UInt8}, Ptr{Void}),
-                     ft_handle, ft_device, id, serialnumber, description, Void)
+                     ft_handle, ft_device, id, serialnumber, description, C_NULL)
   sn = convert(ASCIIString,serialnumber[1:findfirst(serialnumber,0)-1])
   d = convert(ASCIIString,description[1:findfirst(description,0)-1])
   checkstatus(ft_status)
@@ -490,14 +490,11 @@ end
 
 function FT_GetLibraryVersion()
   dllversion = Ref{Culong}()
-  ft_status = ccall((:FT_GetLibraryVersion, "ftd2xx.dll"),
-                     Culong,
-                     (Culong, Ref{Culong}),
-                     ft_handle, dllversion)
+  ft_status = ccall((:FT_GetLibraryVersion, "ftd2xx.dll"),Culong,(Ref{Culong},),dllversion)
   checkstatus(ft_status)
-  build = (driverversion[] & 0x000000ff)
-  minor = (driverversion[] & 0x0000ff00)>>8
-  major = (driverversion[] & 0x00ff0000)>>16
+  build = (dllversion[] & 0x000000ff)
+  minor = (dllversion[] & 0x0000ff00)>>8
+  major = (dllversion[] & 0x00ff0000)>>16
   return VersionNumber(major,minor,build)
 end
 
@@ -517,8 +514,8 @@ function FT_GetStatus(ft_handle::UInt32)
   eventstatus = Ref{Culong}()
   ft_status = ccall((:FT_GetStatus, "ftd2xx.dll"),
                      Culong,
-                     (Culong, Ref{Culong}),
-                     ft_handle, comportnumber)
+                     (Culong,Ref{Culong},Ref{Culong},Ref{Culong}),
+                     ft_handle, amountinrxqueue, amountintxqueue, eventstatus)
   checkstatus(ft_status)
   return (convert(Int32,amountinrxqueue[]),
           convert(Int32,amountintxqueue[]),convert(Int32,eventstatus[]))
@@ -599,8 +596,8 @@ end
 function FT_Reload(vid::Integer, pid::Integer)
   ft_status = ccall((:FT_Reload, "ftd2xx.dll"),
                      Culong,
-                     (Culong, Cuint, Cuint),
-                     ft_handle, vid, pid)
+                     (Cuint, Cuint),
+                     vid, pid)
   checkstatus(ft_status)
   return nothing
 end
@@ -620,8 +617,8 @@ function FT_StopInTask(ft_handle::UInt32)
   return nothing
 end
 
-function FT_StartInTask(ft_handle::UInt32)
-  ft_status = ccall((:FT_StartInTask, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
+function FT_RestartInTask(ft_handle::UInt32)
+  ft_status = ccall((:FT_RestartInTask, "ftd2xx.dll"),Culong,(Culong,),ft_handle)
   checkstatus(ft_status)
   return nothing
 end

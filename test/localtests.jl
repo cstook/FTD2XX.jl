@@ -48,20 +48,19 @@ FT_ClrRts(h)
 
 ms = FT_GetModemStatus(h)
 println("modem status = $ms")
-(devicetype, id, serialnumber, description, dummy) = FT_GetDeviceInfo(h)
-vid = convert(UInt16, (0xffff0000&&id)>>16)
-pid = convert(UInt16, 0x0000ffff&&id)
+(devicetype, id, serialnumber, description) = FT_GetDeviceInfo(h)
+vid = convert(UInt16, (0xffff0000&id)>>16)
+pid = convert(UInt16, 0x0000ffff&id)
 println("Device info from FT_GetDevice_Info")
 println("device type= $devicetype")
 println("id = $id,  vid = $vid,  pid = $pid")
 println("serial number = $serialnumber")
 println("description = $description")
-println("dummy = $dummy")
 
 driverversion = FT_GetDriverVersion(h)
 println("FT_GetDriverVersion = $driverversion")
-libraryversion = FT_GetLibrary_Version()
-println("FT_GetLibraryVersion = #libraryversion")
+libraryversion = FT_GetLibraryVersion()
+println("FT_GetLibraryVersion = $libraryversion")
 comportnumber = FT_GetComPortNumber(h)
 println("FT_GetComPortNumber = $comportnumber")
 (rxqueue, txqueue, eventstatus) = FT_GetStatus(h)
@@ -72,26 +71,25 @@ println("event status = $eventstatus")
 
 
 eventcharacter = 0x01
-enableevent = 0x00
+enableevent = false
 errorcharacter = 0x02
-enableerror = 0x00
+enableerror = false
 FT_SetChars(h,eventcharacter,enableevent, errorcharacter, enableerror)
 
 FT_SetBreakOn(h)
 FT_SetBreakOff(h)
-FT_Purge(h, FT_PURGE_RX && FT_PURGE_TX)
+FT_Purge(h, FT_PURGE_RX & FT_PURGE_TX)
 
 FT_ResetDevice(h)
 FT_ResetPort(h)
 FT_CyclePort(h)
 FT_Rescan(h)
-FT_Reload(vid,pid)
-FT_SetResetPipeRetryCount(100)
-FT_SetResetPipeRetryCount(50)  # back to default
+FT_SetResetPipeRetryCount(h,100)
+FT_SetResetPipeRetryCount(h,50)  # back to default
 FT_StopInTask(h)
 FT_RestartInTask(h)
-FT_SetDeadmanTimeout(6000)
-FT_SetDeadmanTimeout(5000)  # back to default
+FT_SetDeadmanTimeout(h,6000)
+FT_SetDeadmanTimeout(h,5000)  # back to default
 
 ####################################
 #
@@ -100,3 +98,7 @@ FT_SetDeadmanTimeout(5000)  # back to default
 ####################################
 
 FT_Close(h)
+
+
+println("reloading vid=$vid, pid=$pid")
+FT_Reload(vid,pid)

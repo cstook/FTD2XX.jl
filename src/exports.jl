@@ -7,7 +7,7 @@ export FT_GetDeviceInfo, FT_GetDriverVersion, FT_GetLibraryVersion
 export FT_GetComPortNumber, FT_GetStatus, FT_SetChars, FT_SetBreakOn
 export FT_SetBreakOff, FT_Purge, FT_ResetDevice, FT_ResetPort, FT_CyclePort
 export FT_Rescan, FT_Reload, FT_SetResetPipeRetryCount, FT_StopInTask
-export FT_StartInTask, FT_SetDeadmanTimeout, FT_ReadEE, FT_WriteEE, FT_EraseEE
+export FT_RestartInTask, FT_SetDeadmanTimeout, FT_ReadEE, FT_WriteEE, FT_EraseEE
 export FT_EE_Read, FT_EE_Program, FT_EE_UASize, FT_EE_UARead, FT_EE_UAWrite
 export FT_SetLatencyTimer, FT_SetBitMode, FT_GetBitMode, FT_SetUSBParameters
 
