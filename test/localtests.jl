@@ -47,13 +47,34 @@ FT_SetRts(h)
 FT_ClrRts(h)
 
 ms = FT_GetModemStatus(h)
-println("modem status = $ms")
+modemstatus = convert(UInt8,ms&0x00ff)
+linestatus = convert(UInt8,(ms&0xff00)>>8)
+print("modem status = 0x")
+@printf("%X",modemstatus)
+println()
+modemstatus&CTS == CTS ? println("CTS set") : nothing
+modemstatus&DSR == DSR ? println("DSR set") : nothing
+modemstatus&RI == RI ? println("RI set") : nothing
+modemstatus&DCD == DCD ? println("DCD set") : nothing
+print("line status = 0x")
+@printf("%X",linestatus)
+println()
+linestatus&OE == OE ? println("Overrun Error") : nothing
+linestatus&PE == PE ? println("Parity Error") : nothing
+linestatus&FE == FE ? println("Framing Error") : nothing
+linestatus&BI == BI ? println("Break Interupt") : nothing
 (devicetype, id, serialnumber, description) = FT_GetDeviceInfo(h)
 vid = convert(UInt16, (0xffff0000&id)>>16)
 pid = convert(UInt16, 0x0000ffff&id)
 println("Device info from FT_GetDevice_Info")
 println("device type= $devicetype")
-println("id = $id,  vid = $vid,  pid = $pid")
+print("id = 0x")
+@printf("%X",id)
+print("    vid = 0x")
+@printf("%X",vid)
+print("    pid = 0x")
+@printf("%X",pid)
+println()
 println("serial number = $serialnumber")
 println("description = $description")
 
@@ -97,8 +118,14 @@ FT_SetDeadmanTimeout(h,5000)  # back to default
 #
 ####################################
 
-FT_Close(h)
 
-
-println("reloading vid=$vid, pid=$pid")
+print("reloading vid=0x")
+@printf("%X",vid)
+print("    pid=0x")
+@printf("%X",pid)
+println()
 FT_Reload(vid,pid)
+
+FT_ResetPort(h)
+
+FT_Close(h)
