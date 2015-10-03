@@ -185,11 +185,16 @@ FT_SetBitMode(h, 0x00, 0x02)  # mode = MPSSE
 FT_SetBitMode(h, 0x00, 0x00)  # reset mode
 println("FT_SetBitMode test complete")
 
-
 println()
 idbv = FT_GetBitMode(h)
 print("instaneous data bus value = 0x")
 @printf("%X",idbv)
+
 println()
+intransfersize = 100 * 64
+outtransfersize = 101 * 64
+FT_SetUSBParameters(h, intransfersize, outtransfersize)
+FT_SetUSBParameters(h, 4096, 4096)  # back to default
+println("FT_SetUSBParameters test complete")
 
 FT_Close(h)
