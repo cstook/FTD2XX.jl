@@ -180,6 +180,7 @@ immutable _ft_device_list_info_node
   d57  :: UInt8; d58  :: UInt8; d59  :: UInt8; d60  :: UInt8 
   d61  :: UInt8; d62  :: UInt8; d63  :: UInt8; d64  :: UInt8  
   FT_HANDLE    :: Cuint
+  why_do_i_need_this :: Cuint
 end
 
 # FT_FLAGS (see FT_DEVICE_LIST_INFO_NODE)

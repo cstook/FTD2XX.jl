@@ -639,7 +639,7 @@ function FT_ReadEE(ft_handle::UInt32, wordoffset::Integer)
                      (Culong, Culong, Ref{Culong}),
                      ft_handle, wordoffset, value)
   checkstatus(ft_status)
-  return convert(Int32,value[])
+  return convert(UInt32,value[])
 end
 
 function FT_WriteEE(ft_handle::UInt32, wordofffset::Integer, value::Integer)
@@ -688,7 +688,7 @@ function FT_EE_UASize(ft_handle::UInt32)
   return convert(Int32,eesize[])
 end
 
-function FT_EE_UARead(ft_handle::UInt32, buffer::Array{UInt8,1})
+function FT_EE_UARead!(ft_handle::UInt32, buffer::Array{UInt8,1})
   len = length(buffer)
   bytesread = Ref{Culong}()
   ft_status = ccall((:FT_EE_UARead, "ftd2xx.dll"),
@@ -696,7 +696,7 @@ function FT_EE_UARead(ft_handle::UInt32, buffer::Array{UInt8,1})
                      (Culong, Ptr{UInt8}, Culong, Ref{Culong}),
                      ft_handle, buffer, len, bytesread)
   checkstatus(ft_status)
-  return convert(Int32, bytesread[])
+  return convert(UInt32, bytesread[])
 end
 
 function FT_EE_UAWrite(ft_handle::UInt32, buffer::Array{UInt8,1})

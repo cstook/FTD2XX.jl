@@ -101,6 +101,8 @@ FT_SetBreakOn(h)
 FT_SetBreakOff(h)
 FT_Purge(h, FT_PURGE_RX & FT_PURGE_TX)
 
+
+
 FT_ResetDevice(h)
 FT_ResetPort(h)
 FT_CyclePort(h)
@@ -111,21 +113,73 @@ FT_StopInTask(h)
 FT_RestartInTask(h)
 FT_SetDeadmanTimeout(h,6000)
 FT_SetDeadmanTimeout(h,5000)  # back to default
-
-####################################
-#
-# EEPROM Functions
-#
-####################################
-
-
 print("reloading vid=0x")
 @printf("%X",vid)
 print("    pid=0x")
 @printf("%X",pid)
 println()
 FT_Reload(vid,pid)
-
 FT_ResetPort(h)
+
+
+FT_Close(h)
+
+
+####################################
+#
+# EEPROM Functions
+#
+####################################
+println()
+println("EEPROM testing")
+println("opening serial number FTXRNZUJ")
+h = FT_OpenEx(FT_SerialNumber("FTXRNZUJ"))  # cable with external loopback
+# factory description = "C232HM-EDHSL-0"
+#
+# h = FT_OpenEx(FT_SerialNumber("FTX2GPSJ"))  # cable with external loopback
+# factory description = "UM232H-B"
+
+word0x00000001 = FT_ReadEE(h,0x00000001)
+print("word at EE address 0x00000001 = 0x")
+@printf("%X",word0x00000001)
+println()
+
+userareasize = FT_EE_UASize(h)
+print("user area size = 0x")
+@printf("%X",userareasize)
+println()
+
+userarea = zeros(UInt8, userareasize)
+FT_EE_UARead!(h,userarea)
+show(userarea)
+println()
+
+for (index,byte) in enumerate(userarea)
+  if byte == 255
+    userarea[index] = 0
+  else
+    userarea[index] = byte + 1
+  end
+end
+
+FT_EE_UAWrite(h,userarea)
+userarea = zeros(UInt8, userareasize)
+FT_EE_UARead!(h,userarea)
+show(userarea)
+println()
+println()
+
+
+latencytime_ms = FT_GetLatencyTimer(h)
+ltold = latencytime_ms
+println("latency time is $(latencytime_ms)ms")
+FT_SetLatencyTimer(h,255)
+latencytime_ms = FT_GetLatencyTimer(h)
+println("latency time is ($latencytime_ms)ms")
+FT_SetLatencyTimer(h,ltold)
+latencytime_ms = FT_GetLatencyTimer(h)
+println("latency time is ($latencytime_ms)ms")
+
+
 
 FT_Close(h)
