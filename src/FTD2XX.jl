@@ -722,7 +722,7 @@ end
 
 function FT_GetLatencyTimer(ft_handle::UInt32)
   timer = Ref{Cuchar}()
-  ft_status = ccall((:FT_SetLatencyTimer, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetLatencyTimer, "ftd2xx.dll"),
                      Culong,
                      (Culong, Ref{Cuchar}),
                      ft_handle, timer)
@@ -731,6 +731,7 @@ function FT_GetLatencyTimer(ft_handle::UInt32)
 end
 
 function FT_SetBitMode(ft_handle::UInt32, mask::UInt8, mode::UInt8)
+  @assert mode in keys(ftbitmodedict)
   ft_status = ccall((:FT_SetBitMode, "ftd2xx.dll"),
                      Culong,
                      (Culong, Cuchar, Cuchar),

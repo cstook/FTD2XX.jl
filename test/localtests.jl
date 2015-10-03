@@ -172,14 +172,24 @@ println()
 
 latencytime_ms = FT_GetLatencyTimer(h)
 ltold = latencytime_ms
-println("latency time is $(latencytime_ms)ms")
-FT_SetLatencyTimer(h,255)
+println("latency time is $latencytime_ms ms")
+FT_SetLatencyTimer(h,10)
 latencytime_ms = FT_GetLatencyTimer(h)
-println("latency time is ($latencytime_ms)ms")
+println("latency time is $latencytime_ms ms")
 FT_SetLatencyTimer(h,ltold)
 latencytime_ms = FT_GetLatencyTimer(h)
-println("latency time is ($latencytime_ms)ms")
+println("latency time is $latencytime_ms ms")
+
+println()
+FT_SetBitMode(h, 0x00, 0x02)  # mode = MPSSE
+FT_SetBitMode(h, 0x00, 0x00)  # reset mode
+println("FT_SetBitMode test complete")
 
 
+println()
+idbv = FT_GetBitMode(h)
+print("instaneous data bus value = 0x")
+@printf("%X",idbv)
+println()
 
 FT_Close(h)
