@@ -180,14 +180,10 @@ type FtProgramData
   PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
   function FtProgramData(pd :: ft_program_data)
     newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VendorId,pd.ProductId)
-    mfg = bytestring(pd.Manufacture)
-    mfgid = bytestring(pd.ManufacturerId)
-    d = bytestring(pd.Description)
-    sn = bytestring(pd.SerialNumber)
-    newpd.Manufacture = convert(ASCIIString, mfg[1:findfirst(mfg,0)-1])
-    newpd.ManufacturerId = convert(ASCIIString, mfgid[1:findfirst(mfgid,0)-1])
-    newpd.Description = convert(ASCIIString, d[1:findfirst(d,0)-1])
-    newpd.SerialNumber = convert(ASCIIString, sn[1:findfirst(sn,0)-1])
+    newpd.Manufacture = bytestring(pd.Manufacture)
+    newpd.ManufacturerId = bytestring(pd.ManufacturerId)
+    newpd.Description = bytestring(pd.Description)
+    newpd.SerialNumber = bytestring(pd.SerialNumber)
     for i in 10:130
       newpd.(i) = pd.(i)
     end
@@ -204,6 +200,8 @@ function ft_program_data(pd::FtProgramData)
   end
   return newpd
 end
+
+include("FtProgramData_show.jl")
 
 function checkstatus(ft_status::Culong)
   if ft_status != 0
