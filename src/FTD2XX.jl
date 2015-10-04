@@ -1,3 +1,4 @@
+#__precompile__()
 module FTD2XX
 
 include("exports.jl")
