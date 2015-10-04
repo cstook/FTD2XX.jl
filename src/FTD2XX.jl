@@ -35,7 +35,7 @@ type FtProgramData
                    # 5 = FT232H extensions
   VendorId :: UInt16 # 0x0403 
   ProductId :: UInt16 # 0x6001 
-  Manufactuer :: ASCIIString     # "FTDI"
+  Manufacture :: ASCIIString     # "FTDI"
   ManufacturerId :: ASCIIString  # "FT" 
   Description :: ASCIIString     # "USB HS Serial Converter" 
   SerialNumber :: ASCIIString    # "FT000001" if fixed, or NULL 
@@ -180,16 +180,16 @@ type FtProgramData
   PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
   function FtProgramData(pd :: ft_program_data)
     newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VendorId,pd.ProductId)
-    newpd.Manufacture = convert(ASCIIString,
-                        pd.Manufacture[1:findfirst(pd.Manufacture,0)-1])
-    newpd.ManufactureId = convert(ASCIIString,
-                        pd.ManufactureId[1:findfirst(pd.ManufactureId,0)-1])
-    newpd.Description = convert(ASCIIString,
-                        pd.Description[1:findfirst(pd.Description,0)-1])
-    newpd.SerialNumber = convert(ASCIIString,
-                        pd.SerialNumber[1:findfirst(pd.SerialNumber,0)-1])
+    mfg = bytestring(pd.Manufacture)
+    mfgid = bytestring(pd.ManufacturerId)
+    d = bytestring(pd.Description)
+    sn = bytestring(pd.SerialNumber)
+    newpd.Manufacture = convert(ASCIIString, mfg[1:findfirst(mfg,0)-1])
+    newpd.ManufacturerId = convert(ASCIIString, mfgid[1:findfirst(mfgid,0)-1])
+    newpd.Description = convert(ASCIIString, d[1:findfirst(d,0)-1])
+    newpd.SerialNumber = convert(ASCIIString, sn[1:findfirst(sn,0)-1])
     for i in 10:130
-      newpd.[i] = pd.[i]
+      newpd.(i) = pd.(i)
     end
     return newpd
   end
@@ -200,7 +200,7 @@ function ft_program_data(pd::FtProgramData)
   newpd.VendorId = pd.VendorId
   newpd.ProductId = pd.ProductId
   for i in 10:130
-    newpd.[i] = pd.[i]
+    newpd.(i) = pd.(i)
   end
   return newpd
 end

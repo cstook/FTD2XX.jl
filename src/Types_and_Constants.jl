@@ -199,10 +199,10 @@ type ft_program_data
                    # 5 = FT232H extensions
   VendorId :: Cushort # 0x0403 
   ProductId :: Cushort # 0x6001 
-  Manufacture :: Ref{UInt8}    # "FTDI"
-  ManufacturerId :: Ref{UInt8} # "FT" 
-  Description :: Ref{UInt8}    # "USB HS Serial Converter" 
-  SerialNumber :: Ref{UInt8}   # "FT000001" if fixed, or NULL 
+  Manufacture :: Ptr{UInt8}    # "FTDI"
+  ManufacturerId :: Ptr{UInt8} # "FT" 
+  Description :: Ptr{UInt8}    # "USB HS Serial Converter" 
+  SerialNumber :: Ptr{UInt8}   # "FT000001" if fixed, or NULL 
   MaxPower :: Cushort # 0 < MaxPower <= 500
   PnP :: Cushort # 0 = disabled, 1 = enabled 
   SelfPowered :: Cushort # 0 = bus powered, 1 = self powered 
@@ -367,11 +367,11 @@ type ft_program_data
     for (p,c) in enumerate(SerialNumber)
       sn[p] = Int(c)
     end
-    mfgref = Base.cconvert(Ref{UInt8},mfg)
-    mfgidref = Base.cconvert(Ref{UInt8},mfgid)
-    dref = Base.cconvert(Ref{UInt8},d)
-    snref = Base.cconvert(Ref{UInt8},sn)
-    new(0x00000000, 0xffffffff, Version, 0, 0, mfgref, mfgidref, dref, snref)
+    mfgptr = pointer(mfg)
+    mfgidptr = pointer(mfgid)
+    dptr = pointer(d)
+    snptr = pointer(sn)
+    new(0x00000000, 0xffffffff, Version, 0, 0, mfgptr, mfgidptr, dptr, snptr)
   end
   ft_program_data(Version) = ft_program_data(Version,"","","","")  
 end
