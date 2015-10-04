@@ -197,4 +197,6 @@ FT_SetUSBParameters(h, intransfersize, outtransfersize)
 FT_SetUSBParameters(h, 4096, 4096)  # back to default
 println("FT_SetUSBParameters test complete")
 
+programdata = FT_EE_Read(h)
+
 FT_Close(h)

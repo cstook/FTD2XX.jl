@@ -179,7 +179,7 @@ type FtProgramData
   IsVCPH :: UInt8 # non-zero if interface is to use VCP drivers 
   PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
   function FtProgramData(pd :: ft_program_data)
-    newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VernorID,pd.ProductId)
+    newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VendorId,pd.ProductId)
     newpd.Manufacture = convert(ASCIIString,
                         pd.Manufacture[1:findfirst(pd.Manufacture,0)-1])
     newpd.ManufactureId = convert(ASCIIString,
@@ -657,8 +657,8 @@ function FT_EraseEE(ft_handle::UInt32)
   return nothing
 end 
 
-function FT_EE_Read(ft_handle::UInt32, Version::Integer = 5)
-  @assert Version>-1
+function FT_EE_Read(ft_handle::UInt32, version::Integer = 5)
+  @assert version>-1
   ftpds = Ref{ft_program_data}(ft_program_data(version))
   ft_status = ccall((:FT_EE_Read, "ftd2xx.dll"),
                      Culong,

@@ -199,7 +199,7 @@ type ft_program_data
                    # 5 = FT232H extensions
   VendorId :: Cushort # 0x0403 
   ProductId :: Cushort # 0x6001 
-  Manufactuer :: Ref{UInt8}    # "FTDI"
+  Manufacture :: Ref{UInt8}    # "FTDI"
   ManufacturerId :: Ref{UInt8} # "FT" 
   Description :: Ref{UInt8}    # "USB HS Serial Converter" 
   SerialNumber :: Ref{UInt8}   # "FT000001" if fixed, or NULL 
@@ -358,7 +358,7 @@ type ft_program_data
     for (p,c) in enumerate(Manufacture)
       mfg[p] = Int(c)
     end
-    for (p,c) in enumerate(ManufactureID)
+    for (p,c) in enumerate(ManufactureId)
       mfgid[p] = Int(c)
     end
     for (p,c) in enumerate(Description)
@@ -367,10 +367,12 @@ type ft_program_data
     for (p,c) in enumerate(SerialNumber)
       sn[p] = Int(c)
     end
-    new(0x00000000, 0xffffffff, Version, Ref{UInt8}(mfg), 
-        Ref{UInt8}(mfgid), Ref{UInt8}(d), Ref{UInt8}(sn))
+    mfgref = Base.cconvert(Ref{UInt8},mfg)
+    mfgidref = Base.cconvert(Ref{UInt8},mfgid)
+    dref = Base.cconvert(Ref{UInt8},d)
+    snref = Base.cconvert(Ref{UInt8},sn)
+    new(0x00000000, 0xffffffff, Version, 0, 0, mfgref, mfgidref, dref, snref)
   end
-
   ft_program_data(Version) = ft_program_data(Version,"","","","")  
 end
 
