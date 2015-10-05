@@ -200,7 +200,7 @@ type ft_program_data
   VendorId :: Cushort # 0x0403 
   ProductId :: Cushort # 0x6001 
   Manufacturer :: Ptr{UInt8}    # "FTDI"
-  ManufacturerrId :: Ptr{UInt8} # "FT" 
+  ManufacturerId :: Ptr{UInt8} # "FT" 
   Description :: Ptr{UInt8}    # "USB HS Serial Converter" 
   SerialNumber :: Ptr{UInt8}   # "FT000001" if fixed, or NULL 
   MaxPower :: Cushort # 0 < MaxPower <= 500
