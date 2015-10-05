@@ -198,5 +198,14 @@ FT_SetUSBParameters(h, 4096, 4096)  # back to default
 println("FT_SetUSBParameters test complete")
 
 programdata = FT_EE_Read(h)
+println("PowerSaveEnableH = ",programdata.PowerSaveEnableH)
+programdata.PowerSaveEnableH = 0x00 # turn off power save 
+FT_EE_Program(h,programdata)
+pd2 = FT_EE_Read(h)
+println("PowerSaveEnableH = ",pd2.PowerSaveEnableH)
+pd2.PowerSaveEnableH = 0x01 # turn on power save
+FT_EE_Program(h,pd2)
+pd3 = FT_EE_Read(h)
+println("PowerSaveEnableH = ",pd3.PowerSaveEnableH)
 
 FT_Close(h)

@@ -36,8 +36,8 @@ type FtProgramData
                    # 5 = FT232H extensions
   VendorId :: UInt16 # 0x0403 
   ProductId :: UInt16 # 0x6001 
-  Manufacture :: ASCIIString     # "FTDI"
-  ManufacturerId :: ASCIIString  # "FT" 
+  Manufacturer :: ASCIIString     # "FTDI"
+  ManufacturerrId :: ASCIIString  # "FT" 
   Description :: ASCIIString     # "USB HS Serial Converter" 
   SerialNumber :: ASCIIString    # "FT000001" if fixed, or NULL 
   MaxPower :: UInt16 # 0 < MaxPower <= 500
@@ -181,8 +181,8 @@ type FtProgramData
   PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
   function FtProgramData(pd :: ft_program_data)
     newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VendorId,pd.ProductId)
-    newpd.Manufacture = bytestring(pd.Manufacture)
-    newpd.ManufacturerId = bytestring(pd.ManufacturerId)
+    newpd.Manufacturer = bytestring(pd.Manufacturer)
+    newpd.ManufacturerrId = bytestring(pd.ManufacturerrId)
     newpd.Description = bytestring(pd.Description)
     newpd.SerialNumber = bytestring(pd.SerialNumber)
     for i in 10:130
@@ -193,7 +193,7 @@ type FtProgramData
 end
 
 function ft_program_data(pd::FtProgramData)
-  newpd = ft_program_data(pd.Version,pd.Manufacture,pd.ManufactureId,pd.Description,pd.SerialNumber)
+  newpd = ft_program_data(pd.Version,pd.Manufacturer,pd.ManufacturerrId,pd.Description,pd.SerialNumber)
   newpd.VendorId = pd.VendorId
   newpd.ProductId = pd.ProductId
   for i in 10:130

@@ -199,8 +199,8 @@ type ft_program_data
                    # 5 = FT232H extensions
   VendorId :: Cushort # 0x0403 
   ProductId :: Cushort # 0x6001 
-  Manufacture :: Ptr{UInt8}    # "FTDI"
-  ManufacturerId :: Ptr{UInt8} # "FT" 
+  Manufacturer :: Ptr{UInt8}    # "FTDI"
+  ManufacturerrId :: Ptr{UInt8} # "FT" 
   Description :: Ptr{UInt8}    # "USB HS Serial Converter" 
   SerialNumber :: Ptr{UInt8}   # "FT000001" if fixed, or NULL 
   MaxPower :: Cushort # 0 < MaxPower <= 500
@@ -344,21 +344,21 @@ type ft_program_data
   PowerSaveEnableH :: Cuchar # non-zero if using ACBUS7 to save power for self-powered designs
   
   function ft_program_data(Version::Integer,
-                           Manufacture::ASCIIString,
-                           ManufactureId::ASCIIString,
+                           Manufacturer::ASCIIString,
+                           ManufacturerId::ASCIIString,
                            Description::ASCIIString,
                            SerialNumber::ASCIIString)
-    @assert (length(Manufacture) + length(ManufactureId)) < 41
+    @assert (length(Manufacturer) + length(ManufacturerId)) < 41
     @assert length(Description)<=64
     @assert length(SerialNumber)<=16
     mfg = zeros(UInt8,41)
     mfgid = zeros(UInt8,41)
     d = zeros(UInt8,65)
     sn = zeros(UInt8,17)
-    for (p,c) in enumerate(Manufacture)
+    for (p,c) in enumerate(Manufacturer)
       mfg[p] = Int(c)
     end
-    for (p,c) in enumerate(ManufactureId)
+    for (p,c) in enumerate(ManufacturerId)
       mfgid[p] = Int(c)
     end
     for (p,c) in enumerate(Description)
