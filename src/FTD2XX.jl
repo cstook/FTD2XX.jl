@@ -632,19 +632,21 @@ function FT_SetDeadmanTimeout(ft_handle::UInt32, deadmantimeout::Integer = 5000)
 end 
 
 function FT_ReadEE(ft_handle::UInt32, wordoffset::Integer)
-  value = Ref{Culong}()
+  @assert wordoffset >= 0
+  value = Ref{Cushort}()
   ft_status = ccall((:FT_ReadEE, "ftd2xx.dll"),
                      Culong,
-                     (Culong, Culong, Ref{Culong}),
+                     (Culong, Culong, Ref{Cushort}),
                      ft_handle, wordoffset, value)
   checkstatus(ft_status)
-  return convert(UInt32,value[])
+  return convert(UInt16,value[])
 end
 
-function FT_WriteEE(ft_handle::UInt32, wordofffset::Integer, value::Integer)
+function FT_WriteEE(ft_handle::UInt32, wordoffset::Integer, value::UInt16)
+  @assert wordoffset >= 0
   ft_status = ccall((:FT_WriteEE, "ftd2xx.dll"),
                      Culong,
-                     (Culong, Culong, Culong),
+                     (Culong, Culong, Cushort),
                      ft_handle, wordoffset, value)
   checkstatus(ft_status)
   return nothing
