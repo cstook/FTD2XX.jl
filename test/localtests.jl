@@ -7,6 +7,11 @@ lpdwnumdevs = FT_CreateDeviceInfoList()
 println("$lpdwnumdevs devices found")
 dil = FT_GetDeviceInfoList(lpdwnumdevs)
 println(dil)
+println()
+show(dil[1])
+println()
+show(dil)
+println()
 
 @test length(dil) > 0
 

@@ -21,7 +21,7 @@ type InfoNode
   description   :: ASCIIString
   handle        :: UInt32
 end
-
+include("InfoNode_show.jl")
 include("Types_and_Constants.jl")
 
 type FtProgramData
