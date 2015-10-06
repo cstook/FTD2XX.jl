@@ -1,4 +1,5 @@
 export FT_GetDeviceInfoList
+export FT_FLAGS_OPENED
 
 type InfoNode
   flags         :: UInt32
@@ -31,6 +32,9 @@ function Base.show(io::IO, a::Array{InfoNode,1})
   end
 end
  
+# FT_FLAGS (see FT_DEVICE_LIST_INFO_NODE)
+const FT_FLAGS_OPENED = 0x00000001
+
 # FT_DEVICE_LIST_INFO_NODE (see FT_GetDeviceInfoList and FT_GetDeviceInfoDetail)
 immutable _ft_device_list_info_node
   Flags :: Cuint

@@ -1,6 +1,4 @@
-export FT_CreatedeviceInfoList
-
-
+export FT_CreateDeviceInfoList
 
 function FT_CreateDeviceInfoList()
   lpdwNumDevs = Ref{Culong}()
