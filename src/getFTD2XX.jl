@@ -2,8 +2,6 @@
 # src directory.  If not get correct driver
 # from FTDI website
 
-@windows? using ZipFile : nothing
-
 function haveftd2xx()
   @windows? isfile("ftd2xx.dll"):false
 end
@@ -15,6 +13,7 @@ function getftd2xx()
     return dir
   end
   function win()
+    using ZipFile
     driver = download("http://www.ftdichip.com/Drivers/CDM/CDM v2.12.06 WHQL Certified.zip")
     r = ZipFile.Reader(driver)
     indexofdll = findfirst(x->x.name=="i386/ftd2xx.dll",r.files)
