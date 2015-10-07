@@ -49,8 +49,6 @@ function Base.showerror(io::IO, e::Ftd2xxError)
   print(io, "Ftd2xxError: FT_STATUS=$(fts), $errortext")
 end
 
-include("Types_and_Constants.jl")
-
 function checkstatus(ft_status::Culong)
   if ft_status != 0
     throw(Ftd2xxError(ft_status))
