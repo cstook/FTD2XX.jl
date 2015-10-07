@@ -26,3 +26,10 @@ function getftd2xx()
   end
   @windows? win() : nothing
 end
+
+#=
+if ~haveftd2xx()
+  println("Downloading driver from FTDI")
+  getftd2xx()
+end
+=#
