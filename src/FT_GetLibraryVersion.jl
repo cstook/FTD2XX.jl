@@ -2,7 +2,7 @@ export FT_GetLibraryVersion
 
 function FT_GetLibraryVersion()
   dllversion = Ref{Culong}()
-  ft_status = ccall((:FT_GetLibraryVersion, "ftd2xx.dll"),Culong,(Ref{Culong},),dllversion)
+  ft_status = ccall((:FT_GetLibraryVersion, d2xx),Culong,(Ref{Culong},),dllversion)
   checkstatus(ft_status)
   build = (dllversion[] & 0x000000ff)
   minor = (dllversion[] & 0x0000ff00)>>8

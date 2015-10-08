@@ -2,7 +2,7 @@ export FT_GetDriverVersion
 
 function FT_GetDriverVersion(ft_handle::UInt32)
   driverversion = Ref{Culong}()
-  ft_status = ccall((:FT_GetDriverVersion, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetDriverVersion, d2xx),
                      Culong,
                      (Culong, Ref{Culong}),
                      ft_handle, driverversion)

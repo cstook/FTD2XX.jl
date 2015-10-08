@@ -604,7 +604,7 @@ end
 function FT_EE_Read(ft_handle::UInt32, version::Integer = 5)
   @assert version>-1
   ftpds = Ref{ft_program_data}(ft_program_data(version))
-  ft_status = ccall((:FT_EE_Read, "ftd2xx.dll"),
+  ft_status = ccall((:FT_EE_Read, d2xx),
                      Culong,
                      (Culong, Ref{ft_program_data}),
                      ft_handle, ftpds)
@@ -614,7 +614,7 @@ end
 
 function FT_EE_Program(ft_handle::UInt32, pd::FtProgramData)
   ftpds = Ref{ft_program_data}(ft_program_data(pd))
-  ft_status = ccall((:FT_EE_Program, "ftd2xx.dll"),
+  ft_status = ccall((:FT_EE_Program, d2xx),
                      Culong,
                      (Culong, Ref{ft_program_data}),
                      ft_handle, ftpds)

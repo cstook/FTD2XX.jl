@@ -1,7 +1,7 @@
 export FT_Reload
 
 function FT_Reload(vid::Integer, pid::Integer)
-  ft_status = ccall((:FT_Reload, "ftd2xx.dll"),
+  ft_status = ccall((:FT_Reload, d2xx),
                      Culong,
                      (Cuint, Cuint),
                      vid, pid)

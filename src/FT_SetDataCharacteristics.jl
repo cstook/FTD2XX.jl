@@ -27,7 +27,7 @@ function FT_SetDataCharacteristics(ft_handle::UInt32,
   @assert parity == FT_PARITY_NONE || parity == FT_PARITY_ODD ||
           parity == FT_PARITY_EVEN || parity == FT_PARITY_MARK ||
           parity == FT_PARITY_SPACE "invalid parity"
-  ft_status = ccall((:FT_SetDataCharacteristics, "ftd2xx.dll"),
+  ft_status = ccall((:FT_SetDataCharacteristics, d2xx),
                      Culong,
                      (Culong, Cuchar, Cuchar, Cuchar),
                      ft_handle, wordlength, stopbits, parity)

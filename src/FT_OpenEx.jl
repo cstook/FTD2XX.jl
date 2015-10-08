@@ -39,7 +39,7 @@ end
 
 function FT_OpenEx(location :: Unsigned)
   ft_handle = Ref{Culong}()
-  ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
+  ft_status = ccall((:FT_OpenEx, d2xx),
                       Culong,
                       (Ref{Culong},Culong,Ref{Culong}),
                       location,FT_OPEN_BY_LOCATION,ft_handle)
@@ -49,7 +49,7 @@ end
 
 function FT_OpenEx(serialnumber :: FT_SerialNumber)
   ft_handle = Ref{Culong}()
-  ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
+  ft_status = ccall((:FT_OpenEx, d2xx),
                       Culong,
                       (Ptr{UInt8},Culong,Ref{Culong}),
                       serialnumber.sn,FT_OPEN_BY_SERIAL_NUMBER,ft_handle)
@@ -59,7 +59,7 @@ end
 
 function FT_OpenEx(description :: FT_Description)
   ft_handle = Ref{Culong}()
-  ft_status = ccall((:FT_OpenEx, "ftd2xx.dll"),
+  ft_status = ccall((:FT_OpenEx, d2xx),
                       Culong,
                       (Ptr{UInt8},Culong,Ref{Culong}),
                       description.d,FT_OPEN_BY_DESCRIPTION,ft_handle)

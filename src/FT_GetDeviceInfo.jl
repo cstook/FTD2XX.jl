@@ -36,7 +36,7 @@ function FT_GetDeviceInfo(ft_handle::UInt32)
   description = Array(UInt8,65)
   serialnumber[17] = 0x00
   description[65] = 0x00
-  ft_status = ccall((:FT_GetDeviceInfo, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetDeviceInfo, d2xx),
                      Culong,
                      (Culong, Ref{Culong}, Ref{Culong}, Ptr{UInt8}, Ptr{UInt8}, Ptr{Void}),
                      ft_handle, ft_device, id, serialnumber, description, C_NULL)

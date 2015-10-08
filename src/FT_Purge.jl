@@ -6,7 +6,7 @@ const FT_PURGE_RX = 1
 const FT_PURGE_TX = 2
 
 function FT_Purge(ft_handle::UInt32, mask::Integer)
-  ft_status = ccall((:FT_Purge, "ftd2xx.dll"),
+  ft_status = ccall((:FT_Purge, d2xx),
                      Culong,
                      (Culong, Culong),
                      ft_handle, mask)

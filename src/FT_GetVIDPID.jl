@@ -4,7 +4,7 @@ export FT_GetVIDPID
 function FT_GetVIDPID()
   vid = Ref{Culong}()
   pid = Ref{Culong}()
-  ft_status = ccall((:FT_GetVIDPID, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetVIDPID, d2xx),
                      Culong,
                      (Ref{Culong}, Ref{Culong}),
                       vid, pid)

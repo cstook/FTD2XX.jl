@@ -13,7 +13,7 @@ ftbitmodedict = Dict(
 
 function FT_GetBitMode(ft_handle::UInt32)
   mode = Ref{Cuchar}()
-  ft_status = ccall((:FT_GetBitMode, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetBitMode, d2xx),
                      Culong,
                      (Culong, Ref{Cuchar}),
                      ft_handle, mode)

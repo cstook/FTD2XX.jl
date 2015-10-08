@@ -12,7 +12,7 @@ function FT_SetChars(ft_handle::UInt32, eventch::UInt8, eventchen::Bool,
   else
     error = 0x00
   end
-  ft_status = ccall((:FT_SetChars, "ftd2xx.dll"),
+  ft_status = ccall((:FT_SetChars, d2xx),
                      Culong,
                      (Culong, Cuchar, Cuchar, Cuchar, Cuchar),
                      ft_handle, eventch, event, errorch, error)

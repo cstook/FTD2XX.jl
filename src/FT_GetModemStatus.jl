@@ -16,7 +16,7 @@ const BI = 0x10
 
 function FT_GetModemStatus(ft_handle::UInt32)
   modemstatus = Ref{Culong}()
-  ft_status = ccall((:FT_GetModemStatus, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetModemStatus, d2xx),
                      Culong,
                      (Culong, Ref{Culong}),
                      ft_handle, modemstatus)

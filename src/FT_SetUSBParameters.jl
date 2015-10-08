@@ -9,7 +9,7 @@ function FT_SetUSBParameters(ft_handle::UInt32,
   @assert outtransfersize < 2^16+1
   @assert (intransfersize>>4)*16 == intransfersize
   @assert (outtransfersize>>4)*16 == outtransfersize
-  ft_status = ccall((:FT_SetUSBParameters, "ftd2xx.dll"),
+  ft_status = ccall((:FT_SetUSBParameters, d2xx),
                      Culong,
                      (Culong, Culong, Culong),
                      ft_handle, intransfersize, outtransfersize)

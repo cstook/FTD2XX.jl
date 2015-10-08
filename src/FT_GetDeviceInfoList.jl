@@ -68,7 +68,7 @@ end
 function FT_GetDeviceInfoList(lpdwNumDevs)
   ftdeviceinfolist = Array(_ft_device_list_info_node,lpdwNumDevs)
   n = Ref{Culong}(lpdwNumDevs)
-  ft_status = ccall((:FT_GetDeviceInfoList, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetDeviceInfoList, d2xx),
                       Culong,
                       (Ptr{_ft_device_list_info_node},Ref{Culong}),
                       ftdeviceinfolist,n)

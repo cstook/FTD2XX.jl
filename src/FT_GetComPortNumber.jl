@@ -2,7 +2,7 @@ export  FT_GetComPortNumber
 
 function FT_GetComPortNumber(ft_handle::UInt32)
   comportnumber = Ref{Culong}()
-  ft_status = ccall((:FT_GetComPortNumber, "ftd2xx.dll"),
+  ft_status = ccall((:FT_GetComPortNumber, d2xx),
                      Culong,
                      (Culong, Ref{Culong}),
                      ft_handle, comportnumber)

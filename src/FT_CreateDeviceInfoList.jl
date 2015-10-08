@@ -2,7 +2,7 @@ export FT_CreateDeviceInfoList
 
 function FT_CreateDeviceInfoList()
   lpdwNumDevs = Ref{Culong}()
-  ft_status = ccall((:FT_CreateDeviceInfoList, "ftd2xx.dll"),
+  ft_status = ccall((:FT_CreateDeviceInfoList, d2xx),
                       Culong,
                       (Ref{Culong},),
                       lpdwNumDevs)

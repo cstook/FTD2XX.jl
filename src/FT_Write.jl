@@ -7,7 +7,7 @@ function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
   for (pos,char) in enumerate(stringtowrite)
     buffer[pos] = char
   end
-  ft_status = ccall((:FT_Write, "ftd2xx.dll"),
+  ft_status = ccall((:FT_Write, d2xx),
                      Culong,
                      (Culong, Ptr{UInt8}, Culong, Ref{Culong}),
                      ft_handle, buffer, bytestowrite, byteswritten)
