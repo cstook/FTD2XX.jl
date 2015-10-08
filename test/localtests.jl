@@ -222,3 +222,12 @@ FT_WriteEE(h,0x0001,0x5555)  # write some data
 FT_WriteEE(h,0x0001,word1) # write original value back 
 
 FT_Close(h)
+
+(vid,pid) = @unix? FT_GetVIDPID() : (nothing,nothing)
+println("vid = ",vid,"   pid = ",pid)
+@unix? FT_SetVIDPID(0x5555aaaa,0xaaaa5555) : nothing
+(vid2,pid2) = @unix? FT_GetVIDPID() : (nothing,nothing)
+println("vid = ",vid2,"   pid = ",pid2)
+@unix? FT_SetVIDPID(vid,pid) : nothing
+
+
