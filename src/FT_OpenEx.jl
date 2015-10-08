@@ -38,30 +38,30 @@ immutable FT_SerialNumber
 end
 
 function FT_OpenEx(location :: Unsigned)
-  ft_handle = Ref{Culong}()
+  ft_handle = Ref{Cuint}()
   ft_status = ccall((:FT_OpenEx, d2xx),
-                      Culong,
-                      (Ref{Culong},Culong,Ref{Culong}),
+                      Cuint,
+                      (Ref{Cuint},Cuint,Ref{Cuint}),
                       location,FT_OPEN_BY_LOCATION,ft_handle)
   checkstatus(ft_status)
   return ft_handle[]
 end
 
 function FT_OpenEx(serialnumber :: FT_SerialNumber)
-  ft_handle = Ref{Culong}()
+  ft_handle = Ref{Cuint}()
   ft_status = ccall((:FT_OpenEx, d2xx),
-                      Culong,
-                      (Ptr{UInt8},Culong,Ref{Culong}),
+                      Cuint,
+                      (Ptr{UInt8},Cuint,Ref{Cuint}),
                       serialnumber.sn,FT_OPEN_BY_SERIAL_NUMBER,ft_handle)
   checkstatus(ft_status)
   return ft_handle[]
 end
 
 function FT_OpenEx(description :: FT_Description)
-  ft_handle = Ref{Culong}()
+  ft_handle = Ref{Cuint}()
   ft_status = ccall((:FT_OpenEx, d2xx),
-                      Culong,
-                      (Ptr{UInt8},Culong,Ref{Culong}),
+                      Cuint,
+                      (Ptr{UInt8},Cuint,Ref{Cuint}),
                       description.d,FT_OPEN_BY_DESCRIPTION,ft_handle)
   checkstatus(ft_status)
   return ft_handle[]
