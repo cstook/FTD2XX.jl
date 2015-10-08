@@ -1,6 +1,6 @@
 # functions which work on all operating systems
 
-include("FT_CreatedeviceInfoList.jl")
+include("FT_CreateDeviceInfoList.jl")
 include("FT_GetDeviceInfoList.jl")
 include("FT_Open.jl")
 include("FT_OpenEx.jl")
