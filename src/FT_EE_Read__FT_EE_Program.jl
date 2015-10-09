@@ -80,9 +80,9 @@ const FT_DRIVER_TYPE_VCP = 1
 
 # FT_PROGRAM_DATA_STRUCTURE 
 type ft_program_data
-  Signature1 :: Culong # Header - must be 0x0000000
-  Signature2 :: Culong # Header - must be 0xffffffff
-  Version :: Culong # Header - FT_PROGRAM_DATA version 
+  Signature1 :: Cuint # Header - must be 0x0000000
+  Signature2 :: Cuint # Header - must be 0xffffffff
+  Version :: Cuint # Header - FT_PROGRAM_DATA version 
                    # 0 = original (FT232B) 
                    # 1 = FT2232 extensions 
                    # 2 = FT232R extensions
@@ -605,8 +605,8 @@ function FT_EE_Read(ft_handle::UInt32, version::Integer = 5)
   @assert version>-1
   ftpds = Ref{ft_program_data}(ft_program_data(version))
   ft_status = ccall((:FT_EE_Read, d2xx),
-                     Culong,
-                     (Culong, Ref{ft_program_data}),
+                     Cuint,
+                     (Cuint, Ref{ft_program_data}),
                      ft_handle, ftpds)
   checkstatus(ft_status)
   return FtProgramData(ftpds[])
@@ -615,8 +615,8 @@ end
 function FT_EE_Program(ft_handle::UInt32, pd::FtProgramData)
   ftpds = Ref{ft_program_data}(ft_program_data(pd))
   ft_status = ccall((:FT_EE_Program, d2xx),
-                     Culong,
-                     (Culong, Ref{ft_program_data}),
+                     Cuint,
+                     (Cuint, Ref{ft_program_data}),
                      ft_handle, ftpds)
   checkstatus(ft_status)
   return nothing

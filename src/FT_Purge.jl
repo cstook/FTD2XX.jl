@@ -7,8 +7,8 @@ const FT_PURGE_TX = 2
 
 function FT_Purge(ft_handle::UInt32, mask::Integer)
   ft_status = ccall((:FT_Purge, d2xx),
-                     Culong,
-                     (Culong, Culong),
+                     Cuint,
+                     (Cuint, Cuint),
                      ft_handle, mask)
   checkstatus(ft_status)
   return nothing

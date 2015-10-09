@@ -17,8 +17,8 @@ const FT_BITMODE_SYNC_FIFO = 0x40
 function FT_SetBitMode(ft_handle::UInt32, mask::UInt8, mode::UInt8)
   @assert mode in keys(ftbitmodedict)
   ft_status = ccall((:FT_SetBitMode, d2xx),
-                     Culong,
-                     (Culong, Cuchar, Cuchar),
+                     Cuint,
+                     (Cuint, Cuchar, Cuchar),
                      ft_handle, mask, mode)
   checkstatus(ft_status)
   return nothing

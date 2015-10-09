@@ -1,10 +1,10 @@
 export FT_CreateDeviceInfoList
 
 function FT_CreateDeviceInfoList()
-  lpdwNumDevs = Ref{Culong}()
+  lpdwNumDevs = Ref{Cuint}()
   ft_status = ccall((:FT_CreateDeviceInfoList, d2xx),
-                      Culong,
-                      (Ref{Culong},),
+                      Cuint,
+                      (Ref{Cuint},),
                       lpdwNumDevs)
   checkstatus(ft_status)
   return lpdwNumDevs[]

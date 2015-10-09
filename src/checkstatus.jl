@@ -49,7 +49,7 @@ function Base.showerror(io::IO, e::Ftd2xxError)
   print(io, "Ftd2xxError: FT_STATUS=$(fts), $errortext")
 end
 
-function checkstatus(ft_status::Culong)
+function checkstatus(ft_status::Cuint)
   if ft_status != 0
     throw(Ftd2xxError(ft_status))
   end

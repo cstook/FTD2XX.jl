@@ -15,10 +15,10 @@ const FE = 0x08
 const BI = 0x10
 
 function FT_GetModemStatus(ft_handle::UInt32)
-  modemstatus = Ref{Culong}()
+  modemstatus = Ref{Cuint}()
   ft_status = ccall((:FT_GetModemStatus, d2xx),
-                     Culong,
-                     (Culong, Ref{Culong}),
+                     Cuint,
+                     (Cuint, Ref{Cuint}),
                      ft_handle, modemstatus)
   checkstatus(ft_status)
   return convert(UInt32,modemstatus[])
