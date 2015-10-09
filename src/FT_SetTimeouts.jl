@@ -4,8 +4,8 @@ function FT_SetTimeouts(ft_handle::UInt32,
                          readtimeout::Integer,
                          writetimeout::Integer)
   ft_status = ccall((:FT_SetTimeouts, d2xx),
-                     Cuint,
-                     (Cuint, Cuint, Cuint),
+                     Culong,
+                     (Culong, Culong, Culong),
                      ft_handle, readtimeout, writetimeout)
   checkstatus(ft_status)
   return nothing

@@ -2,7 +2,7 @@
 
 # EEPROM_HEADER STRUCTURE (See FT_EEPROM_Read and FT_EEPROM_Program)
 type ft_eeprom_header
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -15,7 +15,7 @@ end
 type ft_eeprom_232b
   # Common header
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -28,7 +28,7 @@ end
 # FT2232 EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_2232
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -54,7 +54,7 @@ end
 # FT232R EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_232r
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -86,7 +86,7 @@ end
 # FT2232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_2232h
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -124,7 +124,7 @@ end
 # FT4232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_4232h
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -160,7 +160,7 @@ end
 # FT232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_232h
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -201,7 +201,7 @@ end
 
 type ft_eeprom_x_series
   ### BEGIN common elements for all device EEPROMs ###
-  deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
+  deviceType :: Culong # FT_DEVICE FTxxxx device type to be programmed
   # Device descriptor options
   VendorId :: Cshort # 0x0403
   ProductId :: Cshort # 0x6001
@@ -239,7 +239,7 @@ type ft_eeprom_x_series
   BCDDisableSleep :: Cuchar # forces the device never to go into sleep mode
   # I2C options
   I2CSlaveAddress :: Cushort # I2C slave device address
-  I2CDeviceId :: Cuint # I2C device ID
+  I2CDeviceId :: Culong # I2C device ID
   I2CDisableSchmitt :: Cuchar # Disable I2C Schmitt trigger
   # FT1248 options
   FT1248Cpol :: Cuchar # FT1248 clock polarity - clock idle high (1) orclock idle low (0)
@@ -272,9 +272,9 @@ const MS_RLSD_ON = 0x0080 # – Receive Line Signal Detect (RLSD) is on
 
 # FTDCB structure
 type _FTDCB
-  DCBlength :: Cuint # sizeof(FTDCB) 
-  BaudRate :: Cuint # Baud rate at which running
-  status :: Cuint # fields below 
+  DCBlength :: Culong # sizeof(FTDCB) 
+  BaudRate :: Culong # Baud rate at which running
+  status :: Culong # fields below 
                   # fBinary: 1;  Binary Mode (skip EOF check) 
                   # fParity: 1;  Enable parity checking
                   # fOutxCtsFlow:1; CTS handshaking on output 
@@ -305,11 +305,11 @@ end
 
 #FTTIMEOUTS structure 
 type _FTTIMEOUTS 
-  ReadIntervalTimeout :: Cuint #  Maximum time between read chars 
-  ReadTotalTimeoutMultiplier :: Cuint #  Multiplier of characters 
-  ReadTotalTimeoutConstant :: Cuint #  Constant in milliseconds 
-  WriteTotalTimeoutMultiplier :: Cuint #  Multiplier of characters 
-  WriteTotalTimeoutConstant :: Cuint #  Constant in milliseconds
+  ReadIntervalTimeout :: Culong #  Maximum time between read chars 
+  ReadTotalTimeoutMultiplier :: Culong #  Multiplier of characters 
+  ReadTotalTimeoutConstant :: Culong #  Constant in milliseconds 
+  WriteTotalTimeoutMultiplier :: Culong #  Multiplier of characters 
+  WriteTotalTimeoutConstant :: Culong #  Constant in milliseconds
 end
 
 const EV_BREAK = 0x0040 # – BREAK condition detected 
@@ -329,7 +329,7 @@ const PURGE_RXCLEAR = 0x0008 # – Clear the receive buffer
 
 # FTCOMSTAT structure 
 type _FTCOMSTAT 
-  comstat :: Cuint  # fields below
+  comstat :: Culong  # fields below
                     # fCtsHold : 1
                     # fDsrHold : 1
                     # fRlsdHold : 1

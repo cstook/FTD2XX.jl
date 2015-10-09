@@ -15,8 +15,8 @@ function FT_SetFlowControl(ft_handle::UInt32, flowcontrol::Integer,
           flowcontrol == FT_FLOW_DTR_DSR ||
           flowcontrol == FT_FLOW_XON_XOFF "invalid flow control"
   ft_status = ccall((:FT_SetFlowControl, d2xx),
-                     Cuint,
-                     (Cuint, Cushort, Cuchar, Cuchar),
+                     Culong,
+                     (Culong, Cushort, Cuchar, Cuchar),
                      ft_handle, flowcontrol, xon, xoff)
   checkstatus(ft_status)
   return nothing

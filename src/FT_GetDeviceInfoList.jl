@@ -37,10 +37,10 @@ const FT_FLAGS_OPENED = 0x00000001
 
 # FT_DEVICE_LIST_INFO_NODE (see FT_GetDeviceInfoList and FT_GetDeviceInfoDetail)
 immutable _ft_device_list_info_node
-  Flags :: Cuint
-  Type  :: Cuint
-  ID    :: Cuint
-  LocId :: Cuint
+  Flags :: Culong
+  Type  :: Culong
+  ID    :: Culong
+  LocId :: Culong
   sn1  :: UInt8; sn2  :: UInt8; sn3  :: UInt8; sn4  :: UInt8  # SerialNumber
   sn5  :: UInt8; sn6  :: UInt8; sn7  :: UInt8; sn8  :: UInt8
   sn9  :: UInt8; sn10 :: UInt8; sn11 :: UInt8; sn12 :: UInt8
@@ -61,16 +61,16 @@ immutable _ft_device_list_info_node
   d53  :: UInt8; d54  :: UInt8; d55  :: UInt8; d56  :: UInt8 
   d57  :: UInt8; d58  :: UInt8; d59  :: UInt8; d60  :: UInt8 
   d61  :: UInt8; d62  :: UInt8; d63  :: UInt8; d64  :: UInt8  
-  FT_HANDLE    :: Cuint
-  why_do_i_need_this :: Cuint
+  FT_HANDLE    :: Culong
+  why_do_i_need_this :: Culong
 end
 
 function FT_GetDeviceInfoList(lpdwNumDevs)
   ftdeviceinfolist = Array(_ft_device_list_info_node,lpdwNumDevs)
-  n = Ref{Cuint}(lpdwNumDevs)
+  n = Ref{Culong}(lpdwNumDevs)
   ft_status = ccall((:FT_GetDeviceInfoList, d2xx),
-                      Cuint,
-                      (Ptr{_ft_device_list_info_node},Ref{Cuint}),
+                      Culong,
+                      (Ptr{_ft_device_list_info_node},Ref{Culong}),
                       ftdeviceinfolist,n)
   checkstatus(ft_status)
   infonodearray = InfoNode[]
