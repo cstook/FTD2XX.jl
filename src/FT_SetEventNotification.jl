@@ -8,7 +8,7 @@ const FT_EVENT_MODEM_STATUS = 2
 const FT_EVENT_LINE_STATUS = 4
 
 
-function FT_SetEventNotification(ft_handle::UInt32, eventmask::Integer)
+function FT_SetEventNotification(ft_handle::Culong, eventmask::Integer)
 #=
 What do I do here ????
 

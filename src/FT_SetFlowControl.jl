@@ -8,7 +8,7 @@ const FT_FLOW_RTS_CTS = 0x0100
 const FT_FLOW_DTR_DSR = 0x0200 
 const FT_FLOW_XON_XOFF = 0x0400
 
-function FT_SetFlowControl(ft_handle::UInt32, flowcontrol::Integer,
+function FT_SetFlowControl(ft_handle::Culong, flowcontrol::Integer,
                            xon::UInt8 = 0x11, xoff::UInt8 = 0x13)
   @assert flowcontrol == FT_FLOW_NONE ||
           flowcontrol == FT_FLOW_RTS_CTS ||
@@ -16,7 +16,7 @@ function FT_SetFlowControl(ft_handle::UInt32, flowcontrol::Integer,
           flowcontrol == FT_FLOW_XON_XOFF "invalid flow control"
   ft_status = ccall((:FT_SetFlowControl, d2xx),
                      Cuint,
-                     (Cuint, Cushort, Cuchar, Cuchar),
+                     (Culong, Cushort, Cuchar, Cuchar),
                      ft_handle, flowcontrol, xon, xoff)
   checkstatus(ft_status)
   return nothing

@@ -1,9 +1,9 @@
 export FT_SetResetPipeRetryCount
 
-function FT_SetResetPipeRetryCount(ft_handle::UInt32, count::Integer)
+function FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
   ft_status = ccall((:FT_SetResetPipeRetryCount, d2xx),
                      Cuint,
-                     (Cuint, Cuint),
+                     (Culong, Cuint),
                      ft_handle, count)
   checkstatus(ft_status)
   return nothing

@@ -8,8 +8,7 @@ type InfoNode
   locid         :: UInt32
   serialnumber  :: ASCIIString
   description   :: ASCIIString
-  handle        :: UInt32
-  wdint         :: UInt32
+  handle        :: Culong
 end
 
 function Base.show(io::IO, i::InfoNode)
@@ -20,8 +19,11 @@ function Base.show(io::IO, i::InfoNode)
   f()=@printf(io,"locid = 0x%08x \n",i.locid);f()
   println(io,"serialnumber = ",i.serialnumber)
   println(io,"description = ",i.description)
-  f()=@printf(io,"handle = 0x%08x \n",i.handle);f()
-  f()=@printf(io,"wdint = 0x%08x \n",i.wdint);f()
+  if Culong == UInt32
+    f()=@printf(io,"handle = 0x%08x \n",i.handle);f()
+  else
+    f()=@printf(io,"handle = 0x%16x \n",i.handle);f()
+  end
 end
 
 function Base.show(io::IO, a::Array{FTD2XX.InfoNode,1})
@@ -63,8 +65,8 @@ immutable _ft_device_list_info_node
   d53  :: UInt8; d54  :: UInt8; d55  :: UInt8; d56  :: UInt8 
   d57  :: UInt8; d58  :: UInt8; d59  :: UInt8; d60  :: UInt8 
   d61  :: UInt8; d62  :: UInt8; d63  :: UInt8; d64  :: UInt8  
-  FT_HANDLE    :: Cuint
-  why_do_i_need_this :: Cuint
+  FT_HANDLE     :: Cuint
+  FT_HANDLE_MSB :: Cuint
 end
 
 function FT_GetDeviceInfoList(lpdwNumDevs)
@@ -94,10 +96,15 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
     end
     endofstring = findfirst(d,0)-1
     description = convert(ASCIIString,d[1:endofstring])
-    handle = node.FT_HANDLE
-    wdint = node.why_do_i_need_this
+    # this seems wrong, but I don't have a better idea.
+    if Culong == UInt32
+      handle = node.FT_HANDLE
+    else
+      handle = UInt64(FT_HANDLE)
+      handle = handle | (FT_HANDLE_MSB <<32)
+    end
     push!(infonodearray,InfoNode(flags,devicetype,id,locid,serialnumber,
-                                 description,handle,wdint))
+                                 description,handle))
   end
   return infonodearray
 end

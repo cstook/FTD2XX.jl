@@ -14,11 +14,11 @@ const FT_BITMODE_FAST_SERIAL = 0x10
 const FT_BITMODE_CBUS_BITBANG = 0x20 
 const FT_BITMODE_SYNC_FIFO = 0x40
 
-function FT_SetBitMode(ft_handle::UInt32, mask::UInt8, mode::UInt8)
+function FT_SetBitMode(ft_handle::Culong, mask::UInt8, mode::UInt8)
   @assert mode in keys(ftbitmodedict)
   ft_status = ccall((:FT_SetBitMode, d2xx),
                      Cuint,
-                     (Cuint, Cuchar, Cuchar),
+                     (Culong, Cuchar, Cuchar),
                      ft_handle, mask, mode)
   checkstatus(ft_status)
   return nothing

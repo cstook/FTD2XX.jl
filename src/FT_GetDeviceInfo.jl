@@ -29,7 +29,7 @@ ftdevicetypedict = Dict(
   FT_DEVICE_232H => "232H",
   FT_DEVICE_X_SERIES => "X_SERIES")
 
-function FT_GetDeviceInfo(ft_handle::UInt32)
+function FT_GetDeviceInfo(ft_handle::Culong)
   ft_device = Ref{Cuint}() # see ftdevicetypedict
   id = Ref{Cuint}()
   serialnumber = Array(UInt8,17)
@@ -38,7 +38,7 @@ function FT_GetDeviceInfo(ft_handle::UInt32)
   description[65] = 0x00
   ft_status = ccall((:FT_GetDeviceInfo, d2xx),
                      Cuint,
-                     (Cuint, Ref{Cuint}, Ref{Cuint}, Ptr{UInt8}, Ptr{UInt8}, Ptr{Void}),
+                     (Culong, Ref{Cuint}, Ref{Cuint}, Ptr{UInt8}, Ptr{UInt8}, Ptr{Void}),
                      ft_handle, ft_device, id, serialnumber, description, C_NULL)
   sn = convert(ASCIIString,serialnumber[1:findfirst(serialnumber,0)-1])
   d = convert(ASCIIString,description[1:findfirst(description,0)-1])

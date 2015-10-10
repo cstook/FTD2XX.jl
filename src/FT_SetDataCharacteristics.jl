@@ -18,7 +18,7 @@ const FT_PARITY_EVEN = 2
 const FT_PARITY_MARK = 3 
 const FT_PARITY_SPACE = 4
 
-function FT_SetDataCharacteristics(ft_handle::UInt32, 
+function FT_SetDataCharacteristics(ft_handle::Culong, 
                                    wordlength::Integer,
                                    stopbits::Integer,
                                    parity::Integer)
@@ -29,7 +29,7 @@ function FT_SetDataCharacteristics(ft_handle::UInt32,
           parity == FT_PARITY_SPACE "invalid parity"
   ft_status = ccall((:FT_SetDataCharacteristics, d2xx),
                      Cuint,
-                     (Cuint, Cuchar, Cuchar, Cuchar),
+                     (Culong, Cuchar, Cuchar, Cuchar),
                      ft_handle, wordlength, stopbits, parity)
   checkstatus(ft_status)
   return nothing

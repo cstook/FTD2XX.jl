@@ -5,10 +5,10 @@ export FT_PURGE_RX, FT_PURGE_TX
 const FT_PURGE_RX = 1 
 const FT_PURGE_TX = 2
 
-function FT_Purge(ft_handle::UInt32, mask::Integer)
+function FT_Purge(ft_handle::Culong, mask::Integer)
   ft_status = ccall((:FT_Purge, d2xx),
                      Cuint,
-                     (Cuint, Cuint),
+                     (Culong, Cuint),
                      ft_handle, mask)
   checkstatus(ft_status)
   return nothing

@@ -1,6 +1,6 @@
 export FT_Write
 
-function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
+function FT_Write(ft_handle::Culong, stringtowrite::ASCIIString)
   bytestowrite = Cuint(length(stringtowrite))
   byteswritten = Ref{Cuint}()
   buffer = Array(UInt8,bytestowrite)
@@ -9,7 +9,7 @@ function FT_Write(ft_handle::UInt32, stringtowrite::ASCIIString)
   end
   ft_status = ccall((:FT_Write, d2xx),
                      Cuint,
-                     (Cuint, Ptr{UInt8}, Cuint, Ref{Cuint}),
+                     (Culong, Ptr{UInt8}, Cuint, Ref{Cuint}),
                      ft_handle, buffer, bytestowrite, byteswritten)
   checkstatus(ft_status)
   return byteswritten[]
