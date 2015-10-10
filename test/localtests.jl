@@ -1,5 +1,11 @@
 # tests require FTDI devices attached to computer
 
+# unload VCP driver for linux
+try
+  @linux? sudo rmmod ftdi_sio : nothing
+  @linux? sudo rmmod usbserial : nothing
+end
+
 using FTD2XX
 using Base.Test 
 
@@ -83,12 +89,12 @@ println()
 println("serial number = $serialnumber")
 println("description = $description")
 
-driverversion = FT_GetDriverVersion(h)
-println("FT_GetDriverVersion = $driverversion")
-libraryversion = FT_GetLibraryVersion()
-println("FT_GetLibraryVersion = $libraryversion")
-comportnumber = FT_GetComPortNumber(h)
-println("FT_GetComPortNumber = $comportnumber")
+@windows? driverversion = FT_GetDriverVersion(h) : nothing
+@windows? println("FT_GetDriverVersion = $driverversion") : nothing
+@windows? libraryversion = FT_GetLibraryVersion() : nothing
+@windows? println("FT_GetLibraryVersion = $libraryversion") : nothing
+@windows? comportnumber = FT_GetComPortNumber(h) : nothing
+@windows? println("FT_GetComPortNumber = $comportnumber") : nothing
 (rxqueue, txqueue, eventstatus) = FT_GetStatus(h)
 println("FT_GetStatus")
 println("in Rx queue = $rxqueue")
@@ -109,9 +115,9 @@ FT_Purge(h, FT_PURGE_RX & FT_PURGE_TX)
 
 
 FT_ResetDevice(h)
-FT_ResetPort(h)
-FT_CyclePort(h)
-FT_Rescan(h)
+@windows? FT_ResetPort(h):nothing
+@windows? FT_CyclePort(h):nothing
+@windows? FT_Rescan(h):nothing
 FT_SetResetPipeRetryCount(h,100)
 FT_SetResetPipeRetryCount(h,50)  # back to default
 FT_StopInTask(h)
@@ -123,7 +129,7 @@ print("reloading vid=0x")
 print("    pid=0x")
 @printf("%X",pid)
 println()
-FT_Reload(vid,pid)
+@windows? FT_Reload(vid,pid):nothing
 FT_ResetPort(h)
 
 
