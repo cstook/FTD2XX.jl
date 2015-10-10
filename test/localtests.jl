@@ -2,8 +2,8 @@
 
 # unload VCP driver for linux
 try
-  @linux? sudo rmmod ftdi_sio : nothing
-  @linux? sudo rmmod usbserial : nothing
+  @linux? begin;run(`sudo rmmod ftdi_sio`);end : nothing
+  @linux? begin;run(`sudo rmmod usbserial`);end : nothing
 end
 
 using FTD2XX
@@ -89,12 +89,15 @@ println()
 println("serial number = $serialnumber")
 println("description = $description")
 
-@windows? driverversion = FT_GetDriverVersion(h) : nothing
-@windows? println("FT_GetDriverVersion = $driverversion") : nothing
-@windows? libraryversion = FT_GetLibraryVersion() : nothing
-@windows? println("FT_GetLibraryVersion = $libraryversion") : nothing
-@windows? comportnumber = FT_GetComPortNumber(h) : nothing
-@windows? println("FT_GetComPortNumber = $comportnumber") : nothing
+windows = @windows? true:false
+if windows
+  driverversion = FT_GetDriverVersion(h)
+  println("FT_GetDriverVersion = ",driverversion)
+  libraryversion = FT_GetLibraryVersion()
+  println("FT_GetLibraryVersion = $libraryversion")
+  comportnumber = FT_GetComPortNumber(h)
+  println("FT_GetComPortNumber = $comportnumber")
+end
 (rxqueue, txqueue, eventstatus) = FT_GetStatus(h)
 println("FT_GetStatus")
 println("in Rx queue = $rxqueue")
