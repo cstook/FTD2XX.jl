@@ -9,6 +9,7 @@ type InfoNode
   serialnumber  :: ASCIIString
   description   :: ASCIIString
   handle        :: UInt32
+  wdint         :: UInt32
 end
 
 function Base.show(io::IO, i::InfoNode)
@@ -20,9 +21,10 @@ function Base.show(io::IO, i::InfoNode)
   println(io,"serialnumber = ",i.serialnumber)
   println(io,"description = ",i.description)
   f()=@printf(io,"handle = 0x%08x \n",i.handle);f()
+  f()=@printf(io,"wdint = 0x%08x \n",i.wdint);f()
 end
 
-function Base.show(io::IO, a::Array{InfoNode,1})
+function Base.show(io::IO, a::Array{FTD2XX.InfoNode,1})
   println(length(a),"-element ",typeof(a),":")
   for i in a
     println("sn=",rpad(i.serialnumber,17,' ')," description=",rpad(i.description,40,' '))
@@ -93,8 +95,9 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
     endofstring = findfirst(d,0)-1
     description = convert(ASCIIString,d[1:endofstring])
     handle = node.FT_HANDLE
+    wdint = node.why_do_i_need_this
     push!(infonodearray,InfoNode(flags,devicetype,id,locid,serialnumber,
-                                 description,handle))
+                                 description,handle,wdint))
   end
   return infonodearray
 end
