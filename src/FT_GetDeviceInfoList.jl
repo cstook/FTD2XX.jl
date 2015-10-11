@@ -100,8 +100,8 @@ function FT_GetDeviceInfoList(lpdwNumDevs)
     if Culong == UInt32
       handle = node.FT_HANDLE
     else
-      handle = UInt64(FT_HANDLE)
-      handle = handle | (FT_HANDLE_MSB <<32)
+      handle = UInt64(node.FT_HANDLE)
+      handle = handle | (node.FT_HANDLE_MSB <<32)
     end
     push!(infonodearray,InfoNode(flags,devicetype,id,locid,serialnumber,
                                  description,handle))
