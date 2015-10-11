@@ -121,8 +121,8 @@ FT_ResetDevice(h)
 @windows? FT_ResetPort(h):nothing
 @windows? FT_CyclePort(h):nothing
 @windows? FT_Rescan(h):nothing
-FT_SetResetPipeRetryCount(h,100)
-FT_SetResetPipeRetryCount(h,50)  # back to default
+@windows? FT_SetResetPipeRetryCount(h,100):nothing
+@windows? FT_SetResetPipeRetryCount(h,50):nothing  # back to default
 FT_StopInTask(h)
 FT_RestartInTask(h)
 FT_SetDeadmanTimeout(h,6000)
