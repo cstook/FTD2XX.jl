@@ -1,6 +1,8 @@
 export FT_GetDeviceInfoList
 export FT_FLAGS_OPENED
 
+const handleis32 = Culong == UInt32
+
 type InfoNode
   flags         :: UInt32
   devicetype    :: UInt32
@@ -19,7 +21,7 @@ function Base.show(io::IO, i::InfoNode)
   f()=@printf(io,"locid = 0x%08x \n",i.locid);f()
   println(io,"serialnumber = ",i.serialnumber)
   println(io,"description = ",i.description)
-  if Culong == UInt32
+  if handleis32
     f()=@printf(io,"handle = 0x%08x \n",i.handle);f()
   else
     f()=@printf(io,"handle = 0x%016x \n",i.handle);f()
@@ -30,7 +32,7 @@ function Base.show(io::IO, a::Array{FTD2XX.InfoNode,1})
   println(length(a),"-element ",typeof(a),":")
   for i in a
     println("sn=",rpad(i.serialnumber,17,' ')," description=",rpad(i.description,40,' '))
-    if Culong == UInt32
+    if handleis32
       @printf(io,"f=0x%08x, dt=0x%08x, id=0x%08x, lid=0x%08x, h=0x%08x \n",
         i.flags, i.devicetype, i.id, i.locid, i.handle)
     else
