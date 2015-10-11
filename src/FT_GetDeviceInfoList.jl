@@ -22,7 +22,7 @@ function Base.show(io::IO, i::InfoNode)
   if Culong == UInt32
     f()=@printf(io,"handle = 0x%08x \n",i.handle);f()
   else
-    f()=@printf(io,"handle = 0x%16x \n",i.handle);f()
+    f()=@printf(io,"handle = 0x%016x \n",i.handle);f()
   end
 end
 
