@@ -133,7 +133,7 @@ print("    pid=0x")
 @printf("%X",pid)
 println()
 @windows? FT_Reload(vid,pid):nothing
-FT_ResetPort(h)
+@windows? FT_ResetPort(h):nothing
 
 
 FT_Close(h)
