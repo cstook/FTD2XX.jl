@@ -8,5 +8,5 @@ function FT_Read(ft_handle::Culong, bytestoread::Integer)
                       (Culong, Ptr{UInt8}, Cuint, Ref{Cuint}),
                       ft_handle, buffer, bytestoread, bytesreturned)
   checkstatus(ft_status) 
-  return (bytesreturned[], convert(ASCIIString,buffer[1:bytesreturned[]]))
+  return (bytesreturned[], buffer[1:bytesreturned[]])
 end
