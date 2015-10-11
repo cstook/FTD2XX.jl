@@ -30,8 +30,13 @@ function Base.show(io::IO, a::Array{FTD2XX.InfoNode,1})
   println(length(a),"-element ",typeof(a),":")
   for i in a
     println("sn=",rpad(i.serialnumber,17,' ')," description=",rpad(i.description,40,' '))
-    @printf(io,"f=0x%08x, dt=0x%08x, id=0x%08x, lid=0x%08x, h=0x%08x \n",
-      i.flags, i.devicetype, i.id, i.locid, i.handle)
+    if Culong == UInt32
+      @printf(io,"f=0x%08x, dt=0x%08x, id=0x%08x, lid=0x%08x, h=0x%08x \n",
+        i.flags, i.devicetype, i.id, i.locid, i.handle)
+    else
+      @printf(io,"f=0x%08x, dt=0x%08x, id=0x%08x, lid=0x%08x, h=0x%016x \n",
+        i.flags, i.devicetype, i.id, i.locid, i.handle)
+    end
     println()
   end
 end
