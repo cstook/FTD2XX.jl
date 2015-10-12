@@ -1,5 +1,6 @@
-export FT_EEPROM_Read__FT_EEPROM_Program
+export FT_EEPROM_Read, FT_EEPROM_Program
 
+include("FT_DEVICE.jl")  # load constants
 
 # EEPROM_HEADER STRUCTURE (See FT_EEPROM_Read and FT_EEPROM_Program)
 type ft_eeprom_header

@@ -1,6 +1,8 @@
 export FT_GetDeviceInfoList
 export FT_FLAGS_OPENED
 
+include("FT_DEVICE.jl")  # load constants
+
 const handleis32 = Culong == UInt32
 
 type InfoNode

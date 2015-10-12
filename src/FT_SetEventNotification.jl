@@ -12,5 +12,12 @@ function FT_SetEventNotification(ft_handle::Culong, eventmask::Integer)
 #=
 What do I do here ????
 
+const _k32 = "Kernel32.dll"
+hevent = ccall((:CreateEventW,_k32),
+              Culonglong, 
+              (Cchar, Cchar, Cchar, Ptr{UInt8}),
+              C_NULL,0x00,0x00,"")
+
+
 =#
 end
