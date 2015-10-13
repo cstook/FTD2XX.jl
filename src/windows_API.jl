@@ -8,4 +8,4 @@
  include("FT_Rescan.jl")
  include("FT_Reload.jl")
  include("FT_SetResetPipeRetryCount.jl")
- #include("FT_EEPROM_Read__FT_EEPROM_Program.jl")
+ include("FT_EEPROM_Read__FT_EEPROM_Program.jl")

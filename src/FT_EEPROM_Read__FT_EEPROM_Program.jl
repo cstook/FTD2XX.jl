@@ -20,9 +20,25 @@ function fteepromread(ft_handle::Culong, eepromdata::eeprom)
   checkstatus(ft_status)
   mfg_string = bytestring(mfg[1:findfirst(mfg,0x00)])
   mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)])
-  mfg_d = bytestring(d[1:findfirst(d,0x00)])
-  mfg_sn = bytestring(sn[1:findfirst(sn,0x00)])
-  return(mfg_string,mfgid_string,mfg_d,mfg_sn)
+  d_string = bytestring(d[1:findfirst(d,0x00)])
+  sn_string = bytestring(sn[1:findfirst(sn,0x00)])
+  return(mfg_string,mfgid_string,d_string,sn_string)
+end
+
+function fteepromprogram(ft_handle::Culong, eepromdata::eeprom, 
+          mfg_string::ASCIIString, mfgid_string::ASCIIString, 
+          d_string::ASCIIString, sn_string::ASCIIString)
+  size = sizeof(eepromdata)
+  mfg = Array{UInt8,1}(mfg_string * "\0")
+  mfgid = Array{UInt8,1}(mfgid_string * "\0")
+  d = Array{UInt8,1}(d_string * "\0")
+  sn = Array{UInt8,1}(sn_string * "\0")
+  ft_status = ccall((:FT_EEPROM_Program, d2xx),
+            Cuint,
+            (Culong,Ref{eepromdata},Cuint,Ptr{mfg},Ptr{mfgid},Ptr{d},Ptr{sn}),
+            ft_handle,eepromdata,size,mfg,mfgid,d,sn)
+  checkstatus(ft_status)
+  return nothing
 end
 
 # FT232B EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -45,6 +61,11 @@ end
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232b)
   @assert eepromdata.deviceType == FT_DEVICE_232B
   fteepromread(ft_handle,eepromdata)
+end
+
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232b)
+  @assert eepromdata.deviceType == FT_DEVICE_232B
+  fteepromprogram(ft_handle,eepromdata)
 end
 
 # FT2232 EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -77,6 +98,11 @@ end
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_2232)
   @assert eepromdata.deviceType == FT_DEVICE_2232C
   fteepromread(ft_handle,eepromdata)
+end
+
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232)
+  @assert eepromdata.deviceType == FT_DEVICE_2232C
+  fteepromprogram(ft_handle,eepromdata)
 end
 
 # FT232R EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -115,6 +141,11 @@ end
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232r)
   @assert eepromdata.deviceType == FT_DEVICE_232R
   fteepromread(ft_handle,eepromdata)
+end
+
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232)
+  @assert eepromdata.deviceType == FT_DEVICE_2232C
+  fteepromprogram(ft_handle,eepromdata)
 end
 
 # FT2232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -161,6 +192,11 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_2232h)
   fteepromread(ft_handle,eepromdata)
 end
 
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232h)
+  @assert eepromdata.deviceType == FT_DEVICE_2232H
+  fteepromprogram(ft_handle,eepromdata)
+end
+
 # FT4232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_4232h <: eeprom
   ### BEGIN common elements for all device EEPROMs ###
@@ -201,6 +237,11 @@ end
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_4232h)
   @assert eepromdata.deviceType == FT_DEVICE_4232H
   fteepromread(ft_handle,eepromdata)
+end
+
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_4232h)
+  @assert eepromdata.deviceType == FT_DEVICE_4232H
+  fteepromprogram(ft_handle,eepromdata)
 end
 
 # FT232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -249,6 +290,11 @@ end
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232h)
   @assert eepromdata.deviceType == FT_DEVICE_232H
   fteepromread(ft_handle,eepromdata)
+end
+
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232h)
+  @assert eepromdata.deviceType == FT_DEVICE_232H
+  fteepromprogram(ft_handle,eepromdata)
 end
 
 type ft_eeprom_x_series <: eeprom
@@ -307,6 +353,11 @@ end
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_x_series)
   @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
   fteepromread(ft_handle,eepromdata)
+end
+
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_x_series)
+  @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
+  fteepromprogram(ft_handle,eepromdata)
 end
 
 #=
