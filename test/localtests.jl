@@ -228,7 +228,12 @@ FT_EE_Program(h,pd2) # put data back
 word1 = FT_ReadEE(h,0x0001)  # read a byte
 FT_WriteEE(h,0x0001,0x5555)  # write some data
 @assert 0x5555 == FT_ReadEE(h,0x0001)
-FT_WriteEE(h,0x0001,word1) # write original value back 
+FT_WriteEE(h,0x0001,word1) # write original value back
+
+if windows
+  ee = ft_eeprom_232h()
+  ee_read = FT_EEPROM_Read(h,ee)
+end
 
 FT_Close(h)
 

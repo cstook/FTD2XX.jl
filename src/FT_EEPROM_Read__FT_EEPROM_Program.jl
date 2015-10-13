@@ -7,22 +7,24 @@ include("FT_DEVICE.jl")  # load constants
 
 abstract eeprom
 
-function fteepromread(ft_handle::Culong, eepromdata::eeprom)
-  size = sizeof(eepromdata)
+function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
+  size = Cuint(sizeof(eepromdata))
   mfg = Array(UInt8,64); mfg[64] = 0
   mfgid = Array(UInt8,64); mfgid[64] = 0
   d = Array(UInt8,64); d[64] = 0
   sn = Array(UInt8,64); sn[64] = 0
+  ee = Ref{T}(eepromdata)
   ft_status = ccall((:FT_EEPROM_Read, d2xx),
             Cuint,
-            (Culong,Ref{eepromdata},Cuint,Ptr{mfg},Ptr{mfgid},Ptr{d},Ptr{sn}),
-            ft_handle,eepromdata,size,mfg,mfgid,d,sn)
+            (Culong,Ref{T},Cuint,Ptr{UInt8},
+              Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
+            ft_handle,ee,size,mfg,mfgid,d,sn)
   checkstatus(ft_status)
   mfg_string = bytestring(mfg[1:findfirst(mfg,0x00)])
   mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)])
   d_string = bytestring(d[1:findfirst(d,0x00)])
   sn_string = bytestring(sn[1:findfirst(sn,0x00)])
-  return(mfg_string,mfgid_string,d_string,sn_string)
+  return(mfg_string,mfgid_string,d_string,sn_string,eepromdata[])
 end
 
 function fteepromprogram(ft_handle::Culong, eepromdata::eeprom, 
