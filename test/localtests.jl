@@ -12,7 +12,21 @@ The idea to differentiate between various FTDI devices using the product name de
 And voila! please don’t hesitate to post comments or ideas. I hope this post could help others.
 =#
 
+#http://www.linuxforums.org/forum/programming-scripting/112331-usb-ftdi-d2xx-drivers.html
+#=
+As far a permissions, you should try to make your own rule in /etc/udev/rules.d
+This would be for a 2.6 kernel. I wanted to access my USB devices with libusb and could not read them unless I was logged in as root. I picked a rule number and added this rule:
+ATTR{idVendor}=="0D7D", ATTR{idProduct}=="1400", MODE="0666"
+The idVendor and idProduct are for my USB drive. When I ran my code I was able to read the device.
+=#
 
+#https://kenai.com/projects/javaftd2xx/pages/Home
+#=
+Why can't I list/open/write the ftdi devices under linux?
+You should be sure that you have permission to write to the chip. (/dev/bus/usb/[BUS]/[DEVICE], you can determinate the exact location by lsusb). By default you will not have permission, so you must chown it every time when you physically connect, or make an UDEV rule: this way.
+You must fit idVendor and idProduct values to ftdi's, using lsusb. For example a device:
+Bus 004 Device 003: ID (this is idVendor-->)0b38:0003(<--this is idProduct) ...
+=#
 const isunix = @unix? true:false
 const isosx = @osx? true:false
 const islinux = @linux? true:false
@@ -216,7 +230,13 @@ println("latency time is $latencytime_ms ms")
 FT_SetLatencyTimer(h,10)
 latencytime_ms = FT_GetLatencyTimer(h)
 println("latency time is $latencytime_ms ms")
-FT_SetLatencyTimer(h,ltold)
+if (told>1) & (told<256)
+  FT_SetLatencyTimer(h,ltold)
+elseif told>1
+  FT_SetLatencyTimer(h,256)
+else
+  FT_SetLatencyTimer(h,2)
+end
 latencytime_ms = FT_GetLatencyTimer(h)
 println("latency time is $latencytime_ms ms")
 
