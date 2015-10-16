@@ -45,6 +45,14 @@ function fteepromprogram{T<:eeprom}(ft_handle::Culong, eepromdata::T,
   return nothing
 end
 
+function showcommonelements(io::IO, eepromdata::eeprom)
+  f()=@printf(io,"deviceType = 0x%08x\n",eepromdata.deviceType);f()
+  f()=@printf(io,"VendorId = 0x%04x\n",eepromdata.VendorId);f()
+  f()=@printf(io,"ProductId = 0x%04x\n",eepromdata.ProductId);f()
+  f()=@printf(io,"SerNumEnable = 0x%02x\n",eepromdata.SerNumEnable);f()
+  f()=@printf(io,"MaxPower = 0x%04x\n",eepromdata.MaxPower);f()
+end
+
 # FT232B EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
 type ft_eeprom_232b <: eeprom
   # Common header
@@ -67,9 +75,14 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232b)
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232b)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232b,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_232B
-  fteepromprogram(ft_handle,eepromdata)
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
 
 # FT2232 EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -104,9 +117,14 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_2232)
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_2232C
-  fteepromprogram(ft_handle,eepromdata)
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
 
 # FT232R EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -147,9 +165,14 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232r)
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232)
-  @assert eepromdata.deviceType == FT_DEVICE_2232C
-  fteepromprogram(ft_handle,eepromdata)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232r,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
+  @assert eepromdata.deviceType == FT_DEVICE_232R
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
 
 # FT2232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -196,9 +219,14 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_2232h)
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232h)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_2232h,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_2232H
-  fteepromprogram(ft_handle,eepromdata)
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
 
 # FT4232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -243,9 +271,14 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_4232h)
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_4232h)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_4232h,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_4232H
-  fteepromprogram(ft_handle,eepromdata)
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
 
 # FT232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
@@ -291,12 +324,9 @@ type ft_eeprom_232h <: eeprom
   DriverType :: Cuchar #  :: Cuchar #FT X Series EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
   ft_eeprom_232h() = new(FT_DEVICE_232H)
 end
+
 function Base.show(io::IO, eepromdata::ft_eeprom_232h)
-  f()=@printf(io,"deviceType = 0x%08x\n",eepromdata.deviceType);f()
-  f()=@printf(io,"VendorId = 0x%04x\n",eepromdata.VendorId);f()
-  f()=@printf(io,"ProductId = 0x%04x\n",eepromdata.ProductId);f()
-  f()=@printf(io,"SerNumEnable = 0x%02x\n",eepromdata.SerNumEnable);f()
-  f()=@printf(io,"MaxPower = 0x%04x\n",eepromdata.MaxPower);f()
+  showcommonelements(io,eepromdata)
   f()=@printf(io,"ACSlowSlew = 0x%02x\n",eepromdata.ACSlowSlew);f()
   f()=@printf(io,"ACSchmittInput = 0x%02x\n",eepromdata.ACSchmittInput);f()
   f()=@printf(io,"ACDriveCurrent = 0x%02x\n",eepromdata.ACDriveCurrent);f()
@@ -392,39 +422,54 @@ type ft_eeprom_x_series <: eeprom
   ft_eeprom_x_series() = new(FT_DEVICE_X_SERIES)
 end
 
+function Base.show(io::IO, eepromdata::ft_eeprom_232h)
+  showcommonelements(io,eepromdata)
+  f()=@printf(io,"ACSlowSlew= 0x%02x\n",eepromdata.ACSlowSlew);f()
+  f()=@printf(io,"ACSchmittInput= 0x%02x\n",eepromdata.ACSchmittInput);f()
+  f()=@printf(io,"ACDriveCurrent= 0x%02x\n",eepromdata.ACDriveCurrent);f()
+  f()=@printf(io,"ADSlowSlew= 0x%02x\n",eepromdata.ADSlowSlew);f()
+  f()=@printf(io,"ADSchmittInput= 0x%02x\n",eepromdata.ADSchmittInput);f()
+  f()=@printf(io,"ADDriveCurrent= 0x%02x\n",eepromdata.ADDriveCurrent);f()
+  f()=@printf(io,"Cbus0= 0x%02x\n",eepromdata.Cbus0);f()
+  f()=@printf(io,"Cbus1= 0x%02x\n",eepromdata.Cbus1);f()
+  f()=@printf(io,"Cbus2= 0x%02x\n",eepromdata.Cbus2);f()
+  f()=@printf(io,"Cbus3= 0x%02x\n",eepromdata.Cbus3);f()
+  f()=@printf(io,"Cbus4= 0x%02x\n",eepromdata.Cbus4);f()
+  f()=@printf(io,"Cbus5= 0x%02x\n",eepromdata.Cbus5);f()
+  f()=@printf(io,"Cbus6= 0x%02x\n",eepromdata.Cbus6);f()
+  f()=@printf(io,"InvertTXD= 0x%02x\n",eepromdata.InvertTXD);f()
+  f()=@printf(io,"InvertRXD= 0x%02x\n",eepromdata.InvertRXD);f()
+  f()=@printf(io,"InvertRTS= 0x%02x\n",eepromdata.InvertRTS);f()
+  f()=@printf(io,"InvertCTS= 0x%02x\n",eepromdata.InvertCTS);f()
+  f()=@printf(io,"InvertDTR= 0x%02x\n",eepromdata.InvertDTR);f()
+  f()=@printf(io,"InvertDSR= 0x%02x\n",eepromdata.InvertDSR);f()
+  f()=@printf(io,"InvertDCD= 0x%02x\n",eepromdata.InvertDCD);f()
+  f()=@printf(io,"InvertRI= 0x%02x\n",eepromdata.InvertRI);f()
+  f()=@printf(io,"BCDEnable= 0x%02x\n",eepromdata.BCDEnable);f()
+  f()=@printf(io,"BCDForceCbusPWREN= 0x%02x\n",eepromdata.BCDForceCbusPWREN);f()
+  f()=@printf(io,"BCDDisableSleep= 0x%02x\n",eepromdata.BCDDisableSleep);f()
+  f()=@printf(io,"I2CSlaveAddress= 0x%02x\n",eepromdata.I2CSlaveAddress);f()
+  f()=@printf(io,"I2CDeviceId= 0x%02x\n",eepromdata.I2CDeviceId);f()
+  f()=@printf(io,"I2CDisableSchmitt= 0x%02x\n",eepromdata.I2CDisableSchmitt);f()
+  f()=@printf(io,"FT1248Cpol= 0x%02x\n",eepromdata.FT1248Cpol);f()
+  f()=@printf(io,"FT1248Lsb= 0x%02x\n",eepromdata.FT1248Lsb);f()
+  f()=@printf(io,"FT1248FlowControl= 0x%02x\n",eepromdata.FT1248FlowControl);f()
+  f()=@printf(io,"RS485EchoSuppress= 0x%02x\n",eepromdata.RS485EchoSuppress);f()
+  f()=@printf(io,"PowerSaveEnable= 0x%02x\n",eepromdata.PowerSaveEnable);f()
+  f()=@printf(io,"DriverType= 0x%02x\n",eepromdata.DriverType);f()
+end
+
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_x_series)
   @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_x_series)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_x_series,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
-  fteepromprogram(ft_handle,eepromdata)
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
-
-#=
-
-assoication between device structures and types
-
-PFT_EEPROM_232B
-  FT_DEVICE_232BM
-
-PFT_EEPROM_2232
-  FT_DEVICE_2232C
-
-PFT_EEPROM_232R
-  FT_DEVICE_232R
-
-PFT_EEPROM_2232H
-  FT_DEVICE_2232H
-
-PFT_EEPROM_4232H
-  FT_DEVICE_4232H
- 
-PFT_EEPROM_232H
-  FT_DEVICE_232H
-
-PFT_EEPROM_X_SERIES
-  FT_DEVICE_X_SERIES
-
-=#
