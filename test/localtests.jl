@@ -1,4 +1,6 @@
 # tests require FTDI devices attached to computer
+# start julia with sudo julia on linux
+# or read the comments below
 
 # https://www.ikalogic.com/ftdi-d2xx-linux-overcoming-big-problem/
 #=
