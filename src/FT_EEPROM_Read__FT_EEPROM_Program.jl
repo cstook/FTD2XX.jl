@@ -64,10 +64,15 @@ type ft_eeprom_232b <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   ft_eeprom_232b() = new(FT_DEVICE_232B)
   ft_eeprom_232b(VendorId,ProductId,SerNumEnable,MaxPower) = 
     new(FT_DEVICE_232B,VendorId,ProductId,SerNumEnable,MaxPower)
+end
+
+function Base.show(io::IO, eepromdata::ft_eeprom_232b)
+  showcommonelements(io,eepromdata)
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232b)
@@ -95,6 +100,7 @@ type ft_eeprom_2232 <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   # Drive options
   AIsHighCurrent :: Cuchar # non-zero if interface is high current
@@ -110,6 +116,20 @@ type ft_eeprom_2232 <: eeprom
   ADriverType :: Cuchar 
   BDriverType  :: Cuchar
   ft_eeprom_2232() = new(FT_DEVICE_2232C)
+end
+
+function Base.show(io::IO, eepromdata::ft_eeprom_2232)
+  showcommonelements(io,eepromdata)
+  f()=@printf(io,"AIsHighCurrent= 0x%02x\n",eepromdata.AIsHighCurrent);f()
+  f()=@printf(io,"BIsHighCurrent= 0x%02x\n",eepromdata.BIsHighCurrent);f()
+  f()=@printf(io,"AIsFifo= 0x%02x\n",eepromdata.AIsFifo);f()
+  f()=@printf(io,"AIsFifoTar= 0x%02x\n",eepromdata.AIsFifoTar);f()
+  f()=@printf(io,"AIsFastSer= 0x%02x\n",eepromdata.AIsFastSer);f()
+  f()=@printf(io,"BIsFifo= 0x%02x\n",eepromdata.BIsFifo);f()
+  f()=@printf(io,"BIsFifoTar= 0x%02x\n",eepromdata.BIsFifoTar);f()
+  f()=@printf(io,"BIsFastSer= 0x%02x\n",eepromdata.BIsFastSer);f()
+  f()=@printf(io,"ADriverType= 0x%02x\n",eepromdata.ADriverType);f()
+  f()=@printf(io,"BDriverType= 0x%02x\n",eepromdata.BDriverType);f()
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_2232)
@@ -137,6 +157,7 @@ type ft_eeprom_232r <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   # Drive options
   IsHighCurrent :: Cuchar # non-zero if interface is high current
@@ -158,6 +179,26 @@ type ft_eeprom_232r <: eeprom
 # Driver option
   DriverType :: Cuchar #
   ft_eeprom_232r() = new(FT_DEVICE_232R)
+end
+
+function Base.show(io::IO, eepromdata::ft_eeprom_232r)
+  showcommonelements(io,eepromdata)
+  f()=@printf(io,"IsHighCurrent= 0x%02x\n",eepromdata.IsHighCurrent);f()
+  f()=@printf(io,"UseExtOsc= 0x%02x\n",eepromdata.UseExtOsc);f()
+  f()=@printf(io,"InvertTXD= 0x%02x\n",eepromdata.InvertTXD);f()
+  f()=@printf(io,"InvertRXD= 0x%02x\n",eepromdata.InvertRXD);f()
+  f()=@printf(io,"InvertRTS= 0x%02x\n",eepromdata.InvertRTS);f()
+  f()=@printf(io,"InvertCTS= 0x%02x\n",eepromdata.InvertCTS);f()
+  f()=@printf(io,"InvertDTR= 0x%02x\n",eepromdata.InvertDTR);f()
+  f()=@printf(io,"InvertDSR= 0x%02x\n",eepromdata.InvertDSR);f()
+  f()=@printf(io,"InvertDCD= 0x%02x\n",eepromdata.InvertDCD);f()
+  f()=@printf(io,"InvertRI= 0x%02x\n",eepromdata.InvertRI);f()
+  f()=@printf(io,"Cbus0= 0x%02x\n",eepromdata.Cbus0);f()
+  f()=@printf(io,"Cbus1= 0x%02x\n",eepromdata.Cbus1);f()
+  f()=@printf(io,"Cbus2= 0x%02x\n",eepromdata.Cbus2);f()
+  f()=@printf(io,"Cbus3= 0x%02x\n",eepromdata.Cbus3);f()
+  f()=@printf(io,"Cbus4= 0x%02x\n",eepromdata.Cbus4);f()
+  f()=@printf(io,"DriverType= 0x%02x\n",eepromdata.DriverType);f()
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232r)
@@ -185,6 +226,7 @@ type ft_eeprom_2232h <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   # Drive options
   ALSlowSlew :: Cuchar # non-zero if AL pins have slow slew
@@ -214,6 +256,32 @@ type ft_eeprom_2232h <: eeprom
   ft_eeprom_2232h() = new(FT_DEVICE_2232H)
 end
 
+function Base.show(io::IO, eepromdata::ft_eeprom_2232h)
+  showcommonelements(io,eepromdata)
+  f()=@printf(io,"ALSlowSlew= 0x%02x\n",eepromdata.ALSlowSlew);f()
+  f()=@printf(io,"ALSchmittInput= 0x%02x\n",eepromdata.ALSchmittInput);f()
+  f()=@printf(io,"ALDriveCurrent= 0x%02x\n",eepromdata.ALDriveCurrent);f()
+  f()=@printf(io,"AHSlowSlew= 0x%02x\n",eepromdata.AHSlowSlew);f()
+  f()=@printf(io,"AHSchmittInput= 0x%02x\n",eepromdata.AHSchmittInput);f()
+  f()=@printf(io,"AHDriveCurrent= 0x%02x\n",eepromdata.AHDriveCurrent);f()
+  f()=@printf(io,"BLSlowSlew= 0x%02x\n",eepromdata.BLSlowSlew);f()
+  f()=@printf(io,"BLSchmittInput= 0x%02x\n",eepromdata.BLSchmittInput);f()
+  f()=@printf(io,"BLDriveCurrent= 0x%02x\n",eepromdata.BLDriveCurrent);f()
+  f()=@printf(io,"BHSlowSlew= 0x%02x\n",eepromdata.BHSlowSlew);f()
+  f()=@printf(io,"BHSchmittInput= 0x%02x\n",eepromdata.BHSchmittInput);f()
+  f()=@printf(io,"BHDriveCurrent= 0x%02x\n",eepromdata.BHDriveCurrent);f()
+  f()=@printf(io,"AIsFifo= 0x%02x\n",eepromdata.AIsFifo);f()
+  f()=@printf(io,"AIsFifoTar= 0x%02x\n",eepromdata.AIsFifoTar);f()
+  f()=@printf(io,"AIsFastSer= 0x%02x\n",eepromdata.AIsFastSer);f()
+  f()=@printf(io,"BIsFifo= 0x%02x\n",eepromdata.BIsFifo);f()
+  f()=@printf(io,"BIsFifoTar= 0x%02x\n",eepromdata.BIsFifoTar);f()
+  f()=@printf(io,"BIsFastSer= 0x%02x\n",eepromdata.BIsFastSer);f()
+  f()=@printf(io,"BIsFastSer= 0x%02x\n",eepromdata.BIsFastSer);f()
+  f()=@printf(io,"PowerSaveEnable= 0x%02x\n",eepromdata.PowerSaveEnable);f()
+  f()=@printf(io,"ADriverType= 0x%02x\n",eepromdata.ADriverType);f()
+  f()=@printf(io,"BDriverType= 0x%02x\n",eepromdata.BDriverType);f()
+end
+
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_2232h)
   @assert eepromdata.deviceType == FT_DEVICE_2232H
   fteepromread(ft_handle,eepromdata)
@@ -239,6 +307,7 @@ type ft_eeprom_4232h <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   # Drive options
   ASlowSlew :: Cuchar # non-zero if A pins have slow slew
@@ -264,6 +333,30 @@ type ft_eeprom_4232h <: eeprom
   CDriverType :: Cuchar #
   DDriverType :: Cuchar #
   ft_eeprom_4232h() = new(FT_DEVICE_4232H)
+end
+
+function Base.show(io::IO, eepromdata::ft_eeprom_4232h)
+  showcommonelements(io,eepromdata)
+  f()=@printf(io,"ASlowSlew= 0x%02x\n",eepromdata.ASlowSlew);f()
+  f()=@printf(io,"ASchmittInput= 0x%02x\n",eepromdata.ASchmittInput);f()
+  f()=@printf(io,"ADriveCurrent= 0x%02x\n",eepromdata.ADriveCurrent);f()
+  f()=@printf(io,"BSlowSlew= 0x%02x\n",eepromdata.BSlowSlew);f()
+  f()=@printf(io,"BSchmittInput= 0x%02x\n",eepromdata.BSchmittInput);f()
+  f()=@printf(io,"BDriveCurrent= 0x%02x\n",eepromdata.BDriveCurrent);f()
+  f()=@printf(io,"CSlowSlew= 0x%02x\n",eepromdata.CSlowSlew);f()
+  f()=@printf(io,"CSchmittInput= 0x%02x\n",eepromdata.CSchmittInput);f()
+  f()=@printf(io,"CDriveCurrent= 0x%02x\n",eepromdata.CDriveCurrent);f()
+  f()=@printf(io,"DSlowSlew= 0x%02x\n",eepromdata.DSlowSlew);f()
+  f()=@printf(io,"DSchmittInput= 0x%02x\n",eepromdata.DSchmittInput);f()
+  f()=@printf(io,"DDriveCurrent= 0x%02x\n",eepromdata.DDriveCurrent);f()
+  f()=@printf(io,"ARIIsTXDEN= 0x%02x\n",eepromdata.ARIIsTXDEN);f()
+  f()=@printf(io,"BRIIsTXDEN= 0x%02x\n",eepromdata.BRIIsTXDEN);f()
+  f()=@printf(io,"CRIIsTXDEN= 0x%02x\n",eepromdata.CRIIsTXDEN);f()
+  f()=@printf(io,"DRIIsTXDEN= 0x%02x\n",eepromdata.DRIIsTXDEN);f()
+  f()=@printf(io,"ADriverType= 0x%02x\n",eepromdata.ADriverType);f()
+  f()=@printf(io,"BDriverType= 0x%02x\n",eepromdata.BDriverType);f()
+  f()=@printf(io,"CDriverType= 0x%02x\n",eepromdata.CDriverType);f()
+  f()=@printf(io,"DDriverType= 0x%02x\n",eepromdata.DDriverType);f()
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_4232h)
@@ -378,6 +471,7 @@ type ft_eeprom_x_series <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   # Drive options
   ACSlowSlew :: Cuchar # non-zero if AC bus pins have slow slew
