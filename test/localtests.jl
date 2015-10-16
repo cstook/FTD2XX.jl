@@ -129,8 +129,7 @@ println()
 println("serial number = $serialnumber")
 println("description = $description")
 
-windows = @windows? true:false
-if windows
+if iswindows
   driverversion = FT_GetDriverVersion(h)
   println("FT_GetDriverVersion = ",driverversion)
   libraryversion = FT_GetLibraryVersion()
@@ -158,11 +157,13 @@ FT_Purge(h, FT_PURGE_RX & FT_PURGE_TX)
 
 
 FT_ResetDevice(h)
-@windows? FT_ResetPort(h):nothing
-@windows? FT_CyclePort(h):nothing
-@windows? FT_Rescan(h):nothing
-@windows? FT_SetResetPipeRetryCount(h,100):nothing
-@windows? FT_SetResetPipeRetryCount(h,50):nothing  # back to default
+if iswindows
+  FT_ResetPort(h)
+  FT_CyclePort(h)
+  FT_Rescan(h)
+  FT_SetResetPipeRetryCount(h,100)
+  FT_SetResetPipeRetryCount(h,50)  # back to default
+end
 FT_StopInTask(h)
 FT_RestartInTask(h)
 FT_SetDeadmanTimeout(h,6000)
@@ -172,8 +173,10 @@ print("reloading vid=0x")
 print("    pid=0x")
 @printf("%X",pid)
 println()
-@windows? FT_Reload(vid,pid):nothing
-@windows? FT_ResetPort(h):nothing
+if iswindows
+  FT_Reload(vid,pid)
+  FT_ResetPort(h)
+end
 
 
 FT_Close(h)
@@ -230,9 +233,9 @@ println("latency time is $latencytime_ms ms")
 FT_SetLatencyTimer(h,10)
 latencytime_ms = FT_GetLatencyTimer(h)
 println("latency time is $latencytime_ms ms")
-if (told>1) & (told<256)
+if (ltold>1) & (ltold<256)
   FT_SetLatencyTimer(h,ltold)
-elseif told>1
+elseif ltold>1
   FT_SetLatencyTimer(h,256)
 else
   FT_SetLatencyTimer(h,2)
@@ -276,7 +279,7 @@ FT_WriteEE(h,0x0001,0x5555)  # write some data
 @assert 0x5555 == FT_ReadEE(h,0x0001)
 FT_WriteEE(h,0x0001,word1) # write original value back
 
-if windows
+if iswindows
   println()
   println("test FT_EEPROM_Read, FT_EEPROM_Program start")
   ee = ft_eeprom_232h()
@@ -293,11 +296,18 @@ end
 
 FT_Close(h)
 
-(vid,pid) = @unix? FT_GetVIDPID() : (nothing,nothing)
-println("vid = ",vid,"   pid = ",pid)
-@unix? FT_SetVIDPID(0x5555aaaa,0xaaaa5555) : nothing
-(vid2,pid2) = @unix? FT_GetVIDPID() : (nothing,nothing)
-println("vid = ",vid2,"   pid = ",pid2)
-@unix? FT_SetVIDPID(vid,pid) : nothing
+if isunix
+  (vid,pid) = FT_GetVIDPID() 
+  f()=@printf("VendorId = 0x%04x   ",vid);f() 
+  f()=@printf("ProductId = 0x%04x \n",pid);f() 
+  FT_SetVIDPID(0x5555aaaa,0xaaaa5555)
+  (vid2,pid2) = FT_GetVIDPID() 
+  f()=@printf("VendorId = 0x%04x   ",vid);f() 
+  f()=@printf("ProductId = 0x%04x \n",pid);f() 
+  FT_SetVIDPID(vid,pid)
+  (vid,pid) = FT_GetVIDPID() 
+  f()=@printf("VendorId = 0x%04x   ",vid);f() 
+  f()=@printf("ProductId = 0x%04x \n",pid);f() 
+end
 
 
