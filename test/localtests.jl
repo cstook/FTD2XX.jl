@@ -300,7 +300,7 @@ if isunix
   (vid,pid) = FT_GetVIDPID() 
   f()=@printf("VendorId = 0x%04x   ",vid);f() 
   f()=@printf("ProductId = 0x%04x \n",pid);f() 
-  FT_SetVIDPID(0x5555aaaa,0xaaaa5555)
+  FT_SetVIDPID(0xaaaa,0x5555)
   (vid2,pid2) = FT_GetVIDPID() 
   f()=@printf("VendorId = 0x%04x   ",vid);f() 
   f()=@printf("ProductId = 0x%04x \n",pid);f() 
