@@ -231,8 +231,18 @@ FT_WriteEE(h,0x0001,0x5555)  # write some data
 FT_WriteEE(h,0x0001,word1) # write original value back
 
 if windows
+  println()
+  println("test FT_EEPROM_Read, FT_EEPROM_Program start")
   ee = ft_eeprom_232h()
-  ee_read = FT_EEPROM_Read(h,ee)
+  (mfg,mfgid,d,sn,eepromdata) = FT_EEPROM_Read(h,ee)
+  println("mfg=",mfg)
+  println("mfgid=",mfgid)
+  println("d=",d)
+  println("sn=",sn)
+  show(eepromdata)
+  FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn)
+  println("test FT_EEPROM_Read, FT_EEPROM_Program end")
+  println()
 end
 
 FT_Close(h)

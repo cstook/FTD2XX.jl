@@ -38,7 +38,7 @@ function fteepromprogram{T<:eeprom}(ft_handle::Culong, eepromdata::T,
   ee = Ref{T}(eepromdata)
   ft_status = ccall((:FT_EEPROM_Program, d2xx),
             Cuint,
-            (Culong,Ref{eepromdata},Cuint,Ptr{UInt8},
+            (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
             ft_handle,ee,size,mfg,mfgid,d,sn)
   checkstatus(ft_status)
@@ -292,36 +292,36 @@ type ft_eeprom_232h <: eeprom
   ft_eeprom_232h() = new(FT_DEVICE_232H)
 end
 function Base.show(io::IO, eepromdata::ft_eeprom_232h)
-  @printf(io,"deviceType = 0x%08x\n",eepromdata.deviceType)
-  @printf(io,"VendorId = 0x%04x\n",eepromdata.VendorId)
-  @printf(io,"ProductId = 0x%04x\n",eepromdata.ProductId)
-  @printf(io,"SerNumEnable = 0x%02x\n",eepromdata.SerNumEnable)
-  @printf(io,"MaxPower = 0x%04x\n",eepromdata.MaxPower)
-  @printf(io,"ACSlowSlew = 0x%02x\n",eepromdata.ACSlowSlew)
-  @printf(io,"ACSchmittInput = 0x%02x\n",eepromdata.ACSchmittInput)
-  @printf(io,"ACDriveCurrent = 0x%02x\n",eepromdata.ACDriveCurrent)
-  @printf(io,"ADSlowSlew = 0x%02x\n",eepromdata.ADSlowSlew)
-  @printf(io,"ADSchmittInput = 0x%02x\n",eepromdata.ADSchmittInput)
-  @printf(io,"ADDriveCurrent = 0x%02x\n",eepromdata.ADDriveCurrent)
-  @printf(io,"Cbus0 = 0x%02x\n",eepromdata.Cbus0)
-  @printf(io,"Cbus1 = 0x%02x\n",eepromdata.Cbus1)
-  @printf(io,"Cbus2 = 0x%02x\n",eepromdata.Cbus2)
-  @printf(io,"Cbus3 = 0x%02x\n",eepromdata.Cbus3)
-  @printf(io,"Cbus4 = 0x%02x\n",eepromdata.Cbus4)
-  @printf(io,"Cbus5 = 0x%02x\n",eepromdata.Cbus5)
-  @printf(io,"Cbus6 = 0x%02x\n",eepromdata.Cbus6)
-  @printf(io,"Cbus7 = 0x%02x\n",eepromdata.Cbus7)
-  @printf(io,"Cbus8 = 0x%02x\n",eepromdata.Cbus8)
-  @printf(io,"Cbus9 = 0x%02x\n",eepromdata.Cbus9)
-  @printf(io,"FT1248Cpol = 0x%02x\n",eepromdata.FT1248Cpol)
-  @printf(io,"FT1248Lsb = 0x%02x\n",eepromdata.FT1248Lsb)
-  @printf(io,"FT1248FlowControl = 0x%02x\n",eepromdata.FT1248FlowControl)
-  @printf(io,"IsFifo = 0x%02x\n",eepromdata.IsFifo)
-  @printf(io,"IsFifoTar = 0x%02x\n",eepromdata.IsFifoTar)
-  @printf(io,"IsFastSer = 0x%02x\n",eepromdata.IsFastSer)
-  @printf(io,"IsFT1248 = 0x%02x\n",eepromdata.IsFT1248)
-  @printf(io,"PowerSaveEnable = 0x%02x\n",eepromdata.PowerSaveEnable)
-  @printf(io,"DriverType = 0x%02x\n",eepromdata.DriverType)
+  f()=@printf(io,"deviceType = 0x%08x\n",eepromdata.deviceType);f()
+  f()=@printf(io,"VendorId = 0x%04x\n",eepromdata.VendorId);f()
+  f()=@printf(io,"ProductId = 0x%04x\n",eepromdata.ProductId);f()
+  f()=@printf(io,"SerNumEnable = 0x%02x\n",eepromdata.SerNumEnable);f()
+  f()=@printf(io,"MaxPower = 0x%04x\n",eepromdata.MaxPower);f()
+  f()=@printf(io,"ACSlowSlew = 0x%02x\n",eepromdata.ACSlowSlew);f()
+  f()=@printf(io,"ACSchmittInput = 0x%02x\n",eepromdata.ACSchmittInput);f()
+  f()=@printf(io,"ACDriveCurrent = 0x%02x\n",eepromdata.ACDriveCurrent);f()
+  f()=@printf(io,"ADSlowSlew = 0x%02x\n",eepromdata.ADSlowSlew);f()
+  f()=@printf(io,"ADSchmittInput = 0x%02x\n",eepromdata.ADSchmittInput);f()
+  f()=@printf(io,"ADDriveCurrent = 0x%02x\n",eepromdata.ADDriveCurrent);f()
+  f()=@printf(io,"Cbus0 = 0x%02x\n",eepromdata.Cbus0);f()
+  f()=@printf(io,"Cbus1 = 0x%02x\n",eepromdata.Cbus1);f()
+  f()=@printf(io,"Cbus2 = 0x%02x\n",eepromdata.Cbus2);f()
+  f()=@printf(io,"Cbus3 = 0x%02x\n",eepromdata.Cbus3);f()
+  f()=@printf(io,"Cbus4 = 0x%02x\n",eepromdata.Cbus4);f()
+  f()=@printf(io,"Cbus5 = 0x%02x\n",eepromdata.Cbus5);f()
+  f()=@printf(io,"Cbus6 = 0x%02x\n",eepromdata.Cbus6);f()
+  f()=@printf(io,"Cbus7 = 0x%02x\n",eepromdata.Cbus7);f()
+  f()=@printf(io,"Cbus8 = 0x%02x\n",eepromdata.Cbus8);f()
+  f()=@printf(io,"Cbus9 = 0x%02x\n",eepromdata.Cbus9);f()
+  f()=@printf(io,"FT1248Cpol = 0x%02x\n",eepromdata.FT1248Cpol);f()
+  f()=@printf(io,"FT1248Lsb = 0x%02x\n",eepromdata.FT1248Lsb);f()
+  f()=@printf(io,"FT1248FlowControl = 0x%02x\n",eepromdata.FT1248FlowControl);f()
+  f()=@printf(io,"IsFifo = 0x%02x\n",eepromdata.IsFifo);f()
+  f()=@printf(io,"IsFifoTar = 0x%02x\n",eepromdata.IsFifoTar);f()
+  f()=@printf(io,"IsFastSer = 0x%02x\n",eepromdata.IsFastSer);f()
+  f()=@printf(io,"IsFT1248 = 0x%02x\n",eepromdata.IsFT1248);f()
+  f()=@printf(io,"PowerSaveEnable = 0x%02x\n",eepromdata.PowerSaveEnable);f()
+  f()=@printf(io,"DriverType = 0x%02x\n",eepromdata.DriverType);f()
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232h)
@@ -329,9 +329,14 @@ function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232h)
   fteepromread(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232h)
+function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232h,
+                            mfg_string::ASCIIString,
+                            mfgid_string::ASCIIString,
+                            d_string::ASCIIString,
+                            sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_232H
-  fteepromprogram(ft_handle,eepromdata)
+  fteepromprogram(ft_handle,eepromdata,mfg_string,
+                  mfgid_string,d_string,sn_string)
 end
 
 type ft_eeprom_x_series <: eeprom
