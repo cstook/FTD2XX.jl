@@ -422,7 +422,7 @@ type ft_eeprom_x_series <: eeprom
   ft_eeprom_x_series() = new(FT_DEVICE_X_SERIES)
 end
 
-function Base.show(io::IO, eepromdata::ft_eeprom_232h)
+function Base.show(io::IO, eepromdata::ft_eeprom_x_series)
   showcommonelements(io,eepromdata)
   f()=@printf(io,"ACSlowSlew= 0x%02x\n",eepromdata.ACSlowSlew);f()
   f()=@printf(io,"ACSchmittInput= 0x%02x\n",eepromdata.ACSchmittInput);f()
