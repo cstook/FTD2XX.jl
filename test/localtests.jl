@@ -1,9 +1,32 @@
 # tests require FTDI devices attached to computer
 
+# https://www.ikalogic.com/ftdi-d2xx-linux-overcoming-big-problem/
+#=
+Normally your *.rules file would contain this line:
+ATTRS{idVendor}==”0403″, ATTRS{idProduct}==”6014″, MODE=”0666″
+This line will make your device accessible from applications that do not have super user rights (i.e. normal users, not administrators)
+Simply add this line to tell the kernel to unbind the ftdi_sio (usb to serial port driver) from your device:
+[alert type=”primary” display=”inline”]ATTRS{idVendor}==”0403″, ATTRS{idProduct}==”6014″, ATTRS{product}==”PRODUCT_NAME”, RUN+=”/bin/sh -c ‘echo $kernel > /sys/bus/usb/drivers/ftdi_sio/unbind'”[/alert]
+(this is a single line, even though it might appear here as 2 lines)
+The idea to differentiate between various FTDI devices using the product name defined in the USB descriptor.  Once the product named “PRODUCT_NAME” is detected, the shell command above is run, which will effectively unbind the ftdi_sio and your USB device!
+And voila! please don’t hesitate to post comments or ideas. I hope this post could help others.
+=#
+
+
+const isunix = @unix? true:false
+const isosx = @osx? true:false
+const islinux = @linux? true:false
+const iswindows = @windows? true:false
+
 # unload VCP driver for linux
-try
-  @linux? begin;run(`sudo rmmod ftdi_sio`);end : nothing
-  @linux? begin;run(`sudo rmmod usbserial`);end : nothing
+if islinux
+  vid = 0x0403
+  pid = 0x6014
+  FT_SetVIDPID(vid,pid)
+  try
+    run(`sudo rmmod ftdi_sio`)
+    run(`sudo rmmod usbserial`)
+  end
 end
 
 using FTD2XX
