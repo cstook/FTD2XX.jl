@@ -27,7 +27,7 @@ function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
   return(mfg_string,mfgid_string,d_string,sn_string,eepromdata)
 end
 
-function fteepromprogram(ft_handle::Culong, eepromdata::eeprom, 
+function fteepromprogram{T<:eeprom}(ft_handle::Culong, eepromdata::T, 
           mfg_string::ASCIIString, mfgid_string::ASCIIString, 
           d_string::ASCIIString, sn_string::ASCIIString)
   size = sizeof(eepromdata)
@@ -35,10 +35,12 @@ function fteepromprogram(ft_handle::Culong, eepromdata::eeprom,
   mfgid = Array{UInt8,1}(mfgid_string * "\0")
   d = Array{UInt8,1}(d_string * "\0")
   sn = Array{UInt8,1}(sn_string * "\0")
+  ee = Ref{T}(eepromdata)
   ft_status = ccall((:FT_EEPROM_Program, d2xx),
             Cuint,
-            (Culong,Ref{eepromdata},Cuint,Ptr{mfg},Ptr{mfgid},Ptr{d},Ptr{sn}),
-            ft_handle,eepromdata,size,mfg,mfgid,d,sn)
+            (Culong,Ref{eepromdata},Cuint,Ptr{UInt8},
+              Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
+            ft_handle,ee,size,mfg,mfgid,d,sn)
   checkstatus(ft_status)
   return nothing
 end
@@ -256,7 +258,7 @@ type ft_eeprom_232h <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
-  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
   # Drive options
   ACSlowSlew :: Cuchar # non-zero if AC bus pins have slow slew
