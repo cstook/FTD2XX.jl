@@ -20,9 +20,6 @@ const iswindows = @windows? true:false
 
 # unload VCP driver for linux
 if islinux
-  vid = 0x0403
-  pid = 0x6014
-  FT_SetVIDPID(vid,pid)
   try
     run(`sudo rmmod ftdi_sio`)
     run(`sudo rmmod usbserial`)
@@ -31,6 +28,12 @@ end
 
 using FTD2XX
 using Base.Test 
+
+if islinux
+  vid = 0x0403
+  pid = 0x6014
+  FT_SetVIDPID(vid,pid)
+end
 
 lpdwnumdevs = FT_CreateDeviceInfoList()
 println("$lpdwnumdevs devices found")
