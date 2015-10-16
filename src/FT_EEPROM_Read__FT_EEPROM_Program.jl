@@ -24,7 +24,7 @@ function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
   mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)])
   d_string = bytestring(d[1:findfirst(d,0x00)])
   sn_string = bytestring(sn[1:findfirst(sn,0x00)])
-  return(mfg_string,mfgid_string,d_string,sn_string,eepromdata[])
+  return(mfg_string,mfgid_string,d_string,sn_string,eepromdata)
 end
 
 function fteepromprogram(ft_handle::Culong, eepromdata::eeprom, 
@@ -256,6 +256,7 @@ type ft_eeprom_232h <: eeprom
   SerNumEnable :: Cuchar # non-zero if serial number to be used
   # Config descriptor options
   MaxPower :: Cshort #  0 < MaxPower <= 500
+  pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8
   ### END common elements for all device EEPROMs ###
   # Drive options
   ACSlowSlew :: Cuchar # non-zero if AC bus pins have slow slew
@@ -287,6 +288,38 @@ type ft_eeprom_232h <: eeprom
   PowerSaveEnable :: Cuchar ## Driver option
   DriverType :: Cuchar #  :: Cuchar #FT X Series EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
   ft_eeprom_232h() = new(FT_DEVICE_232H)
+end
+function Base.show(io::IO, eepromdata::ft_eeprom_232h)
+  @printf(io,"deviceType = 0x%08x\n",eepromdata.deviceType)
+  @printf(io,"VendorId = 0x%04x\n",eepromdata.VendorId)
+  @printf(io,"ProductId = 0x%04x\n",eepromdata.ProductId)
+  @printf(io,"SerNumEnable = 0x%02x\n",eepromdata.SerNumEnable)
+  @printf(io,"MaxPower = 0x%04x\n",eepromdata.MaxPower)
+  @printf(io,"ACSlowSlew = 0x%02x\n",eepromdata.ACSlowSlew)
+  @printf(io,"ACSchmittInput = 0x%02x\n",eepromdata.ACSchmittInput)
+  @printf(io,"ACDriveCurrent = 0x%02x\n",eepromdata.ACDriveCurrent)
+  @printf(io,"ADSlowSlew = 0x%02x\n",eepromdata.ADSlowSlew)
+  @printf(io,"ADSchmittInput = 0x%02x\n",eepromdata.ADSchmittInput)
+  @printf(io,"ADDriveCurrent = 0x%02x\n",eepromdata.ADDriveCurrent)
+  @printf(io,"Cbus0 = 0x%02x\n",eepromdata.Cbus0)
+  @printf(io,"Cbus1 = 0x%02x\n",eepromdata.Cbus1)
+  @printf(io,"Cbus2 = 0x%02x\n",eepromdata.Cbus2)
+  @printf(io,"Cbus3 = 0x%02x\n",eepromdata.Cbus3)
+  @printf(io,"Cbus4 = 0x%02x\n",eepromdata.Cbus4)
+  @printf(io,"Cbus5 = 0x%02x\n",eepromdata.Cbus5)
+  @printf(io,"Cbus6 = 0x%02x\n",eepromdata.Cbus6)
+  @printf(io,"Cbus7 = 0x%02x\n",eepromdata.Cbus7)
+  @printf(io,"Cbus8 = 0x%02x\n",eepromdata.Cbus8)
+  @printf(io,"Cbus9 = 0x%02x\n",eepromdata.Cbus9)
+  @printf(io,"FT1248Cpol = 0x%02x\n",eepromdata.FT1248Cpol)
+  @printf(io,"FT1248Lsb = 0x%02x\n",eepromdata.FT1248Lsb)
+  @printf(io,"FT1248FlowControl = 0x%02x\n",eepromdata.FT1248FlowControl)
+  @printf(io,"IsFifo = 0x%02x\n",eepromdata.IsFifo)
+  @printf(io,"IsFifoTar = 0x%02x\n",eepromdata.IsFifoTar)
+  @printf(io,"IsFastSer = 0x%02x\n",eepromdata.IsFastSer)
+  @printf(io,"IsFT1248 = 0x%02x\n",eepromdata.IsFT1248)
+  @printf(io,"PowerSaveEnable = 0x%02x\n",eepromdata.PowerSaveEnable)
+  @printf(io,"DriverType = 0x%02x\n",eepromdata.DriverType)
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232h)
