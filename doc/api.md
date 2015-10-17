@@ -17,8 +17,8 @@ Returns handle to device.  Device indexes start at zero.
 ### FT_OpenEx(*description::FT_Description)
 Returns handle to device.  FT_OpenEx allows devices to be opened by location id, serial number or description.
 for example:
-'''julia
+```julia
 handle = FT_OpenEx(0x0314)  # open by location
 handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
 handle = FT_OpenEx(FT_Description("C232HM-EDHSL-0"))
-'''
+```
