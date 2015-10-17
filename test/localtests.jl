@@ -33,6 +33,7 @@ const isunix = @unix? true:false
 const isosx = @osx? true:false
 const islinux = @linux? true:false
 const iswindows = @windows? true:false
+const iswindows10 = true
 
 # unload VCP driver for linux
 if islinux
@@ -66,9 +67,7 @@ println()
 h = FT_Open(0)
 FT_Close(h)
 
-
 # need to fix this !!!!!
-
 #locid = dil[1].locid
 #h = FT_OpenEx(locid)
 #FT_Close(h)
@@ -163,26 +162,32 @@ if iswindows
   FT_ResetPort(h)
   FT_CyclePort(h)
   FT_Rescan(h)
-  FT_SetResetPipeRetryCount(h,100)
-  FT_SetResetPipeRetryCount(h,50)  # back to default
+  if ~iswindows10  # problem with windows 10
+    FT_SetResetPipeRetryCount(h,100)
+    FT_SetResetPipeRetryCount(h,50)  # back to default
+  end
 end
-FT_StopInTask(h)
-FT_RestartInTask(h)
-FT_SetDeadmanTimeout(h,6000)
-FT_SetDeadmanTimeout(h,5000)  # back to default
+if ~iswindows10 # problem with windows 10
+  FT_StopInTask(h) 
+  FT_RestartInTask(h)
+  FT_SetDeadmanTimeout(h,6000)
+  FT_SetDeadmanTimeout(h,5000)  # back to default
+end
 print("reloading vid=0x")
 @printf("%X",vid)
 print("    pid=0x")
 @printf("%X",pid)
 println()
-if iswindows
-  FT_Reload(vid,pid)
+if iswindows & ~iswindows10
+  if ~iswindows10 # problem with windows10
+    FT_Reload(vid,pid)
+  end
   FT_ResetPort(h)
 end
 
 
 FT_Close(h)
-
+wait(Timer(5))
 
 ####################################
 #
@@ -272,6 +277,7 @@ pd2.PowerSaveEnableH = 0x01 # turn on power save
 FT_EE_Program(h,pd2)
 pd3 = FT_EE_Read(h)
 println("PowerSaveEnableH = ",pd3.PowerSaveEnableH)
+print(programdata)
 
 FT_EraseEE(h) # erase the EEPROM
 FT_EE_Program(h,pd2) # put data back
