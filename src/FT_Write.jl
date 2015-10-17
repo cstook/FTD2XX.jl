@@ -1,7 +1,8 @@
 export FT_Write
 
-function FT_Write(ft_handle::Culong, buffer::Array{UInt8,1})
-  bytestowrite = Cuint(length(buffer))
+function FT_Write(ft_handle::Culong,
+                  buffer::Array{UInt8,1},
+                  bytestowrite::Integer)
   byteswritten = Ref{Cuint}()
   ft_status = ccall((:FT_Write, d2xx),
                      Cuint,
@@ -9,4 +10,11 @@ function FT_Write(ft_handle::Culong, buffer::Array{UInt8,1})
                      ft_handle, buffer, bytestowrite, byteswritten)
   checkstatus(ft_status)
   return byteswritten[]
+end
+
+
+function FT_Write(ft_handle::Culong,
+                  buffer::Array{UInt8,1})
+  bytestowrite = Cuint(length(buffer))
+  return FT_Write(ft_handle,buffer,bytestowrite)
 end
