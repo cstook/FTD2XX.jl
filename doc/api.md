@@ -37,10 +37,7 @@ Returns number of bytes written.  If bytestowrite is unspecified it is assumed t
 ### FT_SetBaudRate(ft_handle::Culong, baud::Integer)
 Sets the baud rate.
 
-### FT_SetDataCharacteristics(*ft_handle::Culong, 
-                              wordlength::Integer,
-                              stopbits::Integer,
-                              parity::Integer*)
+### FT_SetDataCharacteristics(*ft_handle::Culong, wordlength::Integer, stopbits::Integer, Parity::Integer*)
 Sets word length, stop bits and parity.
 
 the following constants are exported for use with this function:
