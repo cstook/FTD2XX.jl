@@ -8,10 +8,19 @@ const FT_EVENT_MODEM_STATUS = 2
 const FT_EVENT_LINE_STATUS = 4
 
 
-function FT_SetEventNotification(ft_handle::Culong, eventmask::Integer)
-#=
-What do I do here ????
+function FT_SetEventNotification(ft_handle::Culong,
+                                 event_mask::Integer,
+                                 event_handle::Culong)
+  eh = Ref{Culong}(event_handle)
+  ft_status = ccall((:FT_SetEventNotification, d2xx),
+                   Cuint,
+                   (Culong, Cuint,Ref{Culong}),
+                   ft_handle, event_mask, eh)
+  checkstatus(ft_status)
+  return nothing
+end
 
+#=
 const _k32 = "Kernel32.dll"
 hevent = ccall((:CreateEventW,_k32),
               Culonglong, 
@@ -20,4 +29,3 @@ hevent = ccall((:CreateEventW,_k32),
 
 
 =#
-end
