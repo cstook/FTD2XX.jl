@@ -67,10 +67,9 @@ println()
 h = FT_Open(0)
 FT_Close(h)
 
-# need to fix this !!!!!
-#locid = dil[1].locid
-#h = FT_OpenEx(locid)
-#FT_Close(h)
+locid = dil[1].locid
+h = FT_OpenEx(locid)
+FT_Close(h)
 
 ftsn = FT_SerialNumber(dil[1].serialnumber)
 h = FT_OpenEx(ftsn)

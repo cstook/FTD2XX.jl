@@ -10,7 +10,7 @@ FTD2XX.jl is currently unregistered.  It can be installed using ```Pkg.clone```.
 ```julia
 Pkg.clone("https://github.com/cstook/FTD2XX.jl.git")
 ```
-The [julia documentation](http://docs.julialang.org) section on installing unregistered [Packages](http://docs.julialang.org/en/release-0.4/manual/packages/#packages) provides more information.
+The [julia documentation](http://docs.julialang.org) section on installing unregistered [packages](http://docs.julialang.org/en/release-0.4/manual/packages/#packages) provides more information.
 
 ##OS Compatibility
 

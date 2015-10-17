@@ -41,7 +41,7 @@ function FT_OpenEx(location :: Unsigned)
   ft_handle = Ref{Culong}()
   ft_status = ccall((:FT_OpenEx, d2xx),
                       Cuint,
-                      (Ref{Cuint},Cuint,Ref{Culong}),
+                      (Cuint,Cuint,Ref{Culong}),
                       location,FT_OPEN_BY_LOCATION,ft_handle)
   checkstatus(ft_status)
   return ft_handle[]
