@@ -19,7 +19,44 @@ Returns handle to device.  FT_OpenEx allows devices to be opened by location id,
 
 for example:
 ```julia
-handle = FT_OpenEx(0x0314)  # open by location
-handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
-handle = FT_OpenEx(FT_Description("C232HM-EDHSL-0")) # open by description
+ft_handle = FT_OpenEx(0x0314)  # open by location
+ft_handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
+ft_handle = FT_OpenEx(FT_Description("C232HM-EDHSL-0")) # open by description
+```
+
+### FT_Close(*ft_handle::Culong*)
+Closes device with handle ft_handle.
+
+### FT_Read!(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestoread::Integer*)
+Returns number of bytes returned.  Data is returned by modifying buffer.
+
+### FT_Write(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestowrite::Integer*)
+### FT_Write(*ft_handle::Culong, buffer::Array{UInt8,1}*)
+Returns number of bytes written.  If bytestowrite is unspecified it is assumed to be the length of the buffer.
+
+### FT_SetBaudRate(ft_handle::Culong, baud::Integer)
+Sets the baud rate.
+
+### FT_SetDataCharacteristics(*ft_handle::Culong, 
+                              wordlength::Integer,
+                              stopbits::Integer,
+                              parity::Integer*)
+Sets word length, stop bits and parity.
+
+the following constants are exported for use with this function:
+```julia
+#Word Length
+const FT_BITS_8 = 8 
+const FT_BITS_7 = 7
+
+#Stop Bits
+const FT_STOP_BITS_1 = 0 
+const FT_STOP_BITS_2 = 2
+
+#Parity
+const FT_PARITY_NONE = 0 
+const FT_PARITY_ODD = 1 
+const FT_PARITY_EVEN = 2 
+const FT_PARITY_MARK = 3 
+const FT_PARITY_SPACE = 4
 ```

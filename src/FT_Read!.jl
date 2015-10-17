@@ -1,7 +1,7 @@
 export FT_Read!
 
 function FT_Read!(ft_handle::Culong,
-                 buffer::Array{UInt8},
+                 buffer::Array{UInt8,1},
                  bytestoread::Integer)
   bytesreturned = Ref{Cuint}()
   ft_status = ccall((:FT_Read, d2xx),
