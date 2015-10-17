@@ -12,6 +12,12 @@ Pkg.clone("https://github.com/cstook/FTD2XX.jl.git")
 ```
 The [julia documentation](http://docs.julialang.org) section on installing unregistered [packages](http://docs.julialang.org/en/release-0.4/manual/packages/#packages) provides more information.
 
+## Documentation
+[API for this wrapper](https://github.com/cstook/FTD2XX.jl/blob/master/doc/api.md)
+[FTDI website](http://www.ftdichip.com)
+[D2XX Programer's Guide (from FTDI)](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf)
+
+
 ##OS Compatibility
 
 FTD2XX.jl is compatible with windows, linux, and osx.  See FTDI's [installation guides](http://www.ftdichip.com/Support/Documents/InstallGuides.htm) for instructions on installing drivers for your operating system.  Drivers are assumed to be installed in the default locations.
