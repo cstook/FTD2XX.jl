@@ -6,7 +6,7 @@ FTD2XX.jl is a thin wrapper for [FTDI](http://www.ftdichip.com)'s [D2XX](http://
 
 ##Installation
 
-FTD2XX.jl is currently unregistered.  It can be installed using ```[Pkg.clone](http://www.ftdichip.com/Support/Documents/InstallGuides.htm)```.
+FTD2XX.jl is currently unregistered.  It can be installed using ```Pkg.clone```.
 ```julia
 Pkg.clone("https://github.com/cstook/FTD2XX.jl.git")
 ```
