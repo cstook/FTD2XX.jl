@@ -6,8 +6,13 @@ For complete documentation see [D2XX Programer's Guide](http://www.ftdichip.com/
 ### FT_CreateDeviceInfoList()
 Returns number of devices.
 
-### FT_GetDeviceInfoList(*numberofdevices::Integer*)
+### FT_GetDeviceInfoList(*numberofdevices::Integer = FT_CreateDeviceInfoList()*)
 Returns device information list.  Device information list is an array of type InfoNode.  The fields of InfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
+
+example:
+```julia
+deviceinformationlist = FT_GetDeviceInfoList()
+```
 
 ### FT_Open(*deviceindex::Integer*)
 Returns handle to device.  Device indexes start at zero.
@@ -17,7 +22,7 @@ Returns handle to device.  Device indexes start at zero.
 ### FT_OpenEx(*description::FT_Description*)
 Returns handle to device.  FT_OpenEx allows devices to be opened by location id, serial number or description.
 
-for example:
+example:
 ```julia
 ft_handle = FT_OpenEx(0x0314)  # open by location
 ft_handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
