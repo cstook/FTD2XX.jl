@@ -20,10 +20,10 @@ function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
             ft_handle,ee,size,mfg,mfgid,d,sn)
   checkstatus(ft_status)
-  mfg_string = bytestring(mfg[1:findfirst(mfg,0x00)])
-  mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)])
-  d_string = bytestring(d[1:findfirst(d,0x00)])
-  sn_string = bytestring(sn[1:findfirst(sn,0x00)])
+  mfg_string = bytestring(mfg[1:findfirst(mfg,0x00)-1])
+  mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)-1])
+  d_string = bytestring(d[1:findfirst(d,0x00)-1])
+  sn_string = bytestring(sn[1:findfirst(sn,0x00)-1])
   return(mfg_string,mfgid_string,d_string,sn_string,eepromdata)
 end
 
