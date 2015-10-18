@@ -253,7 +253,7 @@ Write data in a device specific type to EEPROM.
 
 The device specific types are ft_eeprom_232b, ft_eeprom_2232, ft_eeprom_232r, ft_eeprom_2232h, ft_eeprom_4232h, ft_eeprom_232h, ft_eeprom_x_series.  Constructors for these types set the deviceType field to the appropriate constant, leaving the rest of the structure uninitialized.
 
-The constants are:
+The deviceType constants are:
 ```julia
   const FT_DEVICE_232BM = 0 	# for type ft_eeprom_232b
   const FT_DEVICE_232AM = 1 	# discontinued device
