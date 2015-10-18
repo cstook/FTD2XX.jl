@@ -290,8 +290,8 @@ FT_WriteEE(h,0x0001,word1) # write original value back
 if iswindows
   println()
   println("test FT_EEPROM_Read, FT_EEPROM_Program start")
-  ee = ft_eeprom_232h()
-  (mfg,mfgid,d,sn,eepromdata) = FT_EEPROM_Read(h,ee)
+  #ee = ft_eeprom_232h()
+  (mfg,mfgid,d,sn,eepromdata) = FT_EEPROM_Read(h,ft_eeprom_232h())
   println("mfg=",mfg)
   println("mfgid=",mfgid)
   println("d=",d)

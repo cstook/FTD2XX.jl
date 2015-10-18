@@ -240,5 +240,36 @@ Returns com port number where device is attached.
 ### FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
 
 ### FT_EEPROM_Read(*ft_handle::Culong, eepromdata::eeprom*)
+Read data from EEPROM into a device specific type.  Returns tuple (mfg,mfgid,description, serialnumber, eepromdata).  Note this function also overwrites the eepromdata passed as a parameter.  
+
 ### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg_string::ASCIIString,mfgid_string::ASCIIString, d_string::ASCIIString, sn_string::ASCIIString*)
+Write data in a device specific type to EEPROM.
+
+The device specific types are ft_eeprom_232b, ft_eeprom_2232, ft_eeprom_232r, ft_eeprom_2232h, ft_eeprom_4232h, ft_eeprom_232h, ft_eeprom_x_series.  Constructors for these types set the deviceType field to the appropriate constant, leaving the rest of the structure uninitialized.
+
+The constants are:
+```julia
+  const FT_DEVICE_232BM = 0 	# for type ft_eeprom_232b
+  const FT_DEVICE_232AM = 1 	# discontinued device
+  const FT_DEVICE_100AX = 2 	# discontinued device
+  const FT_DEVICE_UNKNOWN = 3
+  const FT_DEVICE_2232C = 4 	# for type ft_eeprom_2232
+  const FT_DEVICE_232R = 5 		# for type ft_eeprom_232r
+  const FT_DEVICE_2232H = 6 	# for type ft_eeprom_2232h
+  const FT_DEVICE_4232H = 7 	# for type ft_eeprom_4232h
+  const FT_DEVICE_232H = 8 		# for type ft_eeprom_232h
+  const FT_DEVICE_X_SERIES = 9 	# for type ft_eeprom_x_series
+```
+
+Example usage:
+```julia
+# assumes device with handle h is open
+(mfg,mfgid,d,sn,eepromdata) = FT_EEPROM_Read(h,ft_eeprom_232h()) # read EEPROM
+eepromdata.PowerSaveEnable = 0x00  # change a parameter 
+FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn) # write back to device
+```
+
+
+
+
 
