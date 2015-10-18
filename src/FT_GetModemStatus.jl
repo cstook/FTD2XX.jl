@@ -21,5 +21,5 @@ function FT_GetModemStatus(ft_handle::Culong)
                      (Culong, Ref{Cuint}),
                      ft_handle, modemstatus)
   checkstatus(ft_status)
-  return convert(UInt32,modemstatus[])
+  return modemstatus[]
 end 
