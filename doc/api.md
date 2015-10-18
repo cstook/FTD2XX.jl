@@ -154,5 +154,26 @@ Restarts the driver's in task.
 Sets deadman timeout in milliseconds.
 
 ### FT_ReadEE(*ft_handle::Culong, wordoffset::Integer*)
-Returns word (16bits) in EEPROM ar wordoffset.
+Returns word (16bits) in EEPROM at wordoffset.
+
+### FT_WriteEE(*ft_handle::Culong, wordoffset::Integer, value::UInt16*)
+Writes a value to EEPROM at wordoffset.
+
+### FT_EraseEE(*ft_handle::Culong*)
+Erase the device EEPROM.
+
+### FT_EE_Read(*ft_handle::Culong, version::Integer = 5*)
+Returns type FtProgramData.
+
+### FT_EE_Program(*ft_handle::Culong, pd::FtProgramData*)
+Programs device EEPROM with FtProgramData.
+
+For Example:
+```julia
+# assumes device with ft_handle has been opened.
+programdata = FT_EE_Read(ft_handle)  		# read the program data
+programdata.Description = "NewDescription"  # change a value
+FT_EE_Program(programdata)					# write back to device
+```
+FtProgramData mirrors FTD2XX's FT_PROGRAM_DATA_STRUCTURE converting pointers to julia strings. See [FTDI's documentation](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf) for a complete description of FT_PROGRAM_DATA_STRUCTURE and associated constants.
 
