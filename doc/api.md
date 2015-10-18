@@ -242,7 +242,7 @@ Returns com port number where device is attached.
 ### FT_EEPROM_Read(*ft_handle::Culong, eepromdata::eeprom*)
 Read data from EEPROM into a device specific type.  Returns tuple (eepromdata, mfg, mfgid, description, serialnumber).  Note this function also overwrites the eepromdata passed as a parameter.  
 
-### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg_string::ASCIIString,mfgid_string::ASCIIString, d_string::ASCIIString, sn_string::ASCIIString*)
+### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg::ASCIIString,mfgid::ASCIIString, description::ASCIIString, serialnumber::ASCIIString*)
 Write data in a device specific type to EEPROM.
 
 The device specific types are ft_eeprom_232b, ft_eeprom_2232, ft_eeprom_232r, ft_eeprom_2232h, ft_eeprom_4232h, ft_eeprom_232h, ft_eeprom_x_series.  Constructors for these types set the deviceType field to the appropriate constant, leaving the rest of the structure uninitialized.
