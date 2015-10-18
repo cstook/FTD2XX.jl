@@ -7,5 +7,5 @@ function FT_EE_UASize(ft_handle::Culong)
                      (Culong, Ref{Cuint}),
                      ft_handle, eesize)
   checkstatus(ft_status)
-  return convert(Int32,eesize[])
+  return eesize[]
 end

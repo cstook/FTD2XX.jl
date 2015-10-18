@@ -173,7 +173,7 @@ For Example:
 # assumes device with ft_handle has been opened.
 programdata = FT_EE_Read(ft_handle)  		# read the program data
 programdata.Description = "NewDescription"  # change a value
-FT_EE_Program(programdata)					# write back to device
+FT_EE_Program(ft_handle, programdata)		# write back to device
 ```
-FtProgramData mirrors FTD2XX's FT_PROGRAM_DATA_STRUCTURE converting pointers to julia strings. See [FTDI's documentation](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf) for a complete description of FT_PROGRAM_DATA_STRUCTURE and associated constants.
+Type FtProgramData mirrors FTD2XX's FT_PROGRAM_DATA_STRUCTURE converting pointers to julia strings. See [FTDI's documentation](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf) for a complete description of FT_PROGRAM_DATA_STRUCTURE and associated constants.
 
