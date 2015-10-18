@@ -567,3 +567,24 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_x_series,
   fteepromprogram(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
+
+function FT_EEPROM_Read(ft_handle::Culong)
+  (devicetype,id,sn,d) = FT_GetDeviceInfo(ft_handle)
+  if devicetype == FT_DEVICE_232BM
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_232b())
+  elseif devicetype == FT_DEVICE_2232C
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_2232())
+  elseif devicetype == FT_DEVICE_232R
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_232r())
+  elseif devicetype == FT_DEVICE_2232H
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_2232h())
+  elseif devicetype == FT_DEVICE_4232H
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_4232h())
+  elseif devicetype == FT_DEVICE_232H
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_232h())
+  elseif devicetype == FT_DEVICE_X_SERIES
+    return FT_EEPROM_Read(ft_handle,ft_eeprom_x_series())
+  else
+    error("Device type ",devicetype," unknown")
+  end
+end

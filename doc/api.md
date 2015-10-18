@@ -245,7 +245,8 @@ Returns com port number where device is attached.
 ### FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
 
 ### FT_EEPROM_Read(*ft_handle::Culong, eepromdata::eeprom*)
-Read data from EEPROM into a device specific type.  Returns tuple (eepromdata, mfg, mfgid, description, serialnumber).  Note this function also overwrites the eepromdata passed as a parameter.  
+### FT_EEPROM_Read(*ft_handle::Culong*)
+Read data from EEPROM into a device specific type.  Returns tuple (eepromdata, mfg, mfgid, description, serialnumber).  The second form, passing only ft_handle is perfered.  Note if passed as a parameter, eepromdata is overwritten.  
 
 ### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg::ASCIIString,mfgid::ASCIIString, description::ASCIIString, serialnumber::ASCIIString*)
 Write data in a device specific type to EEPROM.
@@ -268,13 +269,11 @@ The constants are:
 
 Example usage:
 ```julia
-# assumes device with handle h is open
-(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,ft_eeprom_232h()) # read EEPROM
+# assumes device with handle h is open and is device type FT_DEVICE_232H
+(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h) # read EEPROM, autodetect type
 eepromdata.PowerSaveEnable = 0x00  # change a parameter 
 FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn) # write back to device
+
+# you can specify the device type.  It will autodetect if not incuded.
+(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,ft_eeprom_232h()) # read EEPROM
 ```
-
-
-
-
-
