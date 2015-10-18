@@ -240,7 +240,7 @@ Returns com port number where device is attached.
 ### FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
 
 ### FT_EEPROM_Read(*ft_handle::Culong, eepromdata::eeprom*)
-Read data from EEPROM into a device specific type.  Returns tuple (mfg,mfgid,description, serialnumber, eepromdata).  Note this function also overwrites the eepromdata passed as a parameter.  
+Read data from EEPROM into a device specific type.  Returns tuple (eepromdata, mfg, mfgid, description, serialnumber).  Note this function also overwrites the eepromdata passed as a parameter.  
 
 ### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg_string::ASCIIString,mfgid_string::ASCIIString, d_string::ASCIIString, sn_string::ASCIIString*)
 Write data in a device specific type to EEPROM.

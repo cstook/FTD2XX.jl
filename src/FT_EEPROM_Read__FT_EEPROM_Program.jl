@@ -24,7 +24,7 @@ function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
   mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)-1])
   d_string = bytestring(d[1:findfirst(d,0x00)-1])
   sn_string = bytestring(sn[1:findfirst(sn,0x00)-1])
-  return(mfg_string,mfgid_string,d_string,sn_string,eepromdata)
+  return(eepromdata,mfg_string,mfgid_string,d_string,sn_string)
 end
 
 function fteepromprogram{T<:eeprom}(ft_handle::Culong, eepromdata::T, 
