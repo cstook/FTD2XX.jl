@@ -23,3 +23,5 @@ The [julia documentation](http://docs.julialang.org) section on installing unreg
 ##OS Compatibility
 
 FTD2XX.jl is compatible with windows, linux, and osx.  See FTDI's [installation guides](http://www.ftdichip.com/Support/Documents/InstallGuides.htm) for instructions on installing drivers for your operating system.  Drivers are assumed to be installed in the default locations.
+
+[Asdditional Information for Linux](https://github.com/cstook/FTD2XX.jl/blob/master/doc/AdditionalInformationforLinux.md)
