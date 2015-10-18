@@ -264,7 +264,7 @@ The constants are:
 Example usage:
 ```julia
 # assumes device with handle h is open
-(mfg,mfgid,d,sn,eepromdata) = FT_EEPROM_Read(h,ft_eeprom_232h()) # read EEPROM
+(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,ft_eeprom_232h()) # read EEPROM
 eepromdata.PowerSaveEnable = 0x00  # change a parameter 
 FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn) # write back to device
 ```
