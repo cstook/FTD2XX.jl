@@ -9,5 +9,5 @@ function FT_GetVIDPID()
                      (Ref{Cuint}, Ref{Cuint}),
                       vid, pid)
   checkstatus(ft_status)
-  return (convert(UInt32, vid[]), convert(UInt32, pid[]))
+  return id[], pid[]
 end

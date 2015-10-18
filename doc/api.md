@@ -211,3 +211,34 @@ Returns the bit mode.
 
 ### FT_SetUSBParameters(*ft_handle::Culong, intransfersize::Integer = 4096, outtransfersize::Integer = 4096*)
 Sets the USB input and output transfer size.  Must be a multiple of 64 between 64 and 64k.
+
+## Functions Only Defined for OSX and Linux 
+### FT_GetVIDPID()
+Return tuple (vid,pid) of vendor id and product id.
+
+### FT_SetVIDPID(*vid,pid*)
+Adds the vendor id and product id to the table of vid's and pid's the driver will work with.
+
+## Functions Only Defined for Windows
+### FT_GetDriverVersion(*ft_handle::Culong*)
+Returns driver version as a julia VersionNumber.
+
+### FT_GetLibraryVersion()
+Returns the version of the dll as a julia VersionNumber.
+
+### FT_GetComPortNumber(*ft_handle::Culong*)
+Returns com port number where device is attached.
+
+### FT_ResetPort(*ft_handle::Culong*)
+
+### FT_CyclePort(*ft_handle::Culong*)
+
+### FT_ResetDevice(*ft_handle::Culong*)
+
+### FT_Reload(*vid::Integer, pid::Integer*)
+
+### FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
+
+### FT_EEPROM_Read(*ft_handle::Culong, eepromdata::eeprom*)
+### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg_string::ASCIIString,mfgid_string::ASCIIString, d_string::ASCIIString, sn_string::ASCIIString*)
+
