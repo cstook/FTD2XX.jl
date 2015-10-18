@@ -14,7 +14,9 @@ The [julia documentation](http://docs.julialang.org) section on installing unreg
 
 ## Documentation
 [API for this wrapper](https://github.com/cstook/FTD2XX.jl/blob/master/doc/api.md)
+
 [FTDI website](http://www.ftdichip.com)
+
 [D2XX Programer's Guide (from FTDI)](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf)
 
 

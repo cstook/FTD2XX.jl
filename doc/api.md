@@ -107,6 +107,6 @@ const BI = 0x10
 Returns number of bytes in Rx queue.
 
 ### FT_GetDeviceInfo(*ft_handle::Culong*)
-Returns a tuple (devicetype, deviceid, serialnumber, description)
+Returns tuple (devicetype, deviceid, serialnumber, description)
 
 ### 
