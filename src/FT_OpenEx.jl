@@ -10,8 +10,8 @@ immutable FT_Description
   function FT_Description(s :: ASCIIString)
     description = Array(UInt8,64)
     if length(s) < 64
-      for (pos,char) in enumerate(s)
-        description[pos] = Int(char)
+      for (pos,character) in enumerate(s)
+        description[pos] = Int(character)
       end
       description[length(s)+1] = 0
     else
@@ -26,8 +26,8 @@ immutable FT_SerialNumber
   function FT_SerialNumber(s :: ASCIIString)
     serialnumber = Array(UInt8,16)
     if length(s) < 16
-      for (pos,char) in enumerate(s)
-        serialnumber[pos] = Int(char)
+      for (pos,character) in enumerate(s)
+        serialnumber[pos] = Int(character)
       end
       serialnumber[length(s)+1] = 0
     else

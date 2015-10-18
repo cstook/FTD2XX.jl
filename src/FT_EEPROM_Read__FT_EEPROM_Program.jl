@@ -8,7 +8,7 @@ include("FT_DEVICE.jl")  # load constants
 abstract eeprom
 
 function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
-  size = Cuint(sizeof(eepromdata))
+  datasize = Cuint(sizeof(eepromdata))
   mfg = Array(UInt8,64); mfg[64] = 0
   mfgid = Array(UInt8,64); mfgid[64] = 0
   d = Array(UInt8,64); d[64] = 0
@@ -18,7 +18,7 @@ function fteepromread{T<:eeprom}(ft_handle::Culong, eepromdata::T)
             Cuint,
             (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
-            ft_handle,ee,size,mfg,mfgid,d,sn)
+            ft_handle,ee,datasize,mfg,mfgid,d,sn)
   checkstatus(ft_status)
   mfg_string = bytestring(mfg[1:findfirst(mfg,0x00)-1])
   mfgid_string = bytestring(mfgid[1:findfirst(mfgid,0x00)-1])
@@ -30,7 +30,7 @@ end
 function fteepromprogram{T<:eeprom}(ft_handle::Culong, eepromdata::T, 
           mfg_string::ASCIIString, mfgid_string::ASCIIString, 
           d_string::ASCIIString, sn_string::ASCIIString)
-  size = sizeof(eepromdata)
+  datasize = sizeof(eepromdata)
   mfg = Array{UInt8,1}(mfg_string * "\0")
   mfgid = Array{UInt8,1}(mfgid_string * "\0")
   d = Array{UInt8,1}(d_string * "\0")
@@ -40,7 +40,7 @@ function fteepromprogram{T<:eeprom}(ft_handle::Culong, eepromdata::T,
             Cuint,
             (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
-            ft_handle,ee,size,mfg,mfgid,d,sn)
+            ft_handle,ee,datasize,mfg,mfgid,d,sn)
   checkstatus(ft_status)
   return nothing
 end
@@ -66,9 +66,9 @@ type ft_eeprom_232b <: eeprom
   MaxPower :: Cshort #  0 < MaxPower <= 500
   pad1::UInt8;pad2::UInt8;pad3::UInt8;pad4::UInt8  # needed to allign fields.  Why?
   ### END common elements for all device EEPROMs ###
-  ft_eeprom_232b() = new(FT_DEVICE_232B)
+  ft_eeprom_232b() = new(FT_DEVICE_232BM)
   ft_eeprom_232b(VendorId,ProductId,SerNumEnable,MaxPower) = 
-    new(FT_DEVICE_232B,VendorId,ProductId,SerNumEnable,MaxPower)
+    new(FT_DEVICE_232BM,VendorId,ProductId,SerNumEnable,MaxPower)
 end
 
 function Base.show(io::IO, eepromdata::ft_eeprom_232b)
@@ -76,7 +76,7 @@ function Base.show(io::IO, eepromdata::ft_eeprom_232b)
 end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::ft_eeprom_232b)
-  @assert eepromdata.deviceType == FT_DEVICE_232B
+  @assert eepromdata.deviceType == FT_DEVICE_232BM
   fteepromread(ft_handle,eepromdata)
 end
 
@@ -85,7 +85,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::ft_eeprom_232b,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
-  @assert eepromdata.deviceType == FT_DEVICE_232B
+  @assert eepromdata.deviceType == FT_DEVICE_232BM
   fteepromprogram(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end

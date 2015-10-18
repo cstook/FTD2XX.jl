@@ -3,19 +3,19 @@ export FT_SetChars
 function FT_SetChars(ft_handle::Culong, eventch::UInt8, eventchen::Bool,
                                         errorch::UInt8, errorchen::Bool)
   if eventchen
-    event = 0x01
+    eventcharacterenable = 0x01
   else
-    event = 0x00
+    eventcharacterenable = 0x00
   end
   if errorchen
-    error = 0x01
+    errorcharacterenable = 0x01
   else
-    error = 0x00
+    errorcharacterenable = 0x00
   end
   ft_status = ccall((:FT_SetChars, d2xx),
                      Cuint,
                      (Culong, Cuchar, Cuchar, Cuchar, Cuchar),
-                     ft_handle, eventch, event, errorch, error)
+                     ft_handle, eventch, eventcharacterenable, errorch, errorcharacterenable)
   checkstatus(ft_status)
   return nothing
 end
