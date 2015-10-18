@@ -28,7 +28,7 @@ ft_handle = FT_OpenEx(FT_Description("C232HM-EDHSL-0")) # open by description
 Closes device with handle ft_handle.
 
 ### FT_Read!(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestoread::Integer*)
-Returns number of bytes returned.  Data is returned by modifying buffer. Function does not return until bytes have beed received or timeout.
+Returns number of bytes returned.  Data is returned by modifying buffer. Function does not return until all bytes have been received or timeout.
 
 ### FT_Write(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestowrite::Integer*)
 ### FT_Write(*ft_handle::Culong, buffer::Array{UInt8,1}*)
@@ -177,3 +177,37 @@ FT_EE_Program(ft_handle, programdata)		# write back to device
 ```
 Type FtProgramData mirrors FTD2XX's FT_PROGRAM_DATA_STRUCTURE converting pointers to julia strings. See [FTDI's documentation](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf) for a complete description of FT_PROGRAM_DATA_STRUCTURE and associated constants.
 
+### FT_EE_UASize(*ft_handle::Culong*)
+Returns the size of the user EEPROM area in bytes.
+
+### FT_EE_UARead!(*ft_handle::Culong, buffer::Array{UInt8,1}*)
+Reads length(buffer) bytes of the user EEPROM into buffer.  Returns number of bytes read.
+
+### FT_EE_UAWrite(*ft_handle::Culong, buffer::Array{UInt8,1}*)
+Writes buffer to user EEPROM.  length(buffer) must be less than or equal to the size of the EEPROM user area.
+
+### FT_SetLatencyTimer(*ft_handle::Culong, timer::Integer*)
+Sets time in milliseconds to wait before flushing the receive buffer.
+
+### FT_GetLatencyTimer(*ft_handle::Culong*)
+Returns the value of the latency timer in milliseconds.
+
+### FT_SetBitMode(*ft_handle::Culong, mask::UInt8, mode::UInt8*)
+Sets bit mode and bit mask.  Bit mask determines which bits are inputs and outputs.
+
+The following constants are exported:
+```julia
+const FT_BITMODE_RESET = 0x00 
+const FT_BITMODE_ASYNC_BITBANG = 0x01 
+const FT_BITMODE_MPSSE = 0x02 
+const FT_BITMODE_SYNC_BITBANG = 0x04 
+const FT_BITMODE_MCU_HOST = 0x08 
+const FT_BITMODE_FAST_SERIAL = 0x10
+const FT_BITMODE_CBUS_BITBANG = 0x20 
+const FT_BITMODE_SYNC_FIFO = 0x40
+```
+### FT_GetBitMode(*ft_handle::Culong*)
+Returns the bit mode.
+
+### FT_SetUSBParameters(*ft_handle::Culong, intransfersize::Integer = 4096, outtransfersize::Integer = 4096*)
+Sets the USB input and output transfer size.  Must be a multiple of 64 between 64 and 64k.

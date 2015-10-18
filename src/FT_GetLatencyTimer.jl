@@ -7,5 +7,5 @@ function FT_GetLatencyTimer(ft_handle::Culong)
                      (Culong, Ref{Cuchar}),
                      ft_handle, timer)
   checkstatus(ft_status)
-  return convert(UInt8,timer[])
+  return timer[]
 end

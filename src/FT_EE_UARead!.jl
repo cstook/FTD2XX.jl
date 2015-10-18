@@ -8,5 +8,5 @@ function FT_EE_UARead!(ft_handle::Culong, buffer::Array{UInt8,1})
                      (Culong, Ptr{UInt8}, Cuint, Ref{Cuint}),
                      ft_handle, buffer, len, bytesread)
   checkstatus(ft_status)
-  return convert(UInt32, bytesread[])
+  return bytesread[]
 end

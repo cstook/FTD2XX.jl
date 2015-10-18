@@ -18,5 +18,5 @@ function FT_GetBitMode(ft_handle::Culong)
                      (Culong, Ref{Cuchar}),
                      ft_handle, mode)
   checkstatus(ft_status)
-  return convert(UInt8, mode[])
+  return mode[]
 end 
