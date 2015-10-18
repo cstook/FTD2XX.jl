@@ -9,7 +9,7 @@ Returns number of devices.
 ### FT_GetDeviceInfoList(*numberofdevices::Integer = FT_CreateDeviceInfoList()*)
 Returns device information list.  Device information list is an array of type InfoNode.  The fields of InfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
 
-example:
+Example:
 ```julia
 deviceinformationlist = FT_GetDeviceInfoList()
 ```
@@ -22,7 +22,7 @@ Returns handle to device.  Device indexes start at zero.
 ### FT_OpenEx(*description::FT_Description*)
 Returns handle to device.  FT_OpenEx allows devices to be opened by location id, serial number or description.
 
-example:
+Example:
 ```julia
 ft_handle = FT_OpenEx(0x0314)  # open by location
 ft_handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
@@ -173,7 +173,7 @@ Returns type FtProgramData.
 ### FT_EE_Program(*ft_handle::Culong, pd::FtProgramData*)
 Programs device EEPROM with FtProgramData.
 
-For Example:
+Example:
 ```julia
 # assumes device with ft_handle has been opened.
 programdata = FT_EE_Read(ft_handle)  		# read the program data
@@ -255,19 +255,19 @@ The device specific types are ft_eeprom_232b, ft_eeprom_2232, ft_eeprom_232r, ft
 
 The deviceType constants are:
 ```julia
-  const FT_DEVICE_232BM = 0 	# for type ft_eeprom_232b
+  const FT_DEVICE_232BM = 0 	# for type ft_eeprom_232b <: eeprom
   const FT_DEVICE_232AM = 1 	# discontinued device
   const FT_DEVICE_100AX = 2 	# discontinued device
   const FT_DEVICE_UNKNOWN = 3
-  const FT_DEVICE_2232C = 4 	# for type ft_eeprom_2232
-  const FT_DEVICE_232R = 5 		# for type ft_eeprom_232r
-  const FT_DEVICE_2232H = 6 	# for type ft_eeprom_2232h
-  const FT_DEVICE_4232H = 7 	# for type ft_eeprom_4232h
-  const FT_DEVICE_232H = 8 		# for type ft_eeprom_232h
-  const FT_DEVICE_X_SERIES = 9 	# for type ft_eeprom_x_series
+  const FT_DEVICE_2232C = 4 	# for type ft_eeprom_2232 <: eeprom
+  const FT_DEVICE_232R = 5 		# for type ft_eeprom_232r <: eeprom
+  const FT_DEVICE_2232H = 6 	# for type ft_eeprom_2232h <: eeprom
+  const FT_DEVICE_4232H = 7 	# for type ft_eeprom_4232h <: eeprom
+  const FT_DEVICE_232H = 8 		# for type ft_eeprom_232h <: eeprom
+  const FT_DEVICE_X_SERIES = 9 	# for type ft_eeprom_x_series <: eeprom
 ```
 
-Example usage:
+Example:
 ```julia
 # assumes device with handle h is open and is device type FT_DEVICE_232H
 (eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h) # read EEPROM, autodetect type
