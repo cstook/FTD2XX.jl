@@ -109,4 +109,50 @@ Returns number of bytes in Rx queue.
 ### FT_GetDeviceInfo(*ft_handle::Culong*)
 Returns tuple (devicetype, deviceid, serialnumber, description)
 
-### 
+### FT_SetEventNotification(*ft_handle::Culong, event_mask::Integer, event_handle::Culong*)
+Sets condition for event notification.
+
+The following constants are exported:
+```julia
+# Notification Events
+const FT_EVENT_RXCHAR = 1 
+const FT_EVENT_MODEM_STATUS = 2 
+const FT_EVENT_LINE_STATUS = 4
+```
+
+### FT_GetStatus(*ft_handle::Culong*)
+Returns tuple (bytesinrxqueue, bytesintxqueue, eventstatus)
+
+### FT_SetChars(*ft_handle::Culong, eventch::UInt8, eventchen::Bool, errorch::UInt8, errorchen::Bool*)
+Sets and enables event and error characters.
+
+### FT_SetBreakOn(*ft_handle::Culong*)
+Sets the break condition for the device.
+
+### FT_SetBreakOff(*ft_handle::Culong*)
+Resets the break condition for the device.
+
+### FT_Purge(*ft_handle::Culong, mask::Integer*)
+Purge Tx and Rx buffers.
+
+The following constants are exported:
+```julia
+const FT_PURGE_RX = 1 
+const FT_PURGE_TX = 2
+```
+
+### FT_ResetDevice(*ft_handle::Culong*)
+Sends reset command to device.
+
+### FT_StopInTask(*ft_handle::Culong*)
+Puts drivers in task into a wait state.
+
+### FT_RestartInTask(*ft_handle::Culong*)
+Restarts the driver's in task.
+
+### FT_SetDeadmanTimeout(*ft_handle::Culong, deadmantimeout::Integer = 5000*)
+Sets deadman timeout in milliseconds.
+
+### FT_ReadEE(*ft_handle::Culong, wordoffset::Integer*)
+Returns word (16bits) in EEPROM ar wordoffset.
+

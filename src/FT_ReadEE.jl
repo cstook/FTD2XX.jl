@@ -8,5 +8,5 @@ function FT_ReadEE(ft_handle::Culong, wordoffset::Integer)
                      (Culong, Cuint, Ref{Cushort}),
                      ft_handle, wordoffset, value)
   checkstatus(ft_status)
-  return convert(UInt16,value[])
+  return value[]
 end
