@@ -54,7 +54,7 @@ end
 
 lpdwnumdevs = ft_createdeviceinfolist()
 println("$lpdwnumdevs devices found")
-dil = ft_getdeviceinfoList(lpdwnumdevs)
+dil = ft_getdeviceinfolist(lpdwnumdevs)
 println(dil)
 println()
 show(dil[1])

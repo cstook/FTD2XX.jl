@@ -6,12 +6,12 @@ For complete documentation see [D2XX Programer's Guide](http://www.ftdichip.com/
 ### ft_createdeviceinfolist()
 Returns number of devices.
 
-### ft_getdeviceinfoList(*numberofdevices::Integer = ft_createdeviceinfolist()*)
+### ft_getdeviceinfolist(*numberofdevices::Integer = ft_createdeviceinfolist()*)
 Returns device information list.  Device information list is an array of type FtDeviceListInfoNode.  The fields of FtDeviceListInfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
 
 Example:
 ```julia
-deviceinformationlist = ft_getdeviceinfoList()
+deviceinformationlist = ft_getdeviceinfolist()
 ```
 
 ### ft_open(*deviceindex::Integer*)
