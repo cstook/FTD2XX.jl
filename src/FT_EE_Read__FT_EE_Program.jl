@@ -79,7 +79,7 @@ const FT_DRIVER_TYPE_D2XX = 0
 const FT_DRIVER_TYPE_VCP = 1
 
 # FT_PROGRAM_DATA_STRUCTURE 
-type ft_program_data
+type FtProgramData_C
   Signature1 :: Cuint # Header - must be 0x0000000
   Signature2 :: Cuint # Header - must be 0xffffffff
   Version :: Cuint # Header - FT_PROGRAM_DATA version 
@@ -235,7 +235,7 @@ type ft_program_data
   IsVCPH :: Cuchar # non-zero if interface is to use VCP drivers 
   PowerSaveEnableH :: Cuchar # non-zero if using ACBUS7 to save power for self-powered designs
   
-  function ft_program_data(Version::Integer,
+  function FtProgramData_C(Version::Integer,
                            Manufacturer::ASCIIString,
                            ManufacturerId::ASCIIString,
                            Description::ASCIIString,
@@ -265,7 +265,7 @@ type ft_program_data
     snptr = pointer(sn)
     new(0x00000000, 0xffffffff, Version, 0, 0, mfgptr, mfgidptr, dptr, snptr)
   end
-  ft_program_data(Version) = ft_program_data(Version,"","","","")  
+  FtProgramData_C(Version) = FtProgramData_C(Version,"","","","")  
 end
 
 type FtProgramData
@@ -423,7 +423,7 @@ type FtProgramData
   FT1248FlowControlH :: UInt8 # FT1248 flow control enable 
   IsVCPH :: UInt8 # non-zero if interface is to use VCP drivers 
   PowerSaveEnableH :: UInt8 # non-zero if using ACBUS7 to save power for self-powered designs
-  function FtProgramData(pd :: ft_program_data)
+  function FtProgramData(pd :: FtProgramData_C)
     newpd = new(pd.Signature1,pd.Signature2,pd.Version,pd.VendorId,pd.ProductId)
     newpd.Manufacturer = bytestring(pd.Manufacturer)
     newpd.ManufacturerId = bytestring(pd.ManufacturerId)
@@ -436,8 +436,8 @@ type FtProgramData
   end
 end
 
-function ft_program_data(pd::FtProgramData)
-  newpd = ft_program_data(pd.Version,pd.Manufacturer,pd.ManufacturerId,pd.Description,pd.SerialNumber)
+function FtProgramData_C(pd::FtProgramData)
+  newpd = FtProgramData_C(pd.Version,pd.Manufacturer,pd.ManufacturerId,pd.Description,pd.SerialNumber)
   newpd.VendorId = pd.VendorId
   newpd.ProductId = pd.ProductId
   for i in 10:130
@@ -603,20 +603,20 @@ end
 
 function FT_EE_Read(ft_handle::Culong, version::Integer = 5)
   @assert version>-1
-  ftpds = Ref{ft_program_data}(ft_program_data(version))
+  ftpds = Ref{FtProgramData_C}(FtProgramData_C(version))
   ft_status = ccall((:FT_EE_Read, d2xx),
                      Cuint,
-                     (Culong, Ref{ft_program_data}),
+                     (Culong, Ref{FtProgramData_C}),
                      ft_handle, ftpds)
   checkstatus(ft_status)
   return FtProgramData(ftpds[])
 end
 
 function FT_EE_Program(ft_handle::Culong, pd::FtProgramData)
-  ftpds = Ref{ft_program_data}(ft_program_data(pd))
+  ftpds = Ref{FtProgramData_C}(FtProgramData_C(pd))
   ft_status = ccall((:FT_EE_Program, d2xx),
                      Cuint,
-                     (Culong, Ref{ft_program_data}),
+                     (Culong, Ref{FtProgramData_C}),
                      ft_handle, ftpds)
   checkstatus(ft_status)
   return nothing

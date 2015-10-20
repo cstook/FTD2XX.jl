@@ -7,7 +7,7 @@ For complete documentation see [D2XX Programer's Guide](http://www.ftdichip.com/
 Returns number of devices.
 
 ### FT_GetDeviceInfoList(*numberofdevices::Integer = FT_CreateDeviceInfoList()*)
-Returns device information list.  Device information list is an array of type InfoNode.  The fields of InfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
+Returns device information list.  Device information list is an array of type FtDeviceListInfoNode.  The fields of FtDeviceListInfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
 
 Example:
 ```julia
@@ -251,20 +251,20 @@ Read data from EEPROM into a device specific type.  Returns tuple (eepromdata, m
 ### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg::ASCIIString,mfgid::ASCIIString, description::ASCIIString, serialnumber::ASCIIString*)
 Write data in a device specific type to EEPROM.
 
-The device specific types are ft_eeprom_232b, ft_eeprom_2232, ft_eeprom_232r, ft_eeprom_2232h, ft_eeprom_4232h, ft_eeprom_232h, ft_eeprom_x_series.  Constructors for these types set the deviceType field to the appropriate constant, leaving the rest of the structure uninitialized.
+The device specific types are Fteeprom232b, Fteeprom2232, Fteeprom232r, Fteeprom2232h, Fteeprom4232h, Fteeprom232h, Fteepromxseries.  Constructors for these types set the deviceType field to the appropriate constant, leaving the rest of the structure uninitialized.
 
 The deviceType constants are:
 ```julia
-  const FT_DEVICE_232BM = 0 	# for type ft_eeprom_232b <: eeprom
+  const FT_DEVICE_232BM = 0 	# for type Fteeprom232b <: Eeprom
   const FT_DEVICE_232AM = 1 	# discontinued device
   const FT_DEVICE_100AX = 2 	# discontinued device
   const FT_DEVICE_UNKNOWN = 3
-  const FT_DEVICE_2232C = 4 	# for type ft_eeprom_2232 <: eeprom
-  const FT_DEVICE_232R = 5 		# for type ft_eeprom_232r <: eeprom
-  const FT_DEVICE_2232H = 6 	# for type ft_eeprom_2232h <: eeprom
-  const FT_DEVICE_4232H = 7 	# for type ft_eeprom_4232h <: eeprom
-  const FT_DEVICE_232H = 8 		# for type ft_eeprom_232h <: eeprom
-  const FT_DEVICE_X_SERIES = 9 	# for type ft_eeprom_x_series <: eeprom
+  const FT_DEVICE_2232C = 4 	# for type Fteeprom2232 <: Eeprom
+  const FT_DEVICE_232R = 5 		# for type Fteeprom232r <: Eeprom
+  const FT_DEVICE_2232H = 6 	# for type Fteeprom2232h <: Eeprom
+  const FT_DEVICE_4232H = 7 	# for type Fteeprom4232h <: Eeprom
+  const FT_DEVICE_232H = 8 		# for type Fteeprom232h <: Eeprom
+  const FT_DEVICE_X_SERIES = 9 	# for type Fteepromxseries <: Eeprom
 ```
 
 Example:
@@ -275,5 +275,5 @@ eepromdata.PowerSaveEnable = 0x00  # change a parameter
 FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn) # write back to device
 
 # you can specify the device type.  It will autodetect if not incuded.
-(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,ft_eeprom_232h()) # read EEPROM
+(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,Fteeprom232h()) # read EEPROM
 ```

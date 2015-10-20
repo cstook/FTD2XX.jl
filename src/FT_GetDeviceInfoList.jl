@@ -5,7 +5,7 @@ include("FT_DEVICE.jl")  # load constants
 
 const handleis32 = Culong == UInt32
 
-type InfoNode
+type FtDeviceListInfoNode
   flags         :: UInt32
   devicetype    :: UInt32
   id            :: UInt32
@@ -15,7 +15,7 @@ type InfoNode
   handle        :: Culong
 end
 
-function Base.show(io::IO, i::InfoNode)
+function Base.show(io::IO, i::FtDeviceListInfoNode)
   println(typeof(i),":")
   f()=@printf(io,"flags = 0x%08x \n",i.flags);f()
   f()=@printf(io,"devicetype = 0x%08x \n",i.devicetype);f()
@@ -30,7 +30,7 @@ function Base.show(io::IO, i::InfoNode)
   end
 end
 
-function Base.showcompact(io::IO, i::InfoNode)
+function Base.showcompact(io::IO, i::FtDeviceListInfoNode)
   println(io,"sn=",rpad(i.serialnumber,17,' ')," description=",rpad(i.description,40,' '))
   if handleis32
     f()=@printf(io,"f=0x%08x, dt=0x%08x, id=0x%08x, lid=0x%08x, h=0x%08x \n",i.flags, i.devicetype, i.id, i.locid, i.handle);f()
@@ -39,7 +39,7 @@ function Base.showcompact(io::IO, i::InfoNode)
   end
 end
 
-function Base.show(io::IO, a::Array{FTD2XX.InfoNode,1})
+function Base.show(io::IO, a::Array{FTD2XX.FtDeviceListInfoNode,1})
   println(io,length(a),"-element ",typeof(a),":")
   for i in a
     showcompact(io,i)
@@ -50,7 +50,7 @@ end
 const FT_FLAGS_OPENED = 0x00000001
 
 # FT_DEVICE_LIST_INFO_NODE (see FT_GetDeviceInfoList and FT_GetDeviceInfoDetail)
-immutable _ft_device_list_info_node
+immutable FtDeviceListFtDeviceListInfoNode_C
   Flags :: Cuint
   Type  :: Cuint
   ID    :: Cuint
@@ -80,14 +80,14 @@ immutable _ft_device_list_info_node
 end
 
 function FT_GetDeviceInfoList(lpdwNumDevs::Integer = FT_CreateDeviceInfoList())
-  ftdeviceinfolist = Array(_ft_device_list_info_node,lpdwNumDevs)
+  ftdeviceinfolist = Array(FtDeviceListFtDeviceListInfoNode_C,lpdwNumDevs)
   n = Ref{Cuint}(lpdwNumDevs)
   ft_status = ccall((:FT_GetDeviceInfoList, d2xx),
                       Cuint,
-                      (Ptr{_ft_device_list_info_node},Ref{Cuint}),
+                      (Ptr{FtDeviceListFtDeviceListInfoNode_C},Ref{Cuint}),
                       ftdeviceinfolist,n)
   checkstatus(ft_status)
-  infonodearray = InfoNode[]
+  infonodearray = FtDeviceListInfoNode[]
   sizehint!(infonodearray,lpdwNumDevs)
   for node in ftdeviceinfolist
     flags = node.Flags 
@@ -113,7 +113,7 @@ function FT_GetDeviceInfoList(lpdwNumDevs::Integer = FT_CreateDeviceInfoList())
       handle = UInt64(node.FT_HANDLE)
       handle = handle | (node.FT_HANDLE_MSB <<32)
     end
-    push!(infonodearray,InfoNode(flags,devicetype,id,locid,serialnumber,
+    push!(infonodearray,FtDeviceListInfoNode(flags,devicetype,id,locid,serialnumber,
                                  description,handle))
   end
   return infonodearray
