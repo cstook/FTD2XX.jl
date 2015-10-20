@@ -1,6 +1,6 @@
-export FT_Open
+export ft_open
 
-function FT_Open(iDevice::Integer)
+function ft_open(iDevice::Integer)
   ft_handle = Ref{Culong}()
   ft_status = ccall((:FT_Open, d2xx),
                       Cuint,

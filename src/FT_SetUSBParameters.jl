@@ -1,6 +1,6 @@
-export FT_SetUSBParameters
+export ft_setusbparameters
 
-function FT_SetUSBParameters(ft_handle::Culong,
+function ft_setusbparameters(ft_handle::Culong,
                              intransfersize::Integer = 4096,
                              outtransfersize::Integer = 4096)
   @assert intransfersize > 63

@@ -1,2 +1,2 @@
-include("FT_SetVIDPID.jl")
-include("FT_GetVIDPID.jl")
+include("ft_setvidpid.jl")
+include("ft_getvidpid.jl")

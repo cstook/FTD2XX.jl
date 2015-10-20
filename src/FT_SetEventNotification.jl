@@ -1,14 +1,14 @@
-export FT_SetEventNotification
+export ft_seteventnotification
 export FT_EVENT_RXCHAR, FT_EVENT_MODEM_STATUS
 export FT_EVENT_LINE_STATUS
 
-#Notification Events (see FT_SetEventNotification) 
+#Notification Events (see ft_seteventnotification) 
 const FT_EVENT_RXCHAR = 1 
 const FT_EVENT_MODEM_STATUS = 2 
 const FT_EVENT_LINE_STATUS = 4
 
 
-function FT_SetEventNotification(ft_handle::Culong,
+function ft_seteventnotification(ft_handle::Culong,
                                  event_mask::Integer,
                                  event_handle::Culong)
   eh = Ref{Culong}(event_handle)

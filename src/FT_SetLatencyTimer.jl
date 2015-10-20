@@ -1,6 +1,6 @@
-export FT_SetLatencyTimer
+export ft_setlatencytimer
 
-function FT_SetLatencyTimer(ft_handle::Culong, timer::Integer)
+function ft_setlatencytimer(ft_handle::Culong, timer::Integer)
   @assert timer> @linux? 0:1 # is 1ms valid for linux?
   @assert timer<256
   ft_status = ccall((:FT_SetLatencyTimer, d2xx),

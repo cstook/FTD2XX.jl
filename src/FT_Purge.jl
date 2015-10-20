@@ -1,11 +1,11 @@
-export FT_Purge
+export ft_purge
 export FT_PURGE_RX, FT_PURGE_TX
 
-#Purge RX and TX Buffers (see FT_Purge) 
+#Purge RX and TX Buffers (see ft_purge) 
 const FT_PURGE_RX = 1 
 const FT_PURGE_TX = 2
 
-function FT_Purge(ft_handle::Culong, mask::Integer)
+function ft_purge(ft_handle::Culong, mask::Integer)
   ft_status = ccall((:FT_Purge, d2xx),
                      Cuint,
                      (Culong, Cuint),

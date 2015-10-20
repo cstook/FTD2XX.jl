@@ -604,7 +604,7 @@ end
 function ft_ee_read(ft_handle::Culong, version::Integer = 5)
   @assert version>-1
   ftpds = Ref{FtProgramData_C}(FtProgramData_C(version))
-  ft_status = ccall((:ft_ee_read, d2xx),
+  ft_status = ccall((:FT_EE_Read, d2xx),
                      Cuint,
                      (Culong, Ref{FtProgramData_C}),
                      ft_handle, ftpds)
@@ -614,7 +614,7 @@ end
 
 function ft_ee_program(ft_handle::Culong, pd::FtProgramData)
   ftpds = Ref{FtProgramData_C}(FtProgramData_C(pd))
-  ft_status = ccall((:ft_ee_program, d2xx),
+  ft_status = ccall((:FT_EE_Program, d2xx),
                      Cuint,
                      (Culong, Ref{FtProgramData_C}),
                      ft_handle, ftpds)

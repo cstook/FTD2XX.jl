@@ -1,4 +1,4 @@
-export FT_GetDeviceInfoList
+export ft_getdeviceinfoList
 export FT_FLAGS_OPENED
 
 include("FT_DEVICE.jl")  # load constants
@@ -49,7 +49,7 @@ end
 # FT_FLAGS (see FT_DEVICE_LIST_INFO_NODE)
 const FT_FLAGS_OPENED = 0x00000001
 
-# FT_DEVICE_LIST_INFO_NODE (see FT_GetDeviceInfoList and FT_GetDeviceInfoDetail)
+# FT_DEVICE_LIST_INFO_NODE (see ft_getdeviceinfoList and ft_getdeviceinfoDetail)
 immutable FtDeviceListFtDeviceListInfoNode_C
   Flags :: Cuint
   Type  :: Cuint
@@ -79,7 +79,7 @@ immutable FtDeviceListFtDeviceListInfoNode_C
   FT_HANDLE_MSB :: Cuint
 end
 
-function FT_GetDeviceInfoList(lpdwNumDevs::Integer = ft_createdeviceinfolist())
+function ft_getdeviceinfoList(lpdwNumDevs::Integer = ft_createdeviceinfolist())
   ftdeviceinfolist = Array(FtDeviceListFtDeviceListInfoNode_C,lpdwNumDevs)
   n = Ref{Cuint}(lpdwNumDevs)
   ft_status = ccall((:FT_GetDeviceInfoList, d2xx),

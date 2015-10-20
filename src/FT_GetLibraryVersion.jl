@@ -1,6 +1,6 @@
-export FT_GetLibraryVersion
+export ft_getlibraryversion
 
-function FT_GetLibraryVersion()
+function ft_getlibraryversion()
   dllversion = Ref{Cuint}()
   ft_status = ccall((:FT_GetLibraryVersion, d2xx),Cuint,(Ref{Cuint},),dllversion)
   checkstatus(ft_status)

@@ -1,6 +1,6 @@
-export FT_GetLatencyTimer
+export ft_getlatencytimer
 
-function FT_GetLatencyTimer(ft_handle::Culong)
+function ft_getlatencytimer(ft_handle::Culong)
   timer = Ref{Cuchar}()
   ft_status = ccall((:FT_GetLatencyTimer, d2xx),
                      Cuint,

@@ -1,7 +1,7 @@
-# FT_GetVIDPID.jl
-export FT_GetVIDPID
+# ft_getvidpid.jl
+export ft_getvidpid
 
-function FT_GetVIDPID()
+function ft_getvidpid()
   vid = Ref{Cuint}()
   pid = Ref{Cuint}()
   ft_status = ccall((:FT_GetVIDPID, d2xx),

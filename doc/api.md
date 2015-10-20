@@ -6,43 +6,43 @@ For complete documentation see [D2XX Programer's Guide](http://www.ftdichip.com/
 ### ft_createdeviceinfolist()
 Returns number of devices.
 
-### FT_GetDeviceInfoList(*numberofdevices::Integer = ft_createdeviceinfolist()*)
+### ft_getdeviceinfoList(*numberofdevices::Integer = ft_createdeviceinfolist()*)
 Returns device information list.  Device information list is an array of type FtDeviceListInfoNode.  The fields of FtDeviceListInfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
 
 Example:
 ```julia
-deviceinformationlist = FT_GetDeviceInfoList()
+deviceinformationlist = ft_getdeviceinfoList()
 ```
 
-### FT_Open(*deviceindex::Integer*)
+### ft_open(*deviceindex::Integer*)
 Returns handle to device.  Device indexes start at zero.
 
-### FT_OpenEx(*locid::Unsigned*)
-### FT_OpenEx(*serialnumber::FT_SerialNumber*)
-### FT_OpenEx(*description::FT_Description*)
-Returns handle to device.  FT_OpenEx allows devices to be opened by location id, serial number or description.
+### ft_openex(*locid::Unsigned*)
+### ft_openex(*serialnumber::FT_SerialNumber*)
+### ft_openex(*description::FT_Description*)
+Returns handle to device.  ft_openex allows devices to be opened by location id, serial number or description.
 
 Example:
 ```julia
-ft_handle = FT_OpenEx(0x0314)  # open by location
-ft_handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
-ft_handle = FT_OpenEx(FT_Description("C232HM-EDHSL-0")) # open by description
+ft_handle = ft_openex(0x0314)  # open by location
+ft_handle = ft_openex(ft_serialnumber("FTXRNZUJ")) # open by serial number
+ft_handle = ft_openex(ft_description("C232HM-EDHSL-0")) # open by description
 ```
 
 ### ft_close(*ft_handle::Culong*)
 Closes device with handle ft_handle.
 
-### FT_Read!(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestoread::Integer*)
+### ft_read!(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestoread::Integer*)
 Returns number of bytes returned.  Data is returned by modifying buffer. Function does not return until all bytes have been received or timeout.
 
-### FT_Write(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestowrite::Integer*)
-### FT_Write(*ft_handle::Culong, buffer::Array{UInt8,1}*)
+### ft_write(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestowrite::Integer*)
+### ft_write(*ft_handle::Culong, buffer::Array{UInt8,1}*)
 Returns number of bytes written.  If bytestowrite is unspecified it is assumed to be the length of the buffer.
 
-### FT_SetBaudRate(*ft_handle::Culong, baud::Integer*)
+### ft_setbaudrate(*ft_handle::Culong, baud::Integer*)
 Sets the baud rate.
 
-### FT_SetDataCharacteristics(*ft_handle::Culong, wordlength::Integer, stopbits::Integer, parity::Integer*)
+### ft_setdatacharacteristics(*ft_handle::Culong, wordlength::Integer, stopbits::Integer, parity::Integer*)
 Sets word length, stop bits and parity.
 
 the following constants are exported for use with this function:
@@ -63,10 +63,10 @@ const FT_PARITY_MARK = 3
 const FT_PARITY_SPACE = 4
 ```
 
-### FT_SetTimeouts(*ft_handle::Culong, readtimeout::Integer, writetimeout::Integer*)
+### ft_settimeouts(*ft_handle::Culong, readtimeout::Integer, writetimeout::Integer*)
 Sets read and write timeouts in milliseconds.
 
-### FT_SetFlowControl(*ft_handle::Culong, flowcontrol::Integer,xon::UInt8 = 0x11, xoff::UInt8 = 0x13*)
+### ft_setflowcontrol(*ft_handle::Culong, flowcontrol::Integer,xon::UInt8 = 0x11, xoff::UInt8 = 0x13*)
 Sets flow control and xon and xoff characters.
 
 The following constants are exported:
@@ -78,19 +78,19 @@ const FT_FLOW_DTR_DSR = 0x0200
 const FT_FLOW_XON_XOFF = 0x0400
 ```
 
-### FT_SetDtr(*ft_handle::Culong*)
+### ft_setdtr(*ft_handle::Culong*)
 Sets DTR.
 
 ### ft_clrdtr(*ft_handle::Culong*)
 Clears DTR.
 
-### FT_SetRts(*ft_handle::Culong*)
+### ft_setrts(*ft_handle::Culong*)
 Sets RTS.
 
 ### ft_clrrts(*ft_handle::Culong*)
 Clears RTS.
 
-### FT_GetModemStatus(*ft_handle::Culong*)
+### ft_getmodemstatus(*ft_handle::Culong*)
 Returns modem status.
 
 The following constants are exported:
@@ -108,13 +108,13 @@ const FE = 0x08
 const BI = 0x10
 ```
 
-### FT_GetQueueStatus(*ft_handle::Culong*)
+### ft_getqueuestatus(*ft_handle::Culong*)
 Returns number of bytes in Rx queue.
 
-### FT_GetDeviceInfo(*ft_handle::Culong*)
+### ft_getdeviceinfo(*ft_handle::Culong*)
 Returns tuple (devicetype, deviceid, serialnumber, description)
 
-### FT_SetEventNotification(*ft_handle::Culong, event_mask::Integer, event_handle::Culong*)
+### ft_seteventnotification(*ft_handle::Culong, event_mask::Integer, event_handle::Culong*)
 Sets condition for event notification.
 
 The following constants are exported:
@@ -125,19 +125,19 @@ const FT_EVENT_MODEM_STATUS = 2
 const FT_EVENT_LINE_STATUS = 4
 ```
 
-### FT_GetStatus(*ft_handle::Culong*)
+### ft_getstatus(*ft_handle::Culong*)
 Returns tuple (bytesinrxqueue, bytesintxqueue, eventstatus)
 
-### FT_SetChars(*ft_handle::Culong, eventch::UInt8, eventchen::Bool, errorch::UInt8, errorchen::Bool*)
+### ft_setchars(*ft_handle::Culong, eventch::UInt8, eventchen::Bool, errorch::UInt8, errorchen::Bool*)
 Sets and enables event and error characters.
 
-### FT_SetBreakOn(*ft_handle::Culong*)
+### ft_setbreakon(*ft_handle::Culong*)
 Sets the break condition for the device.
 
-### FT_SetBreakOff(*ft_handle::Culong*)
+### ft_setbreakoff(*ft_handle::Culong*)
 Resets the break condition for the device.
 
-### FT_Purge(*ft_handle::Culong, mask::Integer*)
+### ft_purge(*ft_handle::Culong, mask::Integer*)
 Purge Tx and Rx buffers.
 
 The following constants are exported:
@@ -146,25 +146,25 @@ const FT_PURGE_RX = 1
 const FT_PURGE_TX = 2
 ```
 
-### FT_ResetDevice(*ft_handle::Culong*)
+### ft_resetdevice(*ft_handle::Culong*)
 Sends reset command to device.
 
-### FT_StopInTask(*ft_handle::Culong*)
+### ft_stopintask(*ft_handle::Culong*)
 Puts drivers in task into a wait state.
 
-### FT_RestartInTask(*ft_handle::Culong*)
+### ft_restartintask(*ft_handle::Culong*)
 Restarts the driver's in task.
 
-### FT_SetDeadmanTimeout(*ft_handle::Culong, deadmantimeout::Integer = 5000*)
+### ft_setdeadmantimeout(*ft_handle::Culong, deadmantimeout::Integer = 5000*)
 Sets deadman timeout in milliseconds.
 
-### FT_ReadEE(*ft_handle::Culong, wordoffset::Integer*)
+### ft_readee(*ft_handle::Culong, wordoffset::Integer*)
 Returns word (16bits) in EEPROM at wordoffset.
 
-### FT_WriteEE(*ft_handle::Culong, wordoffset::Integer, value::UInt16*)
+### ft_writeee(*ft_handle::Culong, wordoffset::Integer, value::UInt16*)
 Writes a value to EEPROM at wordoffset.
 
-### FT_EraseEE(*ft_handle::Culong*)
+###ft_eraseee(*ft_handle::Culong*)
 Erase the device EEPROM.
 
 ### ft_ee_read(*ft_handle::Culong, version::Integer = 5*)
@@ -191,13 +191,13 @@ Reads length(buffer) bytes of the user EEPROM into buffer.  Returns number of by
 ### ft_ee_uawrite(*ft_handle::Culong, buffer::Array{UInt8,1}*)
 Writes buffer to user EEPROM.  length(buffer) must be less than or equal to the size of the EEPROM user area.
 
-### FT_SetLatencyTimer(*ft_handle::Culong, timer::Integer*)
+### ft_setlatencytimer(*ft_handle::Culong, timer::Integer*)
 Sets time in milliseconds to wait before flushing the receive buffer.
 
-### FT_GetLatencyTimer(*ft_handle::Culong*)
+### ft_getlatencytimer(*ft_handle::Culong*)
 Returns the value of the latency timer in milliseconds.
 
-### FT_SetBitMode(*ft_handle::Culong, mask::UInt8, mode::UInt8*)
+### ft_setbitmode(*ft_handle::Culong, mask::UInt8, mode::UInt8*)
 Sets bit mode and bit mask.  Bit mask determines which bits are inputs and outputs.
 
 The following constants are exported:
@@ -211,38 +211,38 @@ const FT_BITMODE_FAST_SERIAL = 0x10
 const FT_BITMODE_CBUS_BITBANG = 0x20 
 const FT_BITMODE_SYNC_FIFO = 0x40
 ```
-### FT_GetBitMode(*ft_handle::Culong*)
+### ft_getbitmode(*ft_handle::Culong*)
 Returns the bit mode.
 
-### FT_SetUSBParameters(*ft_handle::Culong, intransfersize::Integer = 4096, outtransfersize::Integer = 4096*)
+### ft_setusbparameters(*ft_handle::Culong, intransfersize::Integer = 4096, outtransfersize::Integer = 4096*)
 Sets the USB input and output transfer size.  Must be a multiple of 64 between 64 and 64k.
 
 ## Functions Only Defined for OSX and Linux 
-### FT_GetVIDPID()
+### ft_getvidpid()
 Return tuple (vid,pid) of vendor id and product id.
 
-### FT_SetVIDPID(*vid,pid*)
+### ft_setvidpid(*vid,pid*)
 Adds the vendor id and product id to the table of vid's and pid's the driver will work with.
 
 ## Functions Only Defined for Windows
-### FT_GetDriverVersion(*ft_handle::Culong*)
+### ft_getdriverversion(*ft_handle::Culong*)
 Returns driver version as a julia VersionNumber.
 
-### FT_GetLibraryVersion()
+### ft_getlibraryversion()
 Returns the version of the dll as a julia VersionNumber.
 
-### FT_GetComPortNumber(*ft_handle::Culong*)
+### ft_getcomportnumber(*ft_handle::Culong*)
 Returns com port number where device is attached.
 
-### FT_ResetPort(*ft_handle::Culong*)
+### ft_resetport(*ft_handle::Culong*)
 
 ### ft_cycleport(*ft_handle::Culong*)
 
-### FT_ResetDevice(*ft_handle::Culong*)
+### ft_resetdevice(*ft_handle::Culong*)
 
-### FT_Reload(*vid::Integer, pid::Integer*)
+### ft_reload(*vid::Integer, pid::Integer*)
 
-### FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
+### ft_setresetpiperetrycount(ft_handle::Culong, count::Integer)
 
 ### ft_eeprom_read(*ft_handle::Culong, eepromdata::eeprom*)
 ### ft_eeprom_read(*ft_handle::Culong*)

@@ -1,6 +1,6 @@
-export FT_Write
+export ft_write
 
-function FT_Write(ft_handle::Culong,
+function ft_write(ft_handle::Culong,
                   buffer::Array{UInt8,1},
                   bytestowrite::Integer)
   byteswritten = Ref{Cuint}()
@@ -13,8 +13,8 @@ function FT_Write(ft_handle::Culong,
 end
 
 
-function FT_Write(ft_handle::Culong,
+function ft_write(ft_handle::Culong,
                   buffer::Array{UInt8,1})
   bytestowrite = Cuint(length(buffer))
-  return FT_Write(ft_handle,buffer,bytestowrite)
+  return ft_write(ft_handle,buffer,bytestowrite)
 end

@@ -1,6 +1,6 @@
-export FT_GetStatus
+export ft_getstatus
 
-function FT_GetStatus(ft_handle::Culong)
+function ft_getstatus(ft_handle::Culong)
   amountinrxqueue = Ref{Cuint}()
   amountintxqueue = Ref{Cuint}()
   eventstatus = Ref{Cuint}()

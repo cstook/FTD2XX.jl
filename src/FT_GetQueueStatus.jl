@@ -1,6 +1,6 @@
-export FT_GetQueueStatus
+export ft_getqueuestatus
 
-function FT_GetQueueStatus(ft_handle::Culong)
+function ft_getqueuestatus(ft_handle::Culong)
   amountinrxqueue = Ref{Cuint}()
   ft_status = ccall((:FT_GetQueueStatus, d2xx),
                      Cuint,

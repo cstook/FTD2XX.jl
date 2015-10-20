@@ -1,6 +1,6 @@
-export FT_ReadEE
+export ft_readee
 
-function FT_ReadEE(ft_handle::Culong, wordoffset::Integer)
+function ft_readee(ft_handle::Culong, wordoffset::Integer)
   @assert wordoffset >= 0
   value = Ref{Cushort}()
   ft_status = ccall((:FT_ReadEE, d2xx),

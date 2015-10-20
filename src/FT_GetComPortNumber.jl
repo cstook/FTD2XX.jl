@@ -1,6 +1,6 @@
-export  FT_GetComPortNumber
+export  ft_getcomportnumber
 
-function FT_GetComPortNumber(ft_handle::Culong)
+function ft_getcomportnumber(ft_handle::Culong)
   comportnumber = Ref{Cuint}()
   ft_status = ccall((:FT_GetComPortNumber, d2xx),
                      Cuint,

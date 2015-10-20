@@ -1,6 +1,6 @@
-export FT_SetBaudRate
+export ft_setbaudrate
 
-function FT_SetBaudRate(ft_handle::Culong, baud::Integer)
+function ft_setbaudrate(ft_handle::Culong, baud::Integer)
   ft_status = ccall((:FT_SetBaudRate, d2xx),
                      Cuint,
                      (Culong,Cuint),

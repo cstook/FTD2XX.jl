@@ -1,6 +1,6 @@
-export FT_Read!
+export ft_read!
 
-function FT_Read!(ft_handle::Culong,
+function ft_read!(ft_handle::Culong,
                  buffer::Array{UInt8,1},
                  bytestoread::Integer)
   bytesreturned = Ref{Cuint}()

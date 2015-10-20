@@ -1,6 +1,6 @@
-export FT_RestartInTask
+export ft_restartintask
 
-function FT_RestartInTask(ft_handle::Culong)
+function ft_restartintask(ft_handle::Culong)
   ft_status = ccall((:FT_RestartInTask, d2xx),Cuint,(Culong,),ft_handle)
   checkstatus(ft_status)
   return nothing

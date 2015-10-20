@@ -1,6 +1,6 @@
-export FT_SetChars
+export ft_setchars
 
-function FT_SetChars(ft_handle::Culong, eventch::UInt8, eventchen::Bool,
+function ft_setchars(ft_handle::Culong, eventch::UInt8, eventchen::Bool,
                                         errorch::UInt8, errorchen::Bool)
   if eventchen
     eventcharacterenable = 0x01

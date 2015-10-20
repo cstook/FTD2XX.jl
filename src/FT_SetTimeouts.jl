@@ -1,6 +1,6 @@
-export FT_SetTimeouts
+export ft_settimeouts
 
-function FT_SetTimeouts(ft_handle::Culong,
+function ft_settimeouts(ft_handle::Culong,
                          readtimeout::Integer,
                          writetimeout::Integer)
   ft_status = ccall((:FT_SetTimeouts, d2xx),

@@ -1,24 +1,24 @@
-export FT_SetDataCharacteristics
+export ft_setdatacharacteristics
 export FT_BITS_8, FT_BITS_7, FT_STOP_BITS_1, FT_STOP_BITS_2
 export FT_PARITY_NONE, FT_PARITY_ODD, FT_PARITY_EVEN, FT_PARITY_MARK
 export FT_PARITY_SPACE
 
-#Word Length (see FT_SetDataCharacteristics) 
+#Word Length (see ft_setdatacharacteristics) 
 const FT_BITS_8 = 8 
 const FT_BITS_7 = 7
 
-#Stop Bits (see FT_SetDataCharacteristics) 
+#Stop Bits (see ft_setdatacharacteristics) 
 const FT_STOP_BITS_1 = 0 
 const FT_STOP_BITS_2 = 2
 
-#Parity (see FT_SetDataCharacteristics) 
+#Parity (see ft_setdatacharacteristics) 
 const FT_PARITY_NONE = 0 
 const FT_PARITY_ODD = 1 
 const FT_PARITY_EVEN = 2 
 const FT_PARITY_MARK = 3 
 const FT_PARITY_SPACE = 4
 
-function FT_SetDataCharacteristics(ft_handle::Culong, 
+function ft_setdatacharacteristics(ft_handle::Culong, 
                                    wordlength::Integer,
                                    stopbits::Integer,
                                    parity::Integer)

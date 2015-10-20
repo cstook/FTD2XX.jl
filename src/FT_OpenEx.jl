@@ -1,13 +1,13 @@
-export FT_Description, FT_SerialNumber, FT_OpenEx
+export ft_description, ft_serialnumber, ft_openex
 
-#Flags (see FT_OpenEx)
+#Flags (see ft_openex)
 const FT_OPEN_BY_SERIAL_NUMBER = 1
 const FT_OPEN_BY_DESCRIPTION = 2
 const FT_OPEN_BY_LOCATION = 4
 
-immutable FT_Description 
+immutable ft_description 
   d :: Array{UInt8,1}
-  function FT_Description(s :: ASCIIString)
+  function ft_description(s :: ASCIIString)
     description = Array(UInt8,64)
     if length(s) < 64
       for (pos,character) in enumerate(s)
@@ -21,9 +21,9 @@ immutable FT_Description
   end
 end
 
-immutable FT_SerialNumber 
+immutable ft_serialnumber 
   sn :: Array{UInt8,1}
-  function FT_SerialNumber(s :: ASCIIString)
+  function ft_serialnumber(s :: ASCIIString)
     serialnumber = Array(UInt8,16)
     if length(s) < 16
       for (pos,character) in enumerate(s)
@@ -37,7 +37,7 @@ immutable FT_SerialNumber
   end
 end
 
-function FT_OpenEx(location :: Unsigned)
+function ft_openex(location :: Unsigned)
   ft_handle = Ref{Culong}()
   ft_status = ccall((:FT_OpenEx, d2xx),
                       Cuint,
@@ -47,7 +47,7 @@ function FT_OpenEx(location :: Unsigned)
   return ft_handle[]
 end
 
-function FT_OpenEx(serialnumber :: FT_SerialNumber)
+function ft_openex(serialnumber :: ft_serialnumber)
   ft_handle = Ref{Culong}()
   ft_status = ccall((:FT_OpenEx, d2xx),
                       Cuint,
@@ -57,7 +57,7 @@ function FT_OpenEx(serialnumber :: FT_SerialNumber)
   return ft_handle[]
 end
 
-function FT_OpenEx(description :: FT_Description)
+function ft_openex(description :: ft_description)
   ft_handle = Ref{Culong}()
   ft_status = ccall((:FT_OpenEx, d2xx),
                       Cuint,

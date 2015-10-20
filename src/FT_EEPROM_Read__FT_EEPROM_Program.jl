@@ -14,7 +14,7 @@ function fteepromread_alleeprom{T<:Eeprom}(ft_handle::Culong, eepromdata::T)
   d = Array(UInt8,64); d[64] = 0
   sn = Array(UInt8,64); sn[64] = 0
   ee = Ref{T}(eepromdata)
-  ft_status = ccall((:ft_eeprom_read, d2xx),
+  ft_status = ccall((:FT_EEPROM_Read, d2xx),
             Cuint,
             (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
@@ -36,7 +36,7 @@ function fteepromprogram_alleeprom{T<:Eeprom}(ft_handle::Culong, eepromdata::T,
   d = Array{UInt8,1}(d_string * "\0")
   sn = Array{UInt8,1}(sn_string * "\0")
   ee = Ref{T}(eepromdata)
-  ft_status = ccall((:ft_eeprom_program, d2xx),
+  ft_status = ccall((:FT_EEPROM_Program, d2xx),
             Cuint,
             (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
@@ -569,7 +569,7 @@ function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteepromxseries,
 end
 
 function ft_eeprom_read(ft_handle::Culong)
-  (devicetype,id,sn,d) = FT_GetDeviceInfo(ft_handle)
+  (devicetype,id,sn,d) = ft_getdeviceinfo(ft_handle)
   if devicetype == FT_DEVICE_232BM
     return ft_eeprom_read(ft_handle,Fteeprom232b())
   elseif devicetype == FT_DEVICE_2232C

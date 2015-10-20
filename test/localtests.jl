@@ -49,12 +49,12 @@ using Base.Test
 if islinux
   vid = 0x0403
   pid = 0x6014
-  FT_SetVIDPID(vid,pid)
+  ft_setvidpid(vid,pid)
 end
 
 lpdwnumdevs = ft_createdeviceinfolist()
 println("$lpdwnumdevs devices found")
-dil = FT_GetDeviceInfoList(lpdwnumdevs)
+dil = ft_getdeviceinfoList(lpdwnumdevs)
 println(dil)
 println()
 show(dil[1])
@@ -64,41 +64,41 @@ println()
 
 @test length(dil) > 0
 
-h = FT_Open(0)
+h = ft_open(0)
 ft_close(h)
 
 locid = dil[1].locid
-h = FT_OpenEx(locid)
+h = ft_openex(locid)
 ft_close(h)
 
-ftsn = FT_SerialNumber(dil[1].serialnumber)
-h = FT_OpenEx(ftsn)
+ftsn = ft_serialnumber(dil[1].serialnumber)
+h = ft_openex(ftsn)
 ft_close(h)
 
-ftd = FT_Description(dil[1].description)
-h = FT_OpenEx(ftd)
+ftd = ft_description(dil[1].description)
+h = ft_openex(ftd)
 ft_close(h)
 
-h = FT_OpenEx(FT_SerialNumber("FTXRNZUJ"))  # cable with external loopback
-FT_SetBaudRate(h,9600)
-FT_SetDataCharacteristics(h, FT_BITS_7, FT_STOP_BITS_1, FT_PARITY_NONE)
-FT_SetTimeouts(h, 1000, 1000)
-FT_SetFlowControl(h,FT_FLOW_NONE)
-byteswritten = FT_Write(h,convert(Array{UInt8,1},"abcd"))
+h = ft_openex(ft_serialnumber("FTXRNZUJ"))  # cable with external loopback
+ft_setbaudrate(h,9600)
+ft_setdatacharacteristics(h, FT_BITS_7, FT_STOP_BITS_1, FT_PARITY_NONE)
+ft_settimeouts(h, 1000, 1000)
+ft_setflowcontrol(h,FT_FLOW_NONE)
+byteswritten = ft_write(h,convert(Array{UInt8,1},"abcd"))
 println("$byteswritten bytes written")
-bytesinqueue = FT_GetQueueStatus(h)
+bytesinqueue = ft_getqueuestatus(h)
 println("$bytesinqueue bytes in queue")
 const buffer = Array(UInt8,byteswritten)
-bytesreturned = FT_Read!(h,buffer,byteswritten)
+bytesreturned = ft_read!(h,buffer,byteswritten)
 println("$bytesreturned bytes read")
 println(convert(ASCIIString,buffer))
 
-FT_SetDtr(h)
+ft_setdtr(h)
 ft_clrdtr(h)
-FT_SetRts(h)
+ft_setrts(h)
 ft_clrrts(h)
 
-ms = FT_GetModemStatus(h)
+ms = ft_getmodemstatus(h)
 modemstatus = convert(UInt8,ms&0x00ff)
 linestatus = convert(UInt8,(ms&0xff00)>>8)
 print("modem status = 0x")
@@ -115,7 +115,7 @@ linestatus&OE == OE ? println("Overrun Error") : nothing
 linestatus&PE == PE ? println("Parity Error") : nothing
 linestatus&FE == FE ? println("Framing Error") : nothing
 linestatus&BI == BI ? println("Break Interupt") : nothing
-(devicetype, id, serialnumber, description) = FT_GetDeviceInfo(h)
+(devicetype, id, serialnumber, description) = ft_getdeviceinfo(h)
 vid = convert(UInt16, (0xffff0000&id)>>16)
 pid = convert(UInt16, 0x0000ffff&id)
 println("Device info from FT_GetDevice_Info")
@@ -131,15 +131,15 @@ println("serial number = $serialnumber")
 println("description = $description")
 
 if iswindows
-  driverversion = FT_GetDriverVersion(h)
-  println("FT_GetDriverVersion = ",driverversion)
-  libraryversion = FT_GetLibraryVersion()
-  println("FT_GetLibraryVersion = $libraryversion")
-  comportnumber = FT_GetComPortNumber(h)
-  println("FT_GetComPortNumber = $comportnumber")
+  driverversion = ft_getdriverversion(h)
+  println("ft_getdriverversion = ",driverversion)
+  libraryversion = ft_getlibraryversion()
+  println("ft_getlibraryversion = $libraryversion")
+  comportnumber = ft_getcomportnumber(h)
+  println("ft_getcomportnumber = $comportnumber")
 end
-(rxqueue, txqueue, eventstatus) = FT_GetStatus(h)
-println("FT_GetStatus")
+(rxqueue, txqueue, eventstatus) = ft_getstatus(h)
+println("ft_getstatus")
 println("in Rx queue = $rxqueue")
 println("in Tx queue = $txqueue")
 println("event status = $eventstatus")
@@ -149,29 +149,29 @@ eventcharacter = 0x01
 enableevent = false
 errorcharacter = 0x02
 enableerror = false
-FT_SetChars(h,eventcharacter,enableevent, errorcharacter, enableerror)
+ft_setchars(h,eventcharacter,enableevent, errorcharacter, enableerror)
 
-FT_SetBreakOn(h)
-FT_SetBreakOff(h)
-FT_Purge(h, FT_PURGE_RX & FT_PURGE_TX)
+ft_setbreakon(h)
+ft_setbreakoff(h)
+ft_purge(h, FT_PURGE_RX & FT_PURGE_TX)
 
 
 
-FT_ResetDevice(h)
+ft_resetdevice(h)
 if iswindows
-  FT_ResetPort(h)
+  ft_resetport(h)
   ft_cycleport(h)
-  FT_Rescan(h)
+  ft_rescan(h)
   if ~iswindows10  # problem with windows 10
-    FT_SetResetPipeRetryCount(h,100)
-    FT_SetResetPipeRetryCount(h,50)  # back to default
+    ft_setresetpiperetrycount(h,100)
+    ft_setresetpiperetrycount(h,50)  # back to default
   end
 end
 if ~iswindows10 # problem with windows 10
-  FT_StopInTask(h) 
-  FT_RestartInTask(h)
-  FT_SetDeadmanTimeout(h,6000)
-  FT_SetDeadmanTimeout(h,5000)  # back to default
+  ft_stopintask(h) 
+  ft_restartintask(h)
+  ft_setdeadmantimeout(h,6000)
+  ft_setdeadmantimeout(h,5000)  # back to default
 end
 print("reloading vid=0x")
 @printf("%X",vid)
@@ -180,9 +180,9 @@ print("    pid=0x")
 println()
 if iswindows & ~iswindows10
   if ~iswindows10 # problem with windows10
-    FT_Reload(vid,pid)
+    ft_reload(vid,pid)
   end
-  FT_ResetPort(h)
+  ft_resetport(h)
 end
 
 
@@ -199,13 +199,13 @@ end
 println()
 println("EEPROM testing")
 println("opening serial number FTXRNZUJ")
-h = FT_OpenEx(FT_SerialNumber("FTXRNZUJ"))  # cable with external loopback
+h = ft_openex(ft_serialnumber("FTXRNZUJ"))  # cable with external loopback
 # factory description = "C232HM-EDHSL-0"
 #
-# h = FT_OpenEx(FT_SerialNumber("FTX2GPSJ"))  # cable with external loopback
+# h = ft_openex(ft_serialnumber("FTX2GPSJ"))  # cable with external loopback
 # factory description = "UM232H-B"
 
-word0x00000001 = FT_ReadEE(h,0x00000001)
+word0x00000001 = ft_readee(h,0x00000001)
 print("word at EE address 0x00000001 = 0x")
 @printf("%X",word0x00000001)
 println()
@@ -236,38 +236,38 @@ println()
 println()
 
 
-latencytime_ms = FT_GetLatencyTimer(h)
+latencytime_ms = ft_getlatencytimer(h)
 ltold = latencytime_ms
 println("latency time is $latencytime_ms ms")
-FT_SetLatencyTimer(h,10)
-latencytime_ms = FT_GetLatencyTimer(h)
+ft_setlatencytimer(h,10)
+latencytime_ms = ft_getlatencytimer(h)
 println("latency time is $latencytime_ms ms")
 if (ltold>1) & (ltold<256)
-  FT_SetLatencyTimer(h,ltold)
+  ft_setlatencytimer(h,ltold)
 elseif ltold>1
-  FT_SetLatencyTimer(h,256)
+  ft_setlatencytimer(h,256)
 else
-  FT_SetLatencyTimer(h,2)
+  ft_setlatencytimer(h,2)
 end
-latencytime_ms = FT_GetLatencyTimer(h)
+latencytime_ms = ft_getlatencytimer(h)
 println("latency time is $latencytime_ms ms")
 
 println()
-FT_SetBitMode(h, 0x00, 0x02)  # mode = MPSSE
-FT_SetBitMode(h, 0x00, 0x00)  # reset mode
-println("FT_SetBitMode test complete")
+ft_setbitmode(h, 0x00, 0x02)  # mode = MPSSE
+ft_setbitmode(h, 0x00, 0x00)  # reset mode
+println("ft_setbitmode test complete")
 
 println()
-idbv = FT_GetBitMode(h)
+idbv = ft_getbitmode(h)
 print("instaneous data bus value = 0x")
 @printf("%X",idbv)
 
 println()
 intransfersize = 100 * 64
 outtransfersize = 101 * 64
-FT_SetUSBParameters(h, intransfersize, outtransfersize)
-FT_SetUSBParameters(h, 4096, 4096)  # back to default
-println("FT_SetUSBParameters test complete")
+ft_setusbparameters(h, intransfersize, outtransfersize)
+ft_setusbparameters(h, 4096, 4096)  # back to default
+println("ft_setusbparameters test complete")
 
 programdata = ft_ee_read(h)
 println("PowerSaveEnableH = ",programdata.PowerSaveEnableH)
@@ -280,14 +280,13 @@ ft_ee_program(h,pd2)
 pd3 = ft_ee_read(h)
 println("PowerSaveEnableH = ",pd3.PowerSaveEnableH)
 print(programdata)
-
-FT_EraseEE(h) # erase the EEPROM
+ft_eraseee(h) # erase the EEPROM
 ft_ee_program(h,pd2) # put data back
 
-word1 = FT_ReadEE(h,0x0001)  # read a byte
-FT_WriteEE(h,0x0001,0x5555)  # write some data
-@assert 0x5555 == FT_ReadEE(h,0x0001)
-FT_WriteEE(h,0x0001,word1) # write original value back
+word1 = ft_readee(h,0x0001)  # read a byte
+ft_writeee(h,0x0001,0x5555)  # write some data
+@assert 0x5555 == ft_readee(h,0x0001)
+ft_writeee(h,0x0001,word1) # write original value back
 
 if iswindows
   println()
@@ -307,15 +306,15 @@ end
 ft_close(h)
 
 if isunix
-  (vid,pid) = FT_GetVIDPID() 
+  (vid,pid) = ft_getvidpid() 
   f()=@printf("VendorId = 0x%04x   ",vid);f() 
   f()=@printf("ProductId = 0x%04x \n",pid);f() 
-  FT_SetVIDPID(0xaaaa,0x5555)
-  (vid2,pid2) = FT_GetVIDPID() 
+  ft_setvidpid(0xaaaa,0x5555)
+  (vid2,pid2) = ft_getvidpid() 
   f()=@printf("VendorId = 0x%04x   ",vid2);f() 
   f()=@printf("ProductId = 0x%04x \n",pid2);f() 
-  FT_SetVIDPID(vid,pid)
-  (vid,pid) = FT_GetVIDPID() 
+  ft_setvidpid(vid,pid)
+  (vid,pid) = ft_getvidpid() 
   f()=@printf("VendorId = 0x%04x   ",vid);f() 
   f()=@printf("ProductId = 0x%04x \n",pid);f() 
 end

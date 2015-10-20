@@ -1,6 +1,6 @@
-export FT_SetDeadmanTimeout
+export ft_setdeadmantimeout
 
-function FT_SetDeadmanTimeout(ft_handle::Culong, deadmantimeout::Integer = 5000)
+function ft_setdeadmantimeout(ft_handle::Culong, deadmantimeout::Integer = 5000)
   ft_status = ccall((:FT_SetDeadmanTimeout, d2xx),
                      Cuint,
                      (Culong, Cuint),

@@ -1,8 +1,8 @@
-export FT_GetDeviceInfo
+export ft_getdeviceinfo
 
 include("FT_DEVICE.jl")
 
-function FT_GetDeviceInfo(ft_handle::Culong)
+function ft_getdeviceinfo(ft_handle::Culong)
   ft_device = Ref{Cuint}() # see ftdevicetypedict
   id = Ref{Cuint}()
   serialnumber = Array(UInt8,17)

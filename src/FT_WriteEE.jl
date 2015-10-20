@@ -1,6 +1,6 @@
-export FT_WriteEE
+export ft_writeee
 
-function FT_WriteEE(ft_handle::Culong, wordoffset::Integer, value::UInt16)
+function ft_writeee(ft_handle::Culong, wordoffset::Integer, value::UInt16)
   @assert wordoffset >= 0
   ft_status = ccall((:FT_WriteEE, d2xx),
                      Cuint,
