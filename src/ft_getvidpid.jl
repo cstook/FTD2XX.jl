@@ -9,5 +9,5 @@ function ft_getvidpid()
                      (Ref{Cuint}, Ref{Cuint}),
                       vid, pid)
   checkstatus(ft_status)
-  return id[], pid[]
+  return vid[], pid[]
 end
