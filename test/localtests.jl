@@ -33,7 +33,7 @@ const isunix = @unix? true:false
 const isosx = @osx? true:false
 const islinux = @linux? true:false
 const iswindows = @windows? true:false
-const iswindows10 = true
+const iswindows10 = false
 
 # unload VCP driver for linux
 if islinux
@@ -187,7 +187,9 @@ end
 
 
 FT_Close(h)
-wait(Timer(5))
+if iswindows10
+  wait(Timer(5))
+end
 
 ####################################
 #
