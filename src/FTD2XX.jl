@@ -6,7 +6,7 @@ module FTD2XX
 @windows? begin const d2xx = "ftd2xx.dll" end: nothing
 
 include("checkstatus.jl")
-include("common_API.jl")
+include("common_api.jl")
 @linux? include("osx_linux_API.jl"):nothing
 @osx? include("osx_linux_API.jl"):nothing
 @windows? include("windows_API.jl"):nothing
