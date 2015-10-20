@@ -1,4 +1,4 @@
-export FT_EEPROM_Read, FT_EEPROM_Program
+export ft_eeprom_read, ft_eeprom_program
 export Fteeprom232b, Fteeprom2232, Fteeprom232r
 export Fteeprom2232h, Fteeprom4232h, Fteeprom232h
 export Fteepromxseries
@@ -14,7 +14,7 @@ function fteepromread_alleeprom{T<:Eeprom}(ft_handle::Culong, eepromdata::T)
   d = Array(UInt8,64); d[64] = 0
   sn = Array(UInt8,64); sn[64] = 0
   ee = Ref{T}(eepromdata)
-  ft_status = ccall((:FT_EEPROM_Read, d2xx),
+  ft_status = ccall((:ft_eeprom_read, d2xx),
             Cuint,
             (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
@@ -36,7 +36,7 @@ function fteepromprogram_alleeprom{T<:Eeprom}(ft_handle::Culong, eepromdata::T,
   d = Array{UInt8,1}(d_string * "\0")
   sn = Array{UInt8,1}(sn_string * "\0")
   ee = Ref{T}(eepromdata)
-  ft_status = ccall((:FT_EEPROM_Program, d2xx),
+  ft_status = ccall((:ft_eeprom_program, d2xx),
             Cuint,
             (Culong,Ref{T},Cuint,Ptr{UInt8},
               Ptr{UInt8},Ptr{UInt8},Ptr{UInt8}),
@@ -53,7 +53,7 @@ function showcommonelements(io::IO, eepromdata::Eeprom)
   f()=@printf(io,"MaxPower = 0x%04x\n",eepromdata.MaxPower);f()
 end
 
-# FT232B EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+# FT232B EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
 type Fteeprom232b <: Eeprom
   # Common header
   ### BEGIN common elements for all device EEPROMs ###
@@ -75,12 +75,12 @@ function Base.show(io::IO, eepromdata::Fteeprom232b)
   showcommonelements(io,eepromdata)
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom232b)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteeprom232b)
   @assert eepromdata.deviceType == FT_DEVICE_232BM
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232b,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteeprom232b,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -90,7 +90,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232b,
                   mfgid_string,d_string,sn_string)
 end
 
-# FT2232 EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+# FT2232 EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
 type Fteeprom2232 <: Eeprom
   ### BEGIN common elements for all device EEPROMs ###
   deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
@@ -132,12 +132,12 @@ function Base.show(io::IO, eepromdata::Fteeprom2232)
   f()=@printf(io,"BDriverType= 0x%02x\n",eepromdata.BDriverType);f()
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom2232)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteeprom2232)
   @assert eepromdata.deviceType == FT_DEVICE_2232C
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteeprom2232,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -147,7 +147,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232,
                   mfgid_string,d_string,sn_string)
 end
 
-# FT232R EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+# FT232R EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
 type Fteeprom232r <: Eeprom
   ### BEGIN common elements for all device EEPROMs ###
   deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
@@ -201,12 +201,12 @@ function Base.show(io::IO, eepromdata::Fteeprom232r)
   f()=@printf(io,"DriverType= 0x%02x\n",eepromdata.DriverType);f()
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom232r)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteeprom232r)
   @assert eepromdata.deviceType == FT_DEVICE_232R
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232r,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteeprom232r,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -216,7 +216,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232r,
                   mfgid_string,d_string,sn_string)
 end
 
-# FT2232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+# FT2232H EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
 type Fteeprom2232h <: Eeprom
   ### BEGIN common elements for all device EEPROMs ###
   deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
@@ -282,12 +282,12 @@ function Base.show(io::IO, eepromdata::Fteeprom2232h)
   f()=@printf(io,"BDriverType= 0x%02x\n",eepromdata.BDriverType);f()
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom2232h)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteeprom2232h)
   @assert eepromdata.deviceType == FT_DEVICE_2232H
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232h,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteeprom2232h,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -297,7 +297,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232h,
                   mfgid_string,d_string,sn_string)
 end
 
-# FT4232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+# FT4232H EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
 type Fteeprom4232h <: Eeprom
   ### BEGIN common elements for all device EEPROMs ###
   deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
@@ -359,12 +359,12 @@ function Base.show(io::IO, eepromdata::Fteeprom4232h)
   f()=@printf(io,"DDriverType= 0x%02x\n",eepromdata.DDriverType);f()
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom4232h)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteeprom4232h)
   @assert eepromdata.deviceType == FT_DEVICE_4232H
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom4232h,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteeprom4232h,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -374,7 +374,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom4232h,
                   mfgid_string,d_string,sn_string)
 end
 
-# FT232H EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+# FT232H EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
 type Fteeprom232h <: Eeprom
   ### BEGIN common elements for all device EEPROMs ###
   deviceType :: Cuint # FT_DEVICE FTxxxx device type to be programmed
@@ -414,7 +414,7 @@ type Fteeprom232h <: Eeprom
   IsFastSer :: Cuchar # non-zero if interface is Fast serial
   IsFT1248 :: Cuchar # non-zero if interface is FT1248
   PowerSaveEnable :: Cuchar ## Driver option
-  DriverType :: Cuchar #  :: Cuchar #FT X Series EEPROM structure for use with FT_EEPROM_Read and FT_EEPROM_Program
+  DriverType :: Cuchar #  :: Cuchar #FT X Series EEPROM structure for use with ft_eeprom_read and ft_eeprom_program
   Fteeprom232h() = new(FT_DEVICE_232H)
 end
 
@@ -447,12 +447,12 @@ function Base.show(io::IO, eepromdata::Fteeprom232h)
   f()=@printf(io,"DriverType = 0x%02x\n",eepromdata.DriverType);f()
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom232h)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteeprom232h)
   @assert eepromdata.deviceType == FT_DEVICE_232H
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232h,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteeprom232h,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -553,12 +553,12 @@ function Base.show(io::IO, eepromdata::Fteepromxseries)
   f()=@printf(io,"DriverType= 0x%02x\n",eepromdata.DriverType);f()
 end
 
-function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteepromxseries)
+function ft_eeprom_read(ft_handle::Culong, eepromdata::Fteepromxseries)
   @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
   fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
-function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteepromxseries,
+function ft_eeprom_program(ft_handle::Culong, eepromdata::Fteepromxseries,
                             mfg_string::ASCIIString,
                             mfgid_string::ASCIIString,
                             d_string::ASCIIString,
@@ -568,22 +568,22 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteepromxseries,
                   mfgid_string,d_string,sn_string)
 end
 
-function FT_EEPROM_Read(ft_handle::Culong)
+function ft_eeprom_read(ft_handle::Culong)
   (devicetype,id,sn,d) = FT_GetDeviceInfo(ft_handle)
   if devicetype == FT_DEVICE_232BM
-    return FT_EEPROM_Read(ft_handle,Fteeprom232b())
+    return ft_eeprom_read(ft_handle,Fteeprom232b())
   elseif devicetype == FT_DEVICE_2232C
-    return FT_EEPROM_Read(ft_handle,Fteeprom2232())
+    return ft_eeprom_read(ft_handle,Fteeprom2232())
   elseif devicetype == FT_DEVICE_232R
-    return FT_EEPROM_Read(ft_handle,Fteeprom232r())
+    return ft_eeprom_read(ft_handle,Fteeprom232r())
   elseif devicetype == FT_DEVICE_2232H
-    return FT_EEPROM_Read(ft_handle,Fteeprom2232h())
+    return ft_eeprom_read(ft_handle,Fteeprom2232h())
   elseif devicetype == FT_DEVICE_4232H
-    return FT_EEPROM_Read(ft_handle,Fteeprom4232h())
+    return ft_eeprom_read(ft_handle,Fteeprom4232h())
   elseif devicetype == FT_DEVICE_232H
-    return FT_EEPROM_Read(ft_handle,Fteeprom232h())
+    return ft_eeprom_read(ft_handle,Fteeprom232h())
   elseif devicetype == FT_DEVICE_X_SERIES
-    return FT_EEPROM_Read(ft_handle,Fteepromxseries())
+    return ft_eeprom_read(ft_handle,Fteepromxseries())
   else
     error("Device type ",devicetype," unknown")
   end

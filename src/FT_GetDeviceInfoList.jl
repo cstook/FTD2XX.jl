@@ -79,7 +79,7 @@ immutable FtDeviceListFtDeviceListInfoNode_C
   FT_HANDLE_MSB :: Cuint
 end
 
-function FT_GetDeviceInfoList(lpdwNumDevs::Integer = FT_CreateDeviceInfoList())
+function FT_GetDeviceInfoList(lpdwNumDevs::Integer = ft_createdeviceinfolist())
   ftdeviceinfolist = Array(FtDeviceListFtDeviceListInfoNode_C,lpdwNumDevs)
   n = Ref{Cuint}(lpdwNumDevs)
   ft_status = ccall((:FT_GetDeviceInfoList, d2xx),

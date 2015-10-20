@@ -1,7 +1,7 @@
-export FT_Close
+export ft_close
 
-function FT_Close(ft_handle :: Culong)
-  ft_status = ccall((:FT_Close, d2xx),
+function ft_close(ft_handle :: Culong)
+  ft_status = ccall((:ft_close, d2xx),
                       Cuint,
                       (Culong,),
                       ft_handle)

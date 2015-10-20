@@ -52,7 +52,7 @@ if islinux
   FT_SetVIDPID(vid,pid)
 end
 
-lpdwnumdevs = FT_CreateDeviceInfoList()
+lpdwnumdevs = ft_createdeviceinfolist()
 println("$lpdwnumdevs devices found")
 dil = FT_GetDeviceInfoList(lpdwnumdevs)
 println(dil)
@@ -65,19 +65,19 @@ println()
 @test length(dil) > 0
 
 h = FT_Open(0)
-FT_Close(h)
+ft_close(h)
 
 locid = dil[1].locid
 h = FT_OpenEx(locid)
-FT_Close(h)
+ft_close(h)
 
 ftsn = FT_SerialNumber(dil[1].serialnumber)
 h = FT_OpenEx(ftsn)
-FT_Close(h)
+ft_close(h)
 
 ftd = FT_Description(dil[1].description)
 h = FT_OpenEx(ftd)
-FT_Close(h)
+ft_close(h)
 
 h = FT_OpenEx(FT_SerialNumber("FTXRNZUJ"))  # cable with external loopback
 FT_SetBaudRate(h,9600)
@@ -94,9 +94,9 @@ println("$bytesreturned bytes read")
 println(convert(ASCIIString,buffer))
 
 FT_SetDtr(h)
-FT_ClrDtr(h)
+ft_clrdtr(h)
 FT_SetRts(h)
-FT_ClrRts(h)
+ft_clrrts(h)
 
 ms = FT_GetModemStatus(h)
 modemstatus = convert(UInt8,ms&0x00ff)
@@ -160,7 +160,7 @@ FT_Purge(h, FT_PURGE_RX & FT_PURGE_TX)
 FT_ResetDevice(h)
 if iswindows
   FT_ResetPort(h)
-  FT_CyclePort(h)
+  ft_cycleport(h)
   FT_Rescan(h)
   if ~iswindows10  # problem with windows 10
     FT_SetResetPipeRetryCount(h,100)
@@ -186,7 +186,7 @@ if iswindows & ~iswindows10
 end
 
 
-FT_Close(h)
+ft_close(h)
 if iswindows10
   wait(Timer(5))
 end
@@ -210,13 +210,13 @@ print("word at EE address 0x00000001 = 0x")
 @printf("%X",word0x00000001)
 println()
 
-userareasize = FT_EE_UASize(h)
+userareasize = ft_ee_uasize(h)
 print("user area size = 0x")
 @printf("%X",userareasize)
 println()
 
 userarea = zeros(UInt8, userareasize)
-FT_EE_UARead!(h,userarea)
+ft_ee_uaread!(h,userarea)
 show(userarea)
 println()
 
@@ -228,9 +228,9 @@ for (index,byte) in enumerate(userarea)
   end
 end
 
-FT_EE_UAWrite(h,userarea)
+ft_ee_uawrite(h,userarea)
 userarea = zeros(UInt8, userareasize)
-FT_EE_UARead!(h,userarea)
+ft_ee_uaread!(h,userarea)
 show(userarea)
 println()
 println()
@@ -269,20 +269,20 @@ FT_SetUSBParameters(h, intransfersize, outtransfersize)
 FT_SetUSBParameters(h, 4096, 4096)  # back to default
 println("FT_SetUSBParameters test complete")
 
-programdata = FT_EE_Read(h)
+programdata = ft_ee_read(h)
 println("PowerSaveEnableH = ",programdata.PowerSaveEnableH)
 programdata.PowerSaveEnableH = 0x00 # turn off power save 
-FT_EE_Program(h,programdata)
-pd2 = FT_EE_Read(h)
+ft_ee_program(h,programdata)
+pd2 = ft_ee_read(h)
 println("PowerSaveEnableH = ",pd2.PowerSaveEnableH)
 pd2.PowerSaveEnableH = 0x01 # turn on power save
-FT_EE_Program(h,pd2)
-pd3 = FT_EE_Read(h)
+ft_ee_program(h,pd2)
+pd3 = ft_ee_read(h)
 println("PowerSaveEnableH = ",pd3.PowerSaveEnableH)
 print(programdata)
 
 FT_EraseEE(h) # erase the EEPROM
-FT_EE_Program(h,pd2) # put data back
+ft_ee_program(h,pd2) # put data back
 
 word1 = FT_ReadEE(h,0x0001)  # read a byte
 FT_WriteEE(h,0x0001,0x5555)  # write some data
@@ -291,20 +291,20 @@ FT_WriteEE(h,0x0001,word1) # write original value back
 
 if iswindows
   println()
-  println("test FT_EEPROM_Read, FT_EEPROM_Program start")
+  println("test ft_eeprom_read, ft_eeprom_program start")
   #ee = Fteeprom232h()
-  (eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,Fteeprom232h())
+  (eepromdata,mfg,mfgid,d,sn) = ft_eeprom_read(h,Fteeprom232h())
   println("mfg=",mfg)
   println("mfgid=",mfgid)
   println("d=",d)
   println("sn=",sn)
   show(eepromdata)
-  FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn)
-  println("test FT_EEPROM_Read, FT_EEPROM_Program end")
+  ft_eeprom_program(h,eepromdata,mfg,mfgid,d,sn)
+  println("test ft_eeprom_read, ft_eeprom_program end")
   println()
 end
 
-FT_Close(h)
+ft_close(h)
 
 if isunix
   (vid,pid) = FT_GetVIDPID() 

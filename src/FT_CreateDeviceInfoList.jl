@@ -1,8 +1,8 @@
-export FT_CreateDeviceInfoList
+export ft_createdeviceinfolist
 
-function FT_CreateDeviceInfoList()
+function ft_createdeviceinfolist()
   lpdwNumDevs = Ref{Cuint}()
-  ft_status = ccall((:FT_CreateDeviceInfoList, d2xx),
+  ft_status = ccall((:ft_createdeviceinfolist, d2xx),
                       Cuint,
                       (Ref{Cuint},),
                       lpdwNumDevs)

@@ -1,4 +1,4 @@
-export FT_EE_Read, FT_EE_Program
+export ft_ee_read, ft_ee_program
 export FtProgramData
 export FT_232R_CBUS_TXDEN, FT_232R_CBUS_PWRON, FT_232R_CBUS_RXLED, 
        FT_232R_CBUS_TXLED, FT_232R_CBUS_TXRXLED, FT_232R_CBUS_SLEEP,
@@ -20,7 +20,7 @@ export FT_X_SERIES_CBUS_TRISTATE, FT_X_SERIES_CBUS_RXLED, FT_X_SERIES_CBUS_TXLED
        FT_X_SERIES_CBUS_KEEP_AWAKE
 export FT_DRIVER_TYPE_D2XX, FT_DRIVER_TYPE_VCP
 
-#FT232R CBUS EEPROM OPTIONS - Ignored for FT245R (see FT_EE_Program and FT_EE_Read) 
+#FT232R CBUS EEPROM OPTIONS - Ignored for FT245R (see ft_ee_program and ft_ee_read) 
 const FT_232R_CBUS_TXDEN = 0x00 
 const FT_232R_CBUS_PWRON = 0x01 
 const FT_232R_CBUS_RXLED = 0x02 
@@ -35,7 +35,7 @@ const FT_232R_CBUS_IOMODE = 0x0A
 const FT_232R_CBUS_BITBANG_WR = 0x0B 
 const FT_232R_CBUS_BITBANG_RD = 0x0C
 
-#FT232H CBUS EEPROM OPTIONS (see FT_EE_Program and FT_EE_Read) 
+#FT232H CBUS EEPROM OPTIONS (see ft_ee_program and ft_ee_read) 
 const FT_232H_CBUS_TRISTATE = 0x00 
 const FT_232H_CBUS_RXLED = 0x01 
 const FT_232H_CBUS_TXLED = 0x02 
@@ -50,7 +50,7 @@ const FT_232H_CBUS_CLK30 = 0x0A
 const FT_232H_CBUS_CLK15 = 0x0B 
 const FT_232H_CBUS_CLK7_5 = 0x0C
 
-#FT X Series CBUS Options EEPROM values (see FT_EEPROM_Read and FT_EEPROM_Program)
+#FT X Series CBUS Options EEPROM values (see ft_eeprom_read and ft_eeprom_program)
 const FT_X_SERIES_CBUS_TRISTATE = 0x00
 const FT_X_SERIES_CBUS_RXLED = 0x01
 const FT_X_SERIES_CBUS_TXLED = 0x02
@@ -601,10 +601,10 @@ function Base.show(io::IO, pd::FtProgramData)
   end
 end
 
-function FT_EE_Read(ft_handle::Culong, version::Integer = 5)
+function ft_ee_read(ft_handle::Culong, version::Integer = 5)
   @assert version>-1
   ftpds = Ref{FtProgramData_C}(FtProgramData_C(version))
-  ft_status = ccall((:FT_EE_Read, d2xx),
+  ft_status = ccall((:ft_ee_read, d2xx),
                      Cuint,
                      (Culong, Ref{FtProgramData_C}),
                      ft_handle, ftpds)
@@ -612,9 +612,9 @@ function FT_EE_Read(ft_handle::Culong, version::Integer = 5)
   return FtProgramData(ftpds[])
 end
 
-function FT_EE_Program(ft_handle::Culong, pd::FtProgramData)
+function ft_ee_program(ft_handle::Culong, pd::FtProgramData)
   ftpds = Ref{FtProgramData_C}(FtProgramData_C(pd))
-  ft_status = ccall((:FT_EE_Program, d2xx),
+  ft_status = ccall((:ft_ee_program, d2xx),
                      Cuint,
                      (Culong, Ref{FtProgramData_C}),
                      ft_handle, ftpds)

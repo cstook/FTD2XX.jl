@@ -1,6 +1,6 @@
-export FT_EE_UARead!
+export ft_ee_uaread!
 
-function FT_EE_UARead!(ft_handle::Culong, buffer::Array{UInt8,1})
+function ft_ee_uaread!(ft_handle::Culong, buffer::Array{UInt8,1})
   len = length(buffer)
   bytesread = Ref{Cuint}()
   ft_status = ccall((:FT_EE_UARead, d2xx),

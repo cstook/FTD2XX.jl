@@ -1,8 +1,8 @@
-export FT_EE_UASize
+export ft_ee_uasize
 
-function FT_EE_UASize(ft_handle::Culong)
+function ft_ee_uasize(ft_handle::Culong)
   eesize = Ref{Cuint}()
-  ft_status = ccall((:FT_EE_UASize, d2xx),
+  ft_status = ccall((:ft_ee_uasize, d2xx),
                      Cuint,
                      (Culong, Ref{Cuint}),
                      ft_handle, eesize)

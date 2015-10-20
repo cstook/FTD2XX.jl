@@ -3,10 +3,10 @@
 For complete documentation see [D2XX Programer's Guide](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf)
 
 ## Functions Available On All Operating Systems
-### FT_CreateDeviceInfoList()
+### ft_createdeviceinfolist()
 Returns number of devices.
 
-### FT_GetDeviceInfoList(*numberofdevices::Integer = FT_CreateDeviceInfoList()*)
+### FT_GetDeviceInfoList(*numberofdevices::Integer = ft_createdeviceinfolist()*)
 Returns device information list.  Device information list is an array of type FtDeviceListInfoNode.  The fields of FtDeviceListInfoNode are flags, devicetype, id, locid, serialnumber,description, handle.
 
 Example:
@@ -29,7 +29,7 @@ ft_handle = FT_OpenEx(FT_SerialNumber("FTXRNZUJ")) # open by serial number
 ft_handle = FT_OpenEx(FT_Description("C232HM-EDHSL-0")) # open by description
 ```
 
-### FT_Close(*ft_handle::Culong*)
+### ft_close(*ft_handle::Culong*)
 Closes device with handle ft_handle.
 
 ### FT_Read!(*ft_handle::Culong, buffer::Array{UInt8,1}, bytestoread::Integer*)
@@ -81,13 +81,13 @@ const FT_FLOW_XON_XOFF = 0x0400
 ### FT_SetDtr(*ft_handle::Culong*)
 Sets DTR.
 
-### FT_ClrDtr(*ft_handle::Culong*)
+### ft_clrdtr(*ft_handle::Culong*)
 Clears DTR.
 
 ### FT_SetRts(*ft_handle::Culong*)
 Sets RTS.
 
-### FT_ClrRts(*ft_handle::Culong*)
+### ft_clrrts(*ft_handle::Culong*)
 Clears RTS.
 
 ### FT_GetModemStatus(*ft_handle::Culong*)
@@ -167,28 +167,28 @@ Writes a value to EEPROM at wordoffset.
 ### FT_EraseEE(*ft_handle::Culong*)
 Erase the device EEPROM.
 
-### FT_EE_Read(*ft_handle::Culong, version::Integer = 5*)
+### ft_ee_read(*ft_handle::Culong, version::Integer = 5*)
 Returns type FtProgramData.
 
-### FT_EE_Program(*ft_handle::Culong, pd::FtProgramData*)
+### ft_ee_program(*ft_handle::Culong, pd::FtProgramData*)
 Programs device EEPROM with FtProgramData.
 
 Example:
 ```julia
 # assumes device with ft_handle has been opened.
-programdata = FT_EE_Read(ft_handle)  		# read the program data
+programdata = ft_ee_read(ft_handle)  		# read the program data
 programdata.Description = "NewDescription"  # change a value
-FT_EE_Program(ft_handle, programdata)		# write back to device
+ft_ee_program(ft_handle, programdata)		# write back to device
 ```
 Type FtProgramData mirrors FTD2XX's FT_PROGRAM_DATA_STRUCTURE converting pointers to julia strings. See [FTDI's documentation](http://www.ftdichip.com/Support/Documents/ProgramGuides/D2XX_Programmer's_Guide%28FT_000071%29.pdf) for a complete description of FT_PROGRAM_DATA_STRUCTURE and associated constants.
 
-### FT_EE_UASize(*ft_handle::Culong*)
+### ft_ee_uasize(*ft_handle::Culong*)
 Returns the size of the user EEPROM area in bytes.
 
-### FT_EE_UARead!(*ft_handle::Culong, buffer::Array{UInt8,1}*)
+### ft_ee_uaread!(*ft_handle::Culong, buffer::Array{UInt8,1}*)
 Reads length(buffer) bytes of the user EEPROM into buffer.  Returns number of bytes read.
 
-### FT_EE_UAWrite(*ft_handle::Culong, buffer::Array{UInt8,1}*)
+### ft_ee_uawrite(*ft_handle::Culong, buffer::Array{UInt8,1}*)
 Writes buffer to user EEPROM.  length(buffer) must be less than or equal to the size of the EEPROM user area.
 
 ### FT_SetLatencyTimer(*ft_handle::Culong, timer::Integer*)
@@ -236,7 +236,7 @@ Returns com port number where device is attached.
 
 ### FT_ResetPort(*ft_handle::Culong*)
 
-### FT_CyclePort(*ft_handle::Culong*)
+### ft_cycleport(*ft_handle::Culong*)
 
 ### FT_ResetDevice(*ft_handle::Culong*)
 
@@ -244,11 +244,11 @@ Returns com port number where device is attached.
 
 ### FT_SetResetPipeRetryCount(ft_handle::Culong, count::Integer)
 
-### FT_EEPROM_Read(*ft_handle::Culong, eepromdata::eeprom*)
-### FT_EEPROM_Read(*ft_handle::Culong*)
+### ft_eeprom_read(*ft_handle::Culong, eepromdata::eeprom*)
+### ft_eeprom_read(*ft_handle::Culong*)
 Read data from EEPROM into a device specific type.  Returns tuple (eepromdata, mfg, mfgid, description, serialnumber).  The second form, passing only ft_handle is perfered.  Note if passed as a parameter, eepromdata is overwritten.  
 
-### FT_EEPROM_Program(*ft_handle::Culong, eepromdata::eeprom, mfg::ASCIIString,mfgid::ASCIIString, description::ASCIIString, serialnumber::ASCIIString*)
+### ft_eeprom_program(*ft_handle::Culong, eepromdata::eeprom, mfg::ASCIIString,mfgid::ASCIIString, description::ASCIIString, serialnumber::ASCIIString*)
 Write data in a device specific type to EEPROM.
 
 The device specific types are Fteeprom232b, Fteeprom2232, Fteeprom232r, Fteeprom2232h, Fteeprom4232h, Fteeprom232h, Fteepromxseries.  Constructors for these types set the deviceType field to the appropriate constant, leaving the rest of the structure uninitialized.
@@ -270,10 +270,10 @@ The deviceType constants are:
 Example:
 ```julia
 # assumes device with handle h is open and is device type FT_DEVICE_232H
-(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h) # read EEPROM, autodetect type
+(eepromdata,mfg,mfgid,d,sn) = ft_eeprom_read(h) # read EEPROM, autodetect type
 eepromdata.PowerSaveEnable = 0x00  # change a parameter 
-FT_EEPROM_Program(h,eepromdata,mfg,mfgid,d,sn) # write back to device
+ft_eeprom_program(h,eepromdata,mfg,mfgid,d,sn) # write back to device
 
 # you can specify the device type.  It will autodetect if not incuded.
-(eepromdata,mfg,mfgid,d,sn) = FT_EEPROM_Read(h,Fteeprom232h()) # read EEPROM
+(eepromdata,mfg,mfgid,d,sn) = ft_eeprom_read(h,Fteeprom232h()) # read EEPROM
 ```
