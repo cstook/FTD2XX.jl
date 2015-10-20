@@ -7,7 +7,7 @@ include("FT_DEVICE.jl")  # load constants
 
 abstract Eeprom
 
-function fteepromread{T<:Eeprom}(ft_handle::Culong, eepromdata::T)
+function fteepromread_alleeprom{T<:Eeprom}(ft_handle::Culong, eepromdata::T)
   datasize = Cuint(sizeof(eepromdata))
   mfg = Array(UInt8,64); mfg[64] = 0
   mfgid = Array(UInt8,64); mfgid[64] = 0
@@ -27,7 +27,7 @@ function fteepromread{T<:Eeprom}(ft_handle::Culong, eepromdata::T)
   return(eepromdata,mfg_string,mfgid_string,d_string,sn_string)
 end
 
-function fteepromprogram{T<:Eeprom}(ft_handle::Culong, eepromdata::T, 
+function fteepromprogram_alleeprom{T<:Eeprom}(ft_handle::Culong, eepromdata::T, 
           mfg_string::ASCIIString, mfgid_string::ASCIIString, 
           d_string::ASCIIString, sn_string::ASCIIString)
   datasize = sizeof(eepromdata)
@@ -77,7 +77,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom232b)
   @assert eepromdata.deviceType == FT_DEVICE_232BM
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232b,
@@ -86,7 +86,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232b,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_232BM
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
@@ -134,7 +134,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom2232)
   @assert eepromdata.deviceType == FT_DEVICE_2232C
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232,
@@ -143,7 +143,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_2232C
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
@@ -203,7 +203,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom232r)
   @assert eepromdata.deviceType == FT_DEVICE_232R
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232r,
@@ -212,7 +212,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232r,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_232R
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
@@ -284,7 +284,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom2232h)
   @assert eepromdata.deviceType == FT_DEVICE_2232H
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232h,
@@ -293,7 +293,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom2232h,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_2232H
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
@@ -361,7 +361,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom4232h)
   @assert eepromdata.deviceType == FT_DEVICE_4232H
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom4232h,
@@ -370,7 +370,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom4232h,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_4232H
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
@@ -449,7 +449,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteeprom232h)
   @assert eepromdata.deviceType == FT_DEVICE_232H
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232h,
@@ -458,7 +458,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteeprom232h,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_232H
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
@@ -555,7 +555,7 @@ end
 
 function FT_EEPROM_Read(ft_handle::Culong, eepromdata::Fteepromxseries)
   @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
-  fteepromread(ft_handle,eepromdata)
+  fteepromread_alleeprom(ft_handle,eepromdata)
 end
 
 function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteepromxseries,
@@ -564,7 +564,7 @@ function FT_EEPROM_Program(ft_handle::Culong, eepromdata::Fteepromxseries,
                             d_string::ASCIIString,
                             sn_string::ASCIIString)
   @assert eepromdata.deviceType == FT_DEVICE_X_SERIES
-  fteepromprogram(ft_handle,eepromdata,mfg_string,
+  fteepromprogram_alleeprom(ft_handle,eepromdata,mfg_string,
                   mfgid_string,d_string,sn_string)
 end
 
