@@ -7,8 +7,8 @@ module FTD2XX
 
 include("checkstatus.jl")
 include("common_api.jl")
-@linux? include("osx_linux_API.jl"):nothing
-@osx? include("osx_linux_API.jl"):nothing
-@windows? include("windows_API.jl"):nothing
+@linux? include("osx_linux_api.jl"):nothing
+@osx? include("osx_linux_api.jl"):nothing
+@windows? include("windows_api.jl"):nothing
 
 end # module
