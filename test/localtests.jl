@@ -33,7 +33,7 @@ const isunix = @unix? true:false
 const isosx = @osx? true:false
 const islinux = @linux? true:false
 const iswindows = @windows? true:false
-const iswindows10 = false
+const iswindows10 = true
 
 # unload VCP driver for linux
 if islinux
@@ -319,4 +319,5 @@ if isunix
   f()=@printf("ProductId = 0x%04x \n",pid);f() 
 end
 
-
+# test IO
+include("localtestIOftuart.jl")

@@ -10,5 +10,5 @@ include("common_api.jl")
 @linux? include("osx_linux_api.jl"):nothing
 @osx? include("osx_linux_api.jl"):nothing
 @windows? include("windows_api.jl"):nothing
-
+include("IOftuart.jl")  # create a subtype of IO for the UART
 end # module
