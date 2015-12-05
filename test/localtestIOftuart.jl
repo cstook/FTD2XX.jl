@@ -6,19 +6,19 @@ using Base.Test
 deviceinfo = ft_getdeviceinfolist()[1]
 
 # open by description
-io = open(ft_description(deviceinfo.description))
+io = open(FT_Description(deviceinfo.description))
 close(io)
 
 # open by serial number
-io = open(ft_serialnumber(deviceinfo.serialnumber))
+io = open(FT_SerialNumber(deviceinfo.serialnumber))
 close(io)
 
 # open by location
-io = open(ft_location(deviceinfo.locid))
+io = open(FT_Location(deviceinfo.locid))
 close(io)
 
 # open by index (zero based)
-io = open(ft_deviceindex(0))
+io = open(FT_DeviceIndex(0))
 
 # assume external loopback is connected
 write(io, 0x55)

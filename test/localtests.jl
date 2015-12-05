@@ -71,15 +71,15 @@ locid = dil[1].locid
 h = ft_openex(locid)
 ft_close(h)
 
-ftsn = ft_serialnumber(dil[1].serialnumber)
+ftsn = FT_SerialNumber(dil[1].serialnumber)
 h = ft_openex(ftsn)
 ft_close(h)
 
-ftd = ft_description(dil[1].description)
+ftd = FT_Description(dil[1].description)
 h = ft_openex(ftd)
 ft_close(h)
 
-h = ft_openex(ft_serialnumber("FTXRNZUJ"))  # cable with external loopback
+h = ft_openex(FT_SerialNumber("FTXRNZUJ"))  # cable with external loopback
 ft_setbaudrate(h,9600)
 ft_setdatacharacteristics(h, FT_BITS_7, FT_STOP_BITS_1, FT_PARITY_NONE)
 ft_settimeouts(h, 1000, 1000)
@@ -199,10 +199,10 @@ end
 println()
 println("EEPROM testing")
 println("opening serial number FTXRNZUJ")
-h = ft_openex(ft_serialnumber("FTXRNZUJ"))  # cable with external loopback
+h = ft_openex(FT_SerialNumber("FTXRNZUJ"))  # cable with external loopback
 # factory description = "C232HM-EDHSL-0"
 #
-# h = ft_openex(ft_serialnumber("FTX2GPSJ"))  # cable with external loopback
+# h = ft_openex(FT_SerialNumber("FTX2GPSJ"))  # cable with external loopback
 # factory description = "UM232H-B"
 
 word0x00000001 = ft_readee(h,0x00000001)

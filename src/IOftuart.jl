@@ -1,6 +1,6 @@
 # create IOftuart
 
-export IOftuart, ft_location, ft_deviceindex, purge, UARTConfiguration
+export IOftuart, FT_Location, FT_DeviceIndex, purge, UARTConfiguration
 
 
 type IOftuart <: IO
@@ -8,11 +8,11 @@ type IOftuart <: IO
   IOftuart(x) = new(x)
 end
 
-immutable ft_location
+immutable FT_Location
   location :: Unsigned
 end
 
-immutable ft_deviceindex
+immutable FT_DeviceIndex
   deviceindex :: Unsigned
 end
 
@@ -88,31 +88,31 @@ function configureuart(io::IOftuart, config :: UARTConfiguration)
   return nothing
 end
 
-function Base.open(device::ft_deviceindex, config::UARTConfiguration)
+function Base.open(device::FT_DeviceIndex, config::UARTConfiguration)
   io = IOftuart(ft_open(device.deviceindex))
   configureuart(io, config)
   return io
 end
 
-function Base.open(device::ft_location, config::UARTConfiguration)
+function Base.open(device::FT_Location, config::UARTConfiguration)
   io = IOftuart(ft_openex(device.location))
   configureuart(io, config)
   return io
 end
 
-function Base.open(device::Union{ft_serialnumber,ft_description}, config::UARTConfiguration)
+function Base.open(device::Union{FT_SerialNumber,FT_Description}, config::UARTConfiguration)
   io = IOftuart(ft_openex(device))
   configureuart(io, config)
   return io
 end
 
 #=
-function Base.open(device::Union{ft_deviceindex, ft_location, ft_serialnumber, ft_description})
+function Base.open(device::Union{FT_DeviceIndex, FT_Location, FT_SerialNumber, FT_Description})
   open(device,UARTConfiguration())
 end
 =#
 
-function Base.open(device::Union{ft_deviceindex, ft_location, ft_serialnumber, ft_description},
+function Base.open(device::Union{FT_DeviceIndex, FT_Location, FT_SerialNumber, FT_Description},
                    baud::Integer = 9600,
                    bits_user::Integer = 8,
                    stop_user::Integer = 1,

@@ -24,19 +24,19 @@ device_infomation_list = ft_getdeviceinfolist()
 
 open a device.
 ```julia
-io = open(ft_serialnumber("FTXRNZUJ"),9600,8,1,"n") # open by serial number
+io = open(FT_SerialNumber("FTXRNZUJ"),9600,8,1,"n") # open by serial number
 ```
 or
 ```julia
-io = open(ft_description("C232HM-EDHSL-0"),9600,8,1,"n") # open by description
+io = open(FT_Description("C232HM-EDHSL-0"),9600,8,1,"n") # open by description
 ```
 or
 ```julia
-io = open(ft_location(0x000001a2),9600,8,1,"n") # open by location
+io = open(FT_Location(0x000001a2),9600,8,1,"n") # open by location
 ```
 or
 ```julia
-io = open(ft_deviceindex(0),9600,8,1,"n") # open by device index
+io = open(FT_DeviceIndex(0),9600,8,1,"n") # open by device index
 ```
 use all the normal IO functions
 ```julia

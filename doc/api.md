@@ -25,8 +25,8 @@ Returns handle to device.  ft_openex allows devices to be opened by location id,
 Example:
 ```julia
 ft_handle = ft_openex(0x0314)  # open by location
-ft_handle = ft_openex(ft_serialnumber("FTXRNZUJ")) # open by serial number
-ft_handle = ft_openex(ft_description("C232HM-EDHSL-0")) # open by description
+ft_handle = ft_openex(FT_SerialNumber("FTXRNZUJ")) # open by serial number
+ft_handle = ft_openex(FT_Description("C232HM-EDHSL-0")) # open by description
 ```
 
 ### ft_close(*ft_handle::Culong*)
