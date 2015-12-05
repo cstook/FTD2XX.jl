@@ -38,7 +38,7 @@ or
 ```julia
 io = open(ft_deviceindex(0),9600,8,1,"n") # open by device index
 ```
-use all the normal io functions
+use all the normal IO functions
 ```julia
 write(io, 0x55)
 byteread = read(io, UInt8)
@@ -61,3 +61,8 @@ close(io)
 FTD2XX.jl is compatible with windows, linux, and osx.  See FTDI's [installation guides](http://www.ftdichip.com/Support/Documents/InstallGuides.htm) for instructions on installing drivers for your operating system.  Drivers are assumed to be installed in the default locations.
 
 [Additional Information for Linux](https://github.com/cstook/FTD2XX.jl/blob/master/doc/AdditionalInformationforLinux.md)
+
+## To Do
+
+I2C as an array.
+SPI, JTAG as readdata = writeread(datatowrite)
