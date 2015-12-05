@@ -65,4 +65,5 @@ FTD2XX.jl is compatible with windows, linux, and osx.  See FTDI's [installation 
 ## To Do
 
 I2C as an array.
+
 SPI, JTAG as readdata = writeread(datatowrite)
