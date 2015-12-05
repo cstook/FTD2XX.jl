@@ -12,6 +12,42 @@ Pkg.clone("https://github.com/cstook/FTD2XX.jl.git")
 ```
 The [julia documentation](http://docs.julialang.org) section on installing unregistered [packages](http://docs.julialang.org/en/release-0.4/manual/packages/#packages) provides more information.
 
+## UART quick start
+
+The UART may be accessed as a type IOftuart <: IO
+
+get information about devices
+
+```julia
+device_infomation_list = ft_getdeviceinfolist()
+```
+
+open a device.
+```julia
+io = open(ft_serialnumber("FTXRNZUJ"),9600,8,1,"n") # open by serial number
+```
+or
+```julia
+io = open(ft_description("C232HM-EDHSL-0"),9600,8,1,"n") # open by description
+```
+or
+```julia
+io = open(ft_location(0x000001a2),9600,8,1,"n") # open by location
+```
+or
+```julia
+io = open(ft_deviceindex(0),9600,8,1,"n") # open by device index
+```
+use all the normal io functions
+```julia
+write(io, 0x55)
+byteread = read(io, UInt8)
+```
+close the device
+```julia
+close(io)
+```
+
 ## Documentation
 [API for this wrapper](https://github.com/cstook/FTD2XX.jl/blob/master/doc/api.md)
 

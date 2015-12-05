@@ -136,10 +136,22 @@ function Base.read(s::IOftuart, ::Type{UInt8})
   return FT_READBUFFER[1]
 end
 
+function Base.read!(s::IOftuart, a::Vector{UInt8})
+  bytesread = ft_read!(s.ft_handle, a)
+  if bytesread<length(a)
+    error("timeout reading Vector{UInt8} from UART. ",bytesread," of ",length(a), " read.")
+  end
+  return a
+end
+
 const FT_WRITEBUFFER = Array(UInt8,1)
 function Base.write(s::IOftuart, x::UInt8)
   FT_WRITEBUFFER[1] = x
   ft_write(s.ft_handle, FT_WRITEBUFFER, 1)
+end
+
+function Base.write(s::IOftuart, x::Vector{UInt8})
+  ft_write(s.ft_handle, x, length(x))
 end
 
 function purge(io::IOftuart)
