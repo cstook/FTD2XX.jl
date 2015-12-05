@@ -16,7 +16,7 @@ immutable FT_DeviceIndex
   deviceindex :: Unsigned
 end
 
-type UARTConfiguration
+immutable UARTConfiguration
   baud :: Cuint
   bits :: UInt8
   stop :: UInt8

@@ -38,6 +38,16 @@ or
 ```julia
 io = open(FT_DeviceIndex(0),9600,8,1,"n") # open by device index
 ```
+or
+```julia
+uartconfig = UARTConfiguration(9600,8,1,"n",
+							   readtimeout = 1000,		# in milliseconds
+							   writetimeout = 1000,		# in milliseconds
+							   flowcontrol = "none",	# none, rts_cts, dtr_dsr, xon_xoff
+							   xon = 0x11,
+							   xoff = 0x13)
+io = open(FT_DeviceIndex(0),uartconfig)
+```
 use all the normal IO functions
 ```julia
 write(io, 0x55)
