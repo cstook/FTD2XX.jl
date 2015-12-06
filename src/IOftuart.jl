@@ -1,11 +1,10 @@
 # create IOftuart
 
-export IOftuart, FT_Location, FT_DeviceIndex, purge, UARTConfiguration
+export FT_Location, FT_DeviceIndex, purge, UARTConfiguration
 
 
 type IOftuart <: IO
   ft_handle  :: Culong
-  IOftuart(x) = new(x)
 end
 
 immutable FT_Location
@@ -30,8 +29,8 @@ immutable UARTConfiguration
                              bits_user::Integer = 8,
                              stop_user::Integer = 1,
                              parity_user = 'n';
-                             readtimeout::Integer = 10,
-                             writetimeout::Integer = 10,
+                             readtimeout::Integer = 100,  # in milliseconds
+                             writetimeout::Integer = 100, # in milliseconds
                              flowcontrol = "none",
                              xon::UInt8 = 0x11,
                              xoff::UInt8 = 0x13)
@@ -106,12 +105,6 @@ function Base.open(device::Union{FT_SerialNumber,FT_Description}, config::UARTCo
   return io
 end
 
-#=
-function Base.open(device::Union{FT_DeviceIndex, FT_Location, FT_SerialNumber, FT_Description})
-  open(device,UARTConfiguration())
-end
-=#
-
 function Base.open(device::Union{FT_DeviceIndex, FT_Location, FT_SerialNumber, FT_Description},
                    baud::Integer = 9600,
                    bits_user::Integer = 8,
@@ -128,7 +121,7 @@ end
 
 Base.isopen(io::IOftuart) = io.ft_handle!=0
 Base.isreadable(io::IOftuart) = isopen(io)
-# Base.iswriteable(io::IOftuart) = isopen(io)  # assume this is a typeo in base
+Base.iswritable(io::IOftuart) = isopen(io)  # iswritable? typo?
 
 const FT_READBUFFER = Array(UInt8,1)
 function Base.read(s::IOftuart, ::Type{UInt8})
@@ -138,20 +131,17 @@ end
 
 function Base.read!(s::IOftuart, a::Vector{UInt8})
   bytesread = ft_read!(s.ft_handle, a)
-  if bytesread<length(a)
-    error("timeout reading Vector{UInt8} from UART. ",bytesread," of ",length(a), " read.")
-  end
-  return a
+  return bytesread
 end
 
 const FT_WRITEBUFFER = Array(UInt8,1)
 function Base.write(s::IOftuart, x::UInt8)
   FT_WRITEBUFFER[1] = x
-  ft_write(s.ft_handle, FT_WRITEBUFFER, 1)
+  byteswritten = ft_write(s.ft_handle, FT_WRITEBUFFER, 1)
 end
 
 function Base.write(s::IOftuart, x::Vector{UInt8})
-  ft_write(s.ft_handle, x, length(x))
+  byteswritten = ft_write(s.ft_handle, x, length(x))
 end
 
 function purge(io::IOftuart)

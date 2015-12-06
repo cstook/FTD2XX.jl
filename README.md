@@ -14,7 +14,7 @@ The [julia documentation](http://docs.julialang.org) section on installing unreg
 
 ## UART quick start
 
-The UART may be accessed as a type IOftuart <: IO
+The UART may be accessed as type IOftuart <: IO
 
 get information about devices
 
