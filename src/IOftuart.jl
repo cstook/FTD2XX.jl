@@ -156,11 +156,6 @@ function Base.read!(s::IOftuart, a::Vector{UInt8})
   return a  # IO retruns the data not bytes read?
 end
 
-function Base.write(s::IOftuart, x::UInt8)
-  s.writebuffer[1] = x
-  byteswritten = ft_write(s.ft_handle, s.writebuffer, 1)
-end
-
 function ft_write(io::IOftuart,
                   buffer::Array{UInt8,1},
                   bytestowrite::Integer = length(buffer))
@@ -170,6 +165,11 @@ function ft_write(io::IOftuart,
                      io.ft_handle, buffer, bytestowrite, io.txbytesreturnedbuffer)
   checkstatus(ft_status)
   return io.txbytesreturnedbuffer[1]
+end
+
+function Base.write(s::IOftuart, x::UInt8)
+  s.writebuffer[1] = x
+  byteswritten = ft_write(s.ft_handle, s.writebuffer, 1)
 end
 
 function Base.write(s::IOftuart, x::Vector{UInt8})
