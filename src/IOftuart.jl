@@ -5,6 +5,9 @@ export FT_Location, FT_DeviceIndex, purge, UARTConfiguration
 
 type IOftuart <: IO
   ft_handle  :: Culong
+  readbuffer :: Array{UInt8,1}
+  writebuffer :: Array{UInt8,1}
+  IOftuart(x) = new(x,Array(UInt8,1),Array(UInt8,1))
 end
 
 immutable FT_Location
@@ -126,21 +129,19 @@ Base.isopen(io::IOftuart) = io.ft_handle!=0
 Base.isreadable(io::IOftuart) = isopen(io)
 Base.iswritable(io::IOftuart) = isopen(io)  # iswritable? typo?
 
-const FT_READBUFFER = Array(UInt8,1)
 function Base.read(s::IOftuart, ::Type{UInt8})
-  ft_read!(s.ft_handle, FT_READBUFFER, 1)
-  return FT_READBUFFER[1]
+  ft_read!(s.ft_handle, s.readbuffer, 1)
+  return s.readbuffer[1]
 end
 
 function Base.read!(s::IOftuart, a::Vector{UInt8})
   bytesread = ft_read!(s.ft_handle, a)
-  return bytesread
+  return a  # IO retruns the data not bytes read?
 end
 
-const FT_WRITEBUFFER = Array(UInt8,1)
 function Base.write(s::IOftuart, x::UInt8)
-  FT_WRITEBUFFER[1] = x
-  byteswritten = ft_write(s.ft_handle, FT_WRITEBUFFER, 1)
+  s.writebuffer[1] = x
+  byteswritten = ft_write(s.ft_handle, s.writebuffer, 1)
 end
 
 function Base.write(s::IOftuart, x::Vector{UInt8})
