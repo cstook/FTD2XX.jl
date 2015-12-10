@@ -120,8 +120,10 @@ function Base.open(device::Union{FT_DeviceIndex, FT_Location, FT_SerialNumber, F
 end
 
 function Base.close(io::IOftuart)
-  ft_close(io.ft_handle)
-  io.ft_handle = 0
+  if io.ft_handle != 0
+    ft_close(io.ft_handle)
+    io.ft_handle = 0
+  end
   return nothing
 end
 

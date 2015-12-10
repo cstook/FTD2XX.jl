@@ -36,8 +36,7 @@ for i in 1:50
   byteswritten = write(io, testvector)
   @test byteswritten == length(testvector)
   readbuffer = zeros(UInt8,length(testvector))
-  bytesread = read!(io, readbuffer)
-  @test bytesread == length(readbuffer)
+  read!(io, readbuffer)
   @test testvector == readbuffer
   print(i%10)
 end
