@@ -1,14 +1,18 @@
 # create IOftuart
 
-export FT_Location, FT_DeviceIndex, purge, UARTConfiguration
+export FT_Location, FT_DeviceIndex, purge, UARTConfiguration, setlatencytimer
 
 
 type IOftuart <: IO
   ft_handle  :: Culong
   readbuffer :: Array{UInt8,1}
   writebuffer :: Array{UInt8,1}
-  IOftuart(x) = new(x,Array(UInt8,1),Array(UInt8,1))
+  rxbytesreturnedbuffer :: Array{Cuint,1}
+  txbytesreturnedbuffer :: Array{Cuint,1}
+  IOftuart(x) = new(x,Array(UInt8,1),Array(UInt8,1), Array(Cuint,1), Array(Cuint,1))
 end
+
+gethandle(io::IOftuart) = io.ft_handle
 
 immutable FT_Location
   location :: Unsigned
@@ -129,15 +133,26 @@ end
 
 Base.isopen(io::IOftuart) = io.ft_handle!=0
 Base.isreadable(io::IOftuart) = isopen(io)
-Base.iswritable(io::IOftuart) = isopen(io)  # iswritable? typo?
+Base.iswritable(io::IOftuart) = isopen(io)
+
+function ft_read!(io::IOftuart,
+                 buffer::Array{UInt8,1},
+                 bytestoread::Integer = length(buffer))
+  ft_status = ccall((:FT_Read, d2xx),
+                      Cuint,
+                      (Culong, Ptr{UInt8}, Cuint, Ptr{Cuint}),
+                      io.ft_handle, buffer, bytestoread, io.rxbytesreturnedbuffer)
+  checkstatus(ft_status) 
+  return (io.rxbytesreturnedbuffer[1])
+end
 
 function Base.read(s::IOftuart, ::Type{UInt8})
-  ft_read!(s.ft_handle, s.readbuffer, 1)
+  ft_read!(s, s.readbuffer, 1)
   return s.readbuffer[1]
 end
 
 function Base.read!(s::IOftuart, a::Vector{UInt8})
-  bytesread = ft_read!(s.ft_handle, a)
+  bytesread = ft_read!(s, a)
   return a  # IO retruns the data not bytes read?
 end
 
@@ -146,12 +161,27 @@ function Base.write(s::IOftuart, x::UInt8)
   byteswritten = ft_write(s.ft_handle, s.writebuffer, 1)
 end
 
+function ft_write(io::IOftuart,
+                  buffer::Array{UInt8,1},
+                  bytestowrite::Integer = length(buffer))
+  ft_status = ccall((:FT_Write, d2xx),
+                     Cuint,
+                     (Culong, Ptr{UInt8}, Cuint, Ptr{Cuint}),
+                     ft_handle, buffer, bytestowrite, io.txbytesreturnedbuffer)
+  checkstatus(ft_status)
+  return io.txbytesreturnedbuffer[i]
+end
+
 function Base.write(s::IOftuart, x::Vector{UInt8})
   byteswritten = ft_write(s.ft_handle, x, length(x))
 end
 
 function purge(io::IOftuart)
   ft_purge(io.ft_handle, FT_PURGE_RX | FT_PURGE_TX)
+end
+
+function setlatencytimer(io::IOftuart, latencyms::Integer)
+  ft_setlatencytimer(io.ft_handle,latencyms)
 end
 
 Base.eof(io::IOftuart) = false
