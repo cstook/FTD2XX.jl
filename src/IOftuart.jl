@@ -12,6 +12,17 @@ type IOftuart <: IO
   IOftuart(x) = new(x,Array(UInt8,1),Array(UInt8,1), Array(Cuint,1), Array(Cuint,1))
 end
 
+function Base.show(io::IO, x::IOftuart)
+  print(io,"FTD2XX.IOftuart.ft_handle(")
+  if handleis32
+    @printf(io,"0x%08x",x.ft_handle)
+  else
+    @printf(io,"0x%16x",x.ft_handle)
+  end
+  println(io,")")
+  return nothing
+end
+
 gethandle(io::IOftuart) = io.ft_handle
 
 immutable FT_Location
