@@ -90,18 +90,21 @@ end
 function Base.open(device::FT_DeviceIndex, config::UARTConfiguration)
   io = IOftuart(ft_open(device.deviceindex))
   configureuart(io, config)
+  finalizer(io,close)
   return io
 end
 
 function Base.open(device::FT_Location, config::UARTConfiguration)
   io = IOftuart(ft_openex(device.location))
   configureuart(io, config)
+  finalizer(io,close)
   return io
 end
 
 function Base.open(device::Union{FT_SerialNumber,FT_Description}, config::UARTConfiguration)
   io = IOftuart(ft_openex(device))
   configureuart(io, config)
+  finalizer(io,close)
   return io
 end
 
