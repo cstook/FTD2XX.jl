@@ -167,13 +167,13 @@ function ft_write(io::IOftuart,
   ft_status = ccall((:FT_Write, d2xx),
                      Cuint,
                      (Culong, Ptr{UInt8}, Cuint, Ptr{Cuint}),
-                     ft_handle, buffer, bytestowrite, io.txbytesreturnedbuffer)
+                     io.ft_handle, buffer, bytestowrite, io.txbytesreturnedbuffer)
   checkstatus(ft_status)
-  return io.txbytesreturnedbuffer[i]
+  return io.txbytesreturnedbuffer[1]
 end
 
 function Base.write(s::IOftuart, x::Vector{UInt8})
-  byteswritten = ft_write(s.ft_handle, x, length(x))
+  byteswritten = ft_write(s, x, length(x))
 end
 
 function purge(io::IOftuart)
@@ -181,7 +181,7 @@ function purge(io::IOftuart)
 end
 
 function setlatencytimer(io::IOftuart, latencyms::Integer)
-  ft_setlatencytimer(io.ft_handle,latencyms)
+  ft_setlatencytimer(io.ft_handle, latencyms)
 end
 
 Base.eof(io::IOftuart) = false
